@@ -16,64 +16,149 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Welcome to" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wAH-RM-gmZ">
-                                <rect key="frame" x="43" y="101" width="307" height="74"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Welcome to" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="wAH-RM-gmZ">
+                                <rect key="frame" x="85.000000000000014" y="109" width="223.33333333333337" height="40"/>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="40"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Sign In" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mtn-RT-TzY">
-                                <rect key="frame" x="44" y="339" width="307" height="74"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="40"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="ShowMate" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IB8-Ej-pSf">
-                                <rect key="frame" x="93" y="166" width="208" height="40"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="ShowMate" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IB8-Ej-pSf">
+                                <rect key="frame" x="92.666666666666686" y="154" width="208" height="40"/>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W6" family="Hiragino Mincho ProN" pointSize="40"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cyk-Aa-fbP">
-                                <rect key="frame" x="93" y="429" width="219" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cyk-Aa-fbP">
+                                <rect key="frame" x="71.666666666666686" y="424" width="250" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="DNP-Mz-C9b"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XgH-5p-V9k">
-                                <rect key="frame" x="93" y="483" width="219" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XgH-5p-V9k">
+                                <rect key="frame" x="71.666666666666686" y="483" width="250" height="34"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="250" id="6VP-yP-a3Y"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tln-8e-Bxl">
-                                <rect key="frame" x="151" y="556" width="91" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tln-8e-Bxl">
+                                <rect key="frame" x="151" y="562" width="91" height="34"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="Sign In">
                                     <fontDescription key="titleFontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <segue destination="WGX-gJ-KJj" kind="show" identifier="SignInSegue" id="uKs-CX-sxl"/>
+                                </connections>
                             </button>
-                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BZi-4a-tBI">
-                                <rect key="frame" x="115" y="643" width="171" height="34"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BZi-4a-tBI">
+                                <rect key="frame" x="111" y="637" width="171" height="34"/>
                                 <color key="tintColor" systemColor="labelColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Create Account">
                                     <fontDescription key="titleFontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
                                 </buttonConfiguration>
+                                <connections>
+                                    <segue destination="9WL-Om-ahI" kind="show" identifier="CreateAccountSegue" id="rbo-98-1bb"/>
+                                </connections>
                             </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign In" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mtn-RT-TzY">
+                                <rect key="frame" x="130.33333333333331" y="344" width="132.33333333333331" height="40"/>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="40"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="Mtn-RT-TzY" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="0X0-l0-3LW"/>
+                            <constraint firstItem="wAH-RM-gmZ" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="50" id="2Th-qa-kHo"/>
+                            <constraint firstItem="BZi-4a-tBI" firstAttribute="firstBaseline" secondItem="tln-8e-Bxl" secondAttribute="baseline" constant="75" id="5N9-NU-Udl"/>
+                            <constraint firstItem="IB8-Ej-pSf" firstAttribute="top" secondItem="wAH-RM-gmZ" secondAttribute="bottom" constant="5" id="6CC-JN-yef"/>
+                            <constraint firstItem="XgH-5p-V9k" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="6mv-Ee-4KU"/>
+                            <constraint firstItem="XgH-5p-V9k" firstAttribute="top" secondItem="cyk-Aa-fbP" secondAttribute="bottom" constant="25" id="8ow-lV-6lT"/>
+                            <constraint firstItem="cyk-Aa-fbP" firstAttribute="top" secondItem="Mtn-RT-TzY" secondAttribute="bottom" constant="40" id="99h-i9-snd"/>
+                            <constraint firstItem="tln-8e-Bxl" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Cus-Hw-qDb"/>
+                            <constraint firstItem="tln-8e-Bxl" firstAttribute="top" secondItem="XgH-5p-V9k" secondAttribute="bottom" constant="45" id="DGr-6V-p1v"/>
+                            <constraint firstItem="BZi-4a-tBI" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="Ynb-VP-CVR"/>
+                            <constraint firstItem="IB8-Ej-pSf" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="aHS-lU-gVa"/>
+                            <constraint firstItem="cyk-Aa-fbP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="h8V-ee-YZT"/>
+                            <constraint firstItem="cyk-Aa-fbP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="jtX-Nc-cS7"/>
+                            <constraint firstItem="Mtn-RT-TzY" firstAttribute="top" secondItem="IB8-Ej-pSf" secondAttribute="bottom" constant="150" id="puH-q5-tPv"/>
+                            <constraint firstItem="wAH-RM-gmZ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="vSt-GW-bb0"/>
+                        </constraints>
                     </view>
+                    <connections>
+                        <outlet property="passwordTextField" destination="XgH-5p-V9k" id="yZk-TS-1gJ"/>
+                        <outlet property="usernameTextField" destination="cyk-Aa-fbP" id="HO1-yz-X2l"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="43.511450381679388" y="3.5211267605633805"/>
+        </scene>
+        <!--LandingVC-->
+        <scene sceneID="rZS-Oi-uiI">
+            <objects>
+                <viewController id="WGX-gJ-KJj" customClass="LandingVC" customModule="ShowMate" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="f8D-KY-p7z">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Home Page" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="eSR-KG-MBO">
+                                <rect key="frame" x="152.66666666666666" y="410.66666666666669" width="88" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="ts1-E1-39I"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="eSR-KG-MBO" firstAttribute="centerY" secondItem="f8D-KY-p7z" secondAttribute="centerY" id="5PE-w3-kAN"/>
+                            <constraint firstItem="eSR-KG-MBO" firstAttribute="centerX" secondItem="f8D-KY-p7z" secondAttribute="centerX" id="t50-OB-Io9"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="G30-E9-Lmf"/>
+                    <connections>
+                        <outlet property="textLabel" destination="eSR-KG-MBO" id="CE9-V6-akw"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="NlS-ch-9K8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="44" y="726"/>
+        </scene>
+        <!--Create AccountVC-->
+        <scene sceneID="mGV-aj-iDQ">
+            <objects>
+                <viewController id="9WL-Om-ahI" customClass="CreateAccountVC" customModule="ShowMate" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="nIt-L5-fma">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Create Account" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="de4-NG-Wdj">
+                                <rect key="frame" x="137" y="410.66666666666669" width="119" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="oqP-uE-wS8"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="de4-NG-Wdj" firstAttribute="centerY" secondItem="nIt-L5-fma" secondAttribute="centerY" id="MKN-k7-GKC"/>
+                            <constraint firstItem="de4-NG-Wdj" firstAttribute="centerX" secondItem="nIt-L5-fma" secondAttribute="centerX" id="SLs-TZ-Dtp"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="SbA-a7-kOu"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bwq-lA-kDr" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="874" y="4"/>
         </scene>
     </scenes>
     <resources>
