@@ -6,7 +6,12 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		B931110C2CC030A1001EE133 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B931110B2CC030A1001EE133 /* SettingsViewController.swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
+		B931110B2CC030A1001EE133 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
 		B999BF912CB6F1FD003CCFD6 /* ShowMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShowMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -45,6 +50,7 @@
 		B999BF882CB6F1FD003CCFD6 = {
 			isa = PBXGroup;
 			children = (
+				B931110B2CC030A1001EE133 /* SettingsViewController.swift */,
 				B999BF932CB6F1FD003CCFD6 /* ShowMate */,
 				B999BF922CB6F1FD003CCFD6 /* Products */,
 			);
@@ -132,6 +138,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B931110C2CC030A1001EE133 /* SettingsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -9,14 +9,21 @@ import UIKit
 
 class LandingVC: UIViewController {
     
+    @IBOutlet weak var profileButton: UIImageView!
     var delegate:UIViewController!
-
-    @IBOutlet weak var textLabel: UILabel!
+    let settingsSegueIdentifier = "SettingsIdentifier"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
         
-        //obivously not going to keep it like this, just wanted it to do something when you got in
-        textLabel.text = "You signed in!"
+        profileButton.addGestureRecognizer(tapGesture)
+        profileButton.isUserInteractionEnabled = true
+        
     }
     
+    @objc func imageTapped() {
+        performSegue(withIdentifier: settingsSegueIdentifier, sender: self)
+    }
+
 }
