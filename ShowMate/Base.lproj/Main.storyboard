@@ -52,7 +52,7 @@
                                     <fontDescription key="titleFontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
                                 </buttonConfiguration>
                                 <connections>
-                                    <segue destination="ZCy-AJ-Nww" kind="presentation" modalPresentationStyle="fullScreen" id="3db-c8-kJA"/>
+                                    <segue destination="ZCy-AJ-Nww" kind="presentation" identifier="SignInSegue" modalPresentationStyle="fullScreen" id="3db-c8-kJA"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BZi-4a-tBI">
@@ -121,15 +121,43 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WuQ-Qn-PuZ">
+                                <rect key="frame" x="33" y="286" width="88" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="My Shows" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="VrF-T7-sdb">
+                                <rect key="frame" x="33" y="155" width="121" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                             <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="fAg-cP-EfQ">
                                 <rect key="frame" x="313" y="53.666666666666742" width="64" height="67"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" systemColor="systemPinkColor"/>
-                                <accessibility key="accessibilityConfiguration">
-                                    <accessibilityTraits key="traits" button="YES" image="YES"/>
-                                </accessibility>
+                                <gestureRecognizers/>
                                 <imageReference key="image" image="person.circle.fill" catalog="system" variableValue="0.80000000000000004"/>
                             </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Groups" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="EtK-si-XtK">
+                                <rect key="frame" x="33" y="687" width="85" height="25"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="CvQ-eM-qwt">
+                                <rect key="frame" x="302" y="115" width="87" height="35"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Settings"/>
+                                <connections>
+                                    <segue destination="yAI-nI-EFs" kind="show" identifier="SettingsIdentifier" id="k8m-on-Mer"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="ts1-E1-39I"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -137,12 +165,35 @@
                     <navigationItem key="navigationItem" id="G30-E9-Lmf"/>
                     <connections>
                         <outlet property="profileButton" destination="fAg-cP-EfQ" id="e4G-AM-rkW"/>
-                        <segue destination="yAI-nI-EFs" kind="show" identifier="SettingsIdentifier" id="QfI-IT-72g"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NlS-ch-9K8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="764.12213740458014" y="750"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="dO4-9A-zH8">
+            <objects>
+                <viewController id="nmK-ID-HSj" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="tgw-rc-IIo">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="my shows" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B9G-zt-goe">
+                                <rect key="frame" x="175" y="378" width="76" height="21"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="7Ds-R6-xXl"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                    </view>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="8KC-Pq-H4c" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1623.6641221374045" y="6.3380281690140849"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="9di-1B-CXC">
@@ -152,18 +203,126 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Qjr-Xv-tDt">
-                                <rect key="frame" x="165" y="415.66666666666669" width="63" height="21"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m1B-Pm-GAJ">
+                                <rect key="frame" x="30.000000000000007" y="69" width="124.66666666666669" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="Htz-RF-a35"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="34"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WJH-JW-q3x">
+                                <rect key="frame" x="358.66666666666669" y="59.666666666666657" width="19.666666666666686" height="19"/>
+                                <color key="tintColor" systemColor="systemPinkColor"/>
+                                <gestureRecognizers/>
+                                <imageReference key="image" image="person.circle.fill" catalog="system" variableValue="0.80000000000000004"/>
+                            </imageView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Account Visability" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ia9-Iz-ywA">
+                                <rect key="frame" x="30" y="169" width="173" height="20"/>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Add Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eb4-oP-kaT">
+                                <rect key="frame" x="138.66666666666666" y="422" width="116" height="20"/>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AHY-gx-EjK">
+                                <rect key="frame" x="60" y="214" width="105" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="105" id="Vba-Ce-ZHd"/>
+                                    <constraint firstAttribute="height" constant="50" id="vxj-s5-p7u"/>
+                                </constraints>
+                                <color key="tintColor" systemColor="systemGreenColor"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Public">
+                                    <fontDescription key="titleFontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
+                                </buttonConfiguration>
+                            </button>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.2.badge.plus" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="gQi-On-JX4">
+                                <rect key="frame" x="146.66666666666666" y="340.66666666666669" width="103" height="101"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="100" id="5Pp-tF-udf"/>
+                                    <constraint firstAttribute="height" constant="100" id="cmk-zp-0Uo"/>
+                                </constraints>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="square.and.arrow.up.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mJe-pT-AOT">
+                                <rect key="frame" x="39" y="522.66666666666663" width="72" height="65"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </imageView>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z28-UN-f5I">
+                                <rect key="frame" x="126" y="523" width="221" height="66"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Upload Profile Photo">
+                                    <fontDescription key="titleFontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
+                                </buttonConfiguration>
+                            </button>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Change Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gsj-Mr-sje">
+                                <rect key="frame" x="29" y="638" width="173" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="old username label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ahh-wZ-ID0">
+                                <rect key="frame" x="68" y="675" width="181" height="29"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="new username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Nib-od-tJg">
+                                <rect key="frame" x="68" y="712" width="214" height="34"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="18"/>
+                                <textInputTraits key="textInputTraits"/>
+                            </textField>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f4L-zx-AV0">
+                                <rect key="frame" x="163.66666666666666" y="764" width="66" height="39"/>
+                                <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="save">
+                                    <fontDescription key="titleFontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
+                                </buttonConfiguration>
+                            </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nH-ou-rGg">
+                                <rect key="frame" x="228.33333333333337" y="214" width="105" height="50"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="105" id="Dc5-mO-p4M"/>
+                                    <constraint firstAttribute="height" constant="50" id="c56-Tq-0Ob"/>
+                                </constraints>
+                                <color key="tintColor" white="0.66666666666666663" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="Private">
+                                    <fontDescription key="titleFontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
+                                </buttonConfiguration>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="QJS-mt-VlI"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
-                            <constraint firstItem="Qjr-Xv-tDt" firstAttribute="centerY" secondItem="J6Q-Kf-Y3b" secondAttribute="centerY" id="QmE-14-A9Q"/>
-                            <constraint firstItem="Qjr-Xv-tDt" firstAttribute="centerX" secondItem="J6Q-Kf-Y3b" secondAttribute="centerX" id="z9K-Cg-q14"/>
+                            <constraint firstItem="QJS-mt-VlI" firstAttribute="trailing" secondItem="WJH-JW-q3x" secondAttribute="trailing" constant="15" id="2y2-Ib-4Xo"/>
+                            <constraint firstItem="gQi-On-JX4" firstAttribute="leading" secondItem="AHY-gx-EjK" secondAttribute="trailing" constant="-18.333333333333343" id="4vR-Ao-eZE"/>
+                            <constraint firstItem="gQi-On-JX4" firstAttribute="centerX" secondItem="J6Q-Kf-Y3b" secondAttribute="centerX" id="JyH-C1-O5S"/>
+                            <constraint firstItem="f4L-zx-AV0" firstAttribute="centerX" secondItem="J6Q-Kf-Y3b" secondAttribute="centerX" id="SNV-u6-ARm"/>
+                            <constraint firstItem="m1B-Pm-GAJ" firstAttribute="leading" secondItem="QJS-mt-VlI" secondAttribute="leading" constant="30" id="U7q-l3-fym"/>
+                            <constraint firstItem="ia9-Iz-ywA" firstAttribute="top" secondItem="m1B-Pm-GAJ" secondAttribute="bottom" constant="60" id="dlP-0u-Wrk"/>
+                            <constraint firstItem="Eb4-oP-kaT" firstAttribute="centerX" secondItem="J6Q-Kf-Y3b" secondAttribute="centerX" id="dxT-Qb-HpQ"/>
+                            <constraint firstItem="WJH-JW-q3x" firstAttribute="top" secondItem="QJS-mt-VlI" secondAttribute="top" constant="15" id="ggv-ch-Jjg"/>
+                            <constraint firstItem="ia9-Iz-ywA" firstAttribute="leading" secondItem="QJS-mt-VlI" secondAttribute="leading" constant="30" id="gxX-VL-vMS"/>
+                            <constraint firstItem="m1B-Pm-GAJ" firstAttribute="top" secondItem="QJS-mt-VlI" secondAttribute="top" constant="25" id="hLa-wa-Qsq"/>
+                            <constraint firstItem="QJS-mt-VlI" firstAttribute="trailing" secondItem="7nH-ou-rGg" secondAttribute="trailing" constant="60" id="lYY-jU-c0x"/>
+                            <constraint firstItem="AHY-gx-EjK" firstAttribute="leading" secondItem="QJS-mt-VlI" secondAttribute="leading" constant="60" id="qsp-hA-hyW"/>
+                            <constraint firstItem="gQi-On-JX4" firstAttribute="top" secondItem="AHY-gx-EjK" secondAttribute="bottom" constant="75" id="t9w-QG-j0r"/>
+                            <constraint firstItem="gQi-On-JX4" firstAttribute="centerX" secondItem="J6Q-Kf-Y3b" secondAttribute="centerX" id="uCQ-BP-Ia6"/>
+                            <constraint firstItem="7nH-ou-rGg" firstAttribute="top" secondItem="ia9-Iz-ywA" secondAttribute="bottom" constant="25" id="z6c-qs-8h8"/>
+                            <constraint firstItem="AHY-gx-EjK" firstAttribute="top" secondItem="ia9-Iz-ywA" secondAttribute="bottom" constant="25" id="zZT-DK-RcD"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="7Ta-Vn-eHm"/>
@@ -301,15 +460,20 @@
         <segue reference="3db-c8-kJA"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="person.2.badge.plus" catalog="system" width="128" height="90"/>
         <image name="person.circle.fill" catalog="system" width="128" height="123"/>
+        <image name="square.and.arrow.up.fill" catalog="system" width="117" height="128"/>
         <systemColor name="labelColor">
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
+        <systemColor name="systemGreenColor">
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

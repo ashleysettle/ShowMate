@@ -15,15 +15,16 @@ class LandingVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(imageTapped))
-        
-        profileButton.addGestureRecognizer(tapGesture)
-        profileButton.isUserInteractionEnabled = true
-        
     }
     
-    @objc func imageTapped() {
-        performSegue(withIdentifier: settingsSegueIdentifier, sender: self)
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == settingsSegueIdentifier,
+           let nextVC = segue.destination as? SettingsViewController {
+            
+            nextVC.delegate = self
+        }
     }
+    
+    
 
 }
