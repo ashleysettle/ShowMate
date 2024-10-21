@@ -29,7 +29,7 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cyk-Aa-fbP">
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cyk-Aa-fbP">
                                 <rect key="frame" x="71.666666666666686" y="444" width="250" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="DNP-Mz-C9b"/>
@@ -209,7 +209,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WJH-JW-q3x">
-                                <rect key="frame" x="313.33333333333331" y="59.666666666666664" width="65" height="68.666666666666657"/>
+                                <rect key="frame" x="313" y="59.666666666666664" width="65" height="68.666666666666657"/>
                                 <color key="tintColor" systemColor="systemPinkColor"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -298,7 +298,7 @@
                                 </buttonConfiguration>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nH-ou-rGg">
-                                <rect key="frame" x="228.33333333333337" y="214" width="105" height="50"/>
+                                <rect key="frame" x="228" y="214" width="105" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="105" id="Dc5-mO-p4M"/>
                                     <constraint firstAttribute="height" constant="50" id="c56-Tq-0Ob"/>
@@ -394,24 +394,24 @@
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XPQ-FH-OYk">
-                                <rect key="frame" x="71.666666666666686" y="552" width="250" height="34"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XPQ-FH-OYk">
+                                <rect key="frame" x="71.666666666666686" y="503" width="250" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="apQ-Ho-qPl"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" ambiguous="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="re-type password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fpl-Pi-dyE">
-                                <rect key="frame" x="71.666666666666686" y="621" width="250" height="34"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="re-type password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="fpl-Pi-dyE">
+                                <rect key="frame" x="71.666666666666686" y="582" width="250" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="JD3-Am-JFw"/>
                                 </constraints>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
-                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WaU-H6-OhN">
-                                <rect key="frame" x="111" y="705" width="171" height="34"/>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WaU-H6-OhN">
+                                <rect key="frame" x="111" y="666" width="171" height="34"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="Create Account">
                                     <fontDescription key="titleFontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
@@ -428,8 +428,8 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" ambiguous="YES" misplaced="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="or2-Kw-xMR">
-                                <rect key="frame" x="71" y="424" width="250" height="34"/>
+                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="or2-Kw-xMR">
+                                <rect key="frame" x="71.666666666666686" y="424" width="250" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="PjT-3p-GZT"/>
                                 </constraints>
@@ -451,10 +451,11 @@
                             <constraint firstItem="V9N-62-0sp" firstAttribute="centerX" secondItem="nIt-L5-fma" secondAttribute="centerX" id="Mch-4I-gBC"/>
                             <constraint firstItem="qLR-KG-YEb" firstAttribute="centerX" secondItem="nIt-L5-fma" secondAttribute="centerX" id="O1T-4u-IFW"/>
                             <constraint firstItem="WaU-H6-OhN" firstAttribute="centerX" secondItem="nIt-L5-fma" secondAttribute="centerX" id="QhT-rb-h1Y"/>
-                            <constraint firstItem="XPQ-FH-OYk" firstAttribute="top" secondItem="or2-Kw-xMR" secondAttribute="bottom" constant="35" id="QpT-xZ-px6"/>
+                            <constraint firstItem="XPQ-FH-OYk" firstAttribute="top" secondItem="or2-Kw-xMR" secondAttribute="bottom" constant="45" id="QpT-xZ-px6"/>
+                            <constraint firstItem="or2-Kw-xMR" firstAttribute="top" secondItem="qLR-KG-YEb" secondAttribute="bottom" constant="45" id="XUV-ky-fw5"/>
                             <constraint firstItem="qLR-KG-YEb" firstAttribute="top" secondItem="V9N-62-0sp" secondAttribute="bottom" constant="60" id="ZBu-ku-g6N"/>
                             <constraint firstItem="V9N-62-0sp" firstAttribute="top" secondItem="yL4-Hk-L0T" secondAttribute="bottom" constant="70" id="k5h-B6-dql"/>
-                            <constraint firstItem="fpl-Pi-dyE" firstAttribute="top" secondItem="XPQ-FH-OYk" secondAttribute="bottom" constant="35" id="p3N-6Z-uhw"/>
+                            <constraint firstItem="fpl-Pi-dyE" firstAttribute="top" secondItem="XPQ-FH-OYk" secondAttribute="bottom" constant="45" id="p3N-6Z-uhw"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="SbA-a7-kOu"/>
@@ -490,7 +491,7 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="jED-Ie-FjY"/>
+        <segue reference="3db-c8-kJA"/>
     </inferredMetricsTieBreakers>
     <resources>
         <image name="person.2.badge.plus" catalog="system" width="128" height="90"/>
