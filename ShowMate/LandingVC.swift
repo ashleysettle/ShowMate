@@ -6,25 +6,32 @@
 //
 
 import UIKit
+import FirebaseAuth
 
 class LandingVC: UIViewController {
     
-    @IBOutlet weak var profileButton: UIImageView!
-    var delegate:UIViewController!
-    let settingsSegueIdentifier = "SettingsIdentifier"
+    @IBOutlet weak var usernameLabel: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == settingsSegueIdentifier,
-           let nextVC = segue.destination as? SettingsViewController {
-            
-            nextVC.delegate = self
+        updateDisplayName()
+        
+        // Add authentication state listener
+        Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
+            self?.updateDisplayName()
         }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateDisplayName()
+    }
     
-
+    private func updateDisplayName() {
+        if let user = Auth.auth().currentUser {
+            usernameLabel.text = user.displayName
+        } else {
+            usernameLabel.text = "N/A"
+        }
+    }
 }

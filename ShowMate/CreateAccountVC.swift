@@ -22,15 +22,26 @@ class CreateAccountVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
-    }
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == createSegueIdentifier,
-           let nextVC = segue.destination as? LandingVC {
-            nextVC.delegate = self
+        Auth.auth().addStateDidChangeListener() {
+            (auth,user) in
+            if user != nil {
+                self.performSegue(withIdentifier: self.createSegueIdentifier, sender: nil)
+                self.emailTextField.text = nil
+                self.passwordText.text = nil
+                self.confirmPasswordText.text = nil
+                self.confirmPasswordText.text = nil
+                self.usernameTextField.text = nil
+                self.errorMessage.text = nil
+            }
         }
     }
+    
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        if segue.identifier == createSegueIdentifier,
+//           let nextVC = segue.destination as? LandingVC {
+//            nextVC.delegate = self
+//        }
+//    }
 
     @IBAction func createAccountPressed(_ sender: Any) {
         if(((emailTextField.text?.isEmpty) != nil) || ((usernameTextField.text?.isEmpty) != nil) || ((passwordText.text?.isEmpty) != nil) || ((confirmPasswordText.text?.isEmpty) != nil)) {
@@ -43,25 +54,13 @@ class CreateAccountVC: UIViewController {
             return
         }
         // create a new user
-        Auth.auth().createUser(withEmail: emailTextField.text!, password: passwordText.text!) {
-                (authResult,error) in
-                if let error = error as NSError? {
-                    self.errorMessage.text = "\(error.localizedDescription)"
-                }else {
-                    self.errorMessage.text = ""
-                    
-                    /*guard let uid = authResult?.user.uid else {return}
-                    let userRef = Database.database().reference().child("users").child(uid)
-                    let userData = ["username": usernameTextField.text, "email": emailTextField.text!]
-                    userRef.setValue(userData) {
-                        (error, ref) in
-                        if let error = error {
-                            errorMessage.text = "failed to save user data"
-                        } else {
-                            return
-                        }
-                    }*/
-                }
+        Auth.auth().createUser(withEmail: emailTextField.text!, password: emailTextField.text!) {
+            (authResult,error) in
+            if let error = error as NSError? {
+                self.errorMessage.text = "\(error.localizedDescription)"
+            }else {
+                self.errorMessage.text = ""
             }
+        }
     }
 }
