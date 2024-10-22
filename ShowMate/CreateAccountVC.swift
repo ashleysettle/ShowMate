@@ -6,7 +6,9 @@
 //
 
 import UIKit
+import Firebase
 import FirebaseAuth
+// needs an import statement
 
 class CreateAccountVC: UIViewController {
     
@@ -31,6 +33,10 @@ class CreateAccountVC: UIViewController {
     }
 
     @IBAction func createAccountPressed(_ sender: Any) {
+        if(((emailTextField.text?.isEmpty) != nil) || ((usernameTextField.text?.isEmpty) != nil) || ((passwordText.text?.isEmpty) != nil) || ((confirmPasswordText.text?.isEmpty) != nil)) {
+            errorMessage.text! = "Please fill out all fields."
+            return
+        }
         // need to add username to createUser
         if(passwordText.text != confirmPasswordText.text){
             errorMessage.text = "Passwords do not match!"
@@ -43,6 +49,18 @@ class CreateAccountVC: UIViewController {
                     self.errorMessage.text = "\(error.localizedDescription)"
                 }else {
                     self.errorMessage.text = ""
+                    
+                    /*guard let uid = authResult?.user.uid else {return}
+                    let userRef = Database.database().reference().child("users").child(uid)
+                    let userData = ["username": usernameTextField.text, "email": emailTextField.text!]
+                    userRef.setValue(userData) {
+                        (error, ref) in
+                        if let error = error {
+                            errorMessage.text = "failed to save user data"
+                        } else {
+                            return
+                        }
+                    }*/
                 }
             }
     }

@@ -53,7 +53,7 @@
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="signInPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ysf-a4-ZdK"/>
-                                    <segue destination="ZCy-AJ-Nww" kind="presentation" identifier="SignInSegue" modalPresentationStyle="fullScreen" id="3db-c8-kJA"/>
+                                    <segue destination="aj5-XC-GXX" kind="showDetail" identifier="SignInSegue" id="W8Z-oH-CB7"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BZi-4a-tBI">
@@ -115,12 +115,12 @@
             </objects>
             <point key="canvasLocation" x="-1089.3129770992366" y="-26.056338028169016"/>
         </scene>
-        <!--LandingVC-->
+        <!--Feed-->
         <scene sceneID="rZS-Oi-uiI">
             <objects>
                 <viewController id="WGX-gJ-KJj" customClass="LandingVC" customModule="ShowMate" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="f8D-KY-p7z">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Feed" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kGu-TO-hGQ">
@@ -161,11 +161,12 @@
                         <viewLayoutGuide key="safeArea" id="ts1-E1-39I"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
+                    <tabBarItem key="tabBarItem" title="Feed" image="house.fill" catalog="system" id="ggB-Pb-b6c"/>
                     <navigationItem key="navigationItem" id="G30-E9-Lmf"/>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="NlS-ch-9K8" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="764.12213740458014" y="750"/>
+            <point key="canvasLocation" x="265" y="786"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="dO4-9A-zH8">
@@ -189,18 +190,18 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8KC-Pq-H4c" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1623.6641221374045" y="6.3380281690140849"/>
+            <point key="canvasLocation" x="949" y="225"/>
         </scene>
         <!--Settings View Controller-->
         <scene sceneID="9di-1B-CXC">
             <objects>
                 <viewController id="yAI-nI-EFs" customClass="SettingsViewController" customModule="ShowMate" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="J6Q-Kf-Y3b">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Settings" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="m1B-Pm-GAJ">
-                                <rect key="frame" x="30.000000000000007" y="69" width="124.66666666666669" height="40"/>
+                                <rect key="frame" x="30.000000000000007" y="25" width="124.66666666666669" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="Htz-RF-a35"/>
                                 </constraints>
@@ -209,7 +210,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="WJH-JW-q3x">
-                                <rect key="frame" x="313" y="59.666666666666664" width="65" height="68.666666666666657"/>
+                                <rect key="frame" x="313.33333333333331" y="15.666666666666664" width="65" height="68.666666666666686"/>
                                 <color key="tintColor" systemColor="systemPinkColor"/>
                                 <gestureRecognizers/>
                                 <constraints>
@@ -219,19 +220,19 @@
                                 <imageReference key="image" image="person.circle.fill" catalog="system" variableValue="0.80000000000000004"/>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Account Visability" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ia9-Iz-ywA">
-                                <rect key="frame" x="30" y="169" width="173" height="20"/>
+                                <rect key="frame" x="30" y="125" width="173" height="20"/>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eb4-oP-kaT">
-                                <rect key="frame" x="138.66666666666666" y="404" width="116" height="20"/>
+                                <rect key="frame" x="138.66666666666666" y="360" width="116" height="20"/>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="AHY-gx-EjK">
-                                <rect key="frame" x="60" y="214" width="105" height="50"/>
+                                <rect key="frame" x="60" y="170" width="105" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="105" id="Vba-Ce-ZHd"/>
                                     <constraint firstAttribute="height" constant="50" id="vxj-s5-p7u"/>
@@ -243,14 +244,14 @@
                                 </buttonConfiguration>
                             </button>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="person.2.badge.plus" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="gQi-On-JX4">
-                                <rect key="frame" x="146.66666666666666" y="295.66666666666669" width="103" height="101"/>
+                                <rect key="frame" x="146.66666666666666" y="251.66666666666663" width="103" height="101"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="5Pp-tF-udf"/>
                                     <constraint firstAttribute="height" constant="100" id="cmk-zp-0Uo"/>
                                 </constraints>
                             </imageView>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" image="square.and.arrow.up.fill" catalog="system" translatesAutoresizingMaskIntoConstraints="NO" id="mJe-pT-AOT">
-                                <rect key="frame" x="39" y="453.66666666666669" width="72" height="30.333333333333314"/>
+                                <rect key="frame" x="39" y="409.66666666666669" width="72" height="30.333333333333314"/>
                                 <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="30" id="jyR-mA-Ymr"/>
@@ -258,7 +259,7 @@
                                 </constraints>
                             </imageView>
                             <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z28-UN-f5I">
-                                <rect key="frame" x="126" y="454" width="221" height="34"/>
+                                <rect key="frame" x="126" y="410" width="221" height="34"/>
                                 <color key="tintColor" white="0.66666666669999997" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Upload Profile Photo">
@@ -266,19 +267,19 @@
                                 </buttonConfiguration>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Change Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Gsj-Mr-sje">
-                                <rect key="frame" x="30" y="529" width="173" height="20"/>
+                                <rect key="frame" x="30" y="485" width="173" height="20"/>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="old username label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ahh-wZ-ID0">
-                                <rect key="frame" x="60" y="579" width="181" height="20"/>
+                                <rect key="frame" x="60" y="535" width="181" height="20"/>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="new username" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Nib-od-tJg">
-                                <rect key="frame" x="60" y="619" width="180" height="34"/>
+                                <rect key="frame" x="60" y="575" width="180" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="180" id="4eT-CV-S2b"/>
                                 </constraints>
@@ -286,7 +287,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="f4L-zx-AV0">
-                                <rect key="frame" x="161.66666666666666" y="673" width="70" height="35"/>
+                                <rect key="frame" x="161.66666666666666" y="629" width="70" height="35"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="35" id="7WE-dl-2ai"/>
                                     <constraint firstAttribute="width" constant="70" id="ITW-55-cU5"/>
@@ -298,7 +299,7 @@
                                 </buttonConfiguration>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="7nH-ou-rGg">
-                                <rect key="frame" x="228" y="214" width="105" height="50"/>
+                                <rect key="frame" x="228.33333333333337" y="170" width="105" height="50"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="105" id="Dc5-mO-p4M"/>
                                     <constraint firstAttribute="height" constant="50" id="c56-Tq-0Ob"/>
@@ -310,7 +311,7 @@
                                 </buttonConfiguration>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DIV-2b-D5M">
-                                <rect key="frame" x="146.66666666666666" y="738" width="100" height="34"/>
+                                <rect key="frame" x="146.66666666666666" y="694" width="100" height="34"/>
                                 <color key="tintColor" systemColor="systemRedColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="filled" title="Log Out">
@@ -358,7 +359,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L2X-2u-RR4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1623.6641221374045" y="750"/>
+            <point key="canvasLocation" x="1622" y="821"/>
         </scene>
         <!--Create AccountVC-->
         <scene sceneID="mGV-aj-iDQ">
@@ -418,7 +419,7 @@
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="createAccountPressed:" destination="9WL-Om-ahI" eventType="touchUpInside" id="c7I-Gz-DTz"/>
-                                    <segue destination="ZCy-AJ-Nww" kind="presentation" identifier="CreateAccountSegue" modalPresentationStyle="overFullScreen" id="jED-Ie-FjY"/>
+                                    <segue destination="aj5-XC-GXX" kind="showDetail" identifier="CreateAccountSegue" id="fnz-aQ-e1B"/>
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cbf-si-cjG">
@@ -471,29 +472,34 @@
             </objects>
             <point key="canvasLocation" x="-95.419847328244273" y="-26.056338028169016"/>
         </scene>
-        <!--Navigation Controller-->
-        <scene sceneID="5FD-Kz-V10">
+        <!--feedPage-->
+        <scene sceneID="pRQ-cE-dwV">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="ZCy-AJ-Nww" sceneMemberID="viewController">
+                <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="aj5-XC-GXX" sceneMemberID="viewController">
                     <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" id="VFA-aU-Sq1">
-                        <rect key="frame" x="0.0" y="0.0" width="393" height="44"/>
+                    <navigationItem key="navigationItem" title="feedPage" customizationIdentifier="feedPageIdentifier" id="wIt-YI-d4T"/>
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Xua-t0-w8P">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
+                        <color key="backgroundColor" systemColor="systemCyanColor"/>
+                        <tabBarAppearance key="standardAppearance">
+                            <color key="backgroundColor" systemColor="systemCyanColor"/>
+                        </tabBarAppearance>
+                    </tabBar>
                     <connections>
-                        <segue destination="WGX-gJ-KJj" kind="relationship" relationship="rootViewController" id="UkA-Mj-ajX"/>
+                        <segue destination="WGX-gJ-KJj" kind="relationship" relationship="viewControllers" id="AiW-Os-bcZ"/>
                     </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="MaP-1m-qMQ" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+                </tabBarController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="uY6-ff-zEz" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-162.59541984732823" y="750"/>
+            <point key="canvasLocation" x="-795" y="719"/>
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="3db-c8-kJA"/>
+        <segue reference="fnz-aQ-e1B"/>
     </inferredMetricsTieBreakers>
     <resources>
+        <image name="house.fill" catalog="system" width="128" height="104"/>
         <image name="person.2.badge.plus" catalog="system" width="128" height="90"/>
         <image name="person.circle.fill" catalog="system" width="128" height="123"/>
         <image name="square.and.arrow.up.fill" catalog="system" width="117" height="128"/>
@@ -503,14 +509,17 @@
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
+        <systemColor name="systemCyanColor">
+            <color red="0.1960784314" green="0.67843137249999996" blue="0.90196078430000004" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+        </systemColor>
         <systemColor name="systemGreenColor">
-            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemPinkColor">
-            <color red="1" green="0.17647058823529413" blue="0.33333333333333331" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.1764705882" blue="0.33333333329999998" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
