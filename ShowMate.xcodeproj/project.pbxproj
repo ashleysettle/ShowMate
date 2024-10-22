@@ -11,10 +11,14 @@
 		50BBC7B72CC6CB9800E03E3A /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 50BBC7B62CC6CB9800E03E3A /* FirebaseAuthCombine-Community */; };
 		50BBC7B92CC6CB9800E03E3A /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 50BBC7B82CC6CB9800E03E3A /* FirebaseCore */; };
 		B931110C2CC030A1001EE133 /* SettingsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B931110B2CC030A1001EE133 /* SettingsViewController.swift */; };
+		B990A27B2CC81CC500BFB2E4 /* FriendsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B990A27A2CC81CC500BFB2E4 /* FriendsViewController.swift */; };
+		B990A27D2CC81CF800BFB2E4 /* ShowsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B990A27C2CC81CF800BFB2E4 /* ShowsViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		B931110B2CC030A1001EE133 /* SettingsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		B990A27A2CC81CC500BFB2E4 /* FriendsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FriendsViewController.swift; sourceTree = "<group>"; };
+		B990A27C2CC81CF800BFB2E4 /* ShowsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShowsViewController.swift; sourceTree = "<group>"; };
 		B999BF912CB6F1FD003CCFD6 /* ShowMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShowMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -56,6 +60,8 @@
 		B999BF882CB6F1FD003CCFD6 = {
 			isa = PBXGroup;
 			children = (
+				B990A27C2CC81CF800BFB2E4 /* ShowsViewController.swift */,
+				B990A27A2CC81CC500BFB2E4 /* FriendsViewController.swift */,
 				B931110B2CC030A1001EE133 /* SettingsViewController.swift */,
 				B999BF932CB6F1FD003CCFD6 /* ShowMate */,
 				B999BF922CB6F1FD003CCFD6 /* Products */,
@@ -151,6 +157,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				B931110C2CC030A1001EE133 /* SettingsViewController.swift in Sources */,
+				B990A27B2CC81CC500BFB2E4 /* FriendsViewController.swift in Sources */,
+				B990A27D2CC81CF800BFB2E4 /* ShowsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,18 +10,38 @@ import FirebaseAuth
 
 class SettingsViewController: UIViewController {
     
+    @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var curUsername: UILabel!
     var delegate:UIViewController!
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        updateDisplayName()
+        
+        // Add authentication state listener
+        Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
+            self?.updateDisplayName()
+        }
         if let user = Auth.auth().currentUser {
             let displayName = user.displayName
             curUsername.text = "Current Username: \(displayName!)"
             
         }
-        // Do any additional setup after loading the view.
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateDisplayName()
+    }
+    
+    private func updateDisplayName() {
+        if let user = Auth.auth().currentUser {
+            usernameLabel.text = user.displayName
+        } else {
+            usernameLabel.text = "N/A"
+        }
+    }
+    
     
     @IBAction func logoutButtonPressed(_ sender: Any) {
         do {
@@ -77,6 +97,7 @@ class SettingsViewController: UIViewController {
             completion(error)
         }
         curUsername.text = "Current Username: \(newDisplayName)"
+        usernameLabel.text = newDisplayName
     }
     
     private func showError(message: String) {
