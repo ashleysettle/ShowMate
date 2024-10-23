@@ -8,13 +8,16 @@
 import UIKit
 import FirebaseAuth
 
-class ShowsViewController: UIViewController {
+class ShowsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
     
+    @IBOutlet weak var showCollectionView: UICollectionView!
     // API Key for TMDB
     // TODO: CHANGE TO ACCESS TOKEN?
     let apiKey = "93080f9cf388f053e991e750e536b3ff"
     
     @IBOutlet weak var usernameLabel: UILabel!
+    
+    let sampleShows = ["pll","office","dwts","bluey","b99"]
     
     // Properties to hold the lists of shows
     var currentlyWatching: [TVShow] = []
@@ -24,17 +27,66 @@ class ShowsViewController: UIViewController {
     // Array to hold search results
     var searchResults: [TVShow] = []
     
+    // Layout constants
+    private let sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
+    private let itemSpacing: CGFloat = 12
+    private let posterAspectRatio: CGFloat = 1.5
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        setupUI()
+        setupCollectionView()
         updateDisplayName()
         
-        // Add authentication state listener
         Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
             self?.updateDisplayName()
         }
         
-        // Dummy show search
         searchSubmitted(show: "The Office")
+    }
+    
+    private func setupUI() {
+        view.backgroundColor = .systemBackground
+    }
+    
+    private func setupCollectionView() {
+        showCollectionView.delegate = self
+        showCollectionView.dataSource = self
+        
+        // Configure layout
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+        layout.minimumInteritemSpacing = itemSpacing
+        layout.minimumLineSpacing = itemSpacing
+        showCollectionView.collectionViewLayout = layout
+        
+        showCollectionView.backgroundColor = .clear
+        showCollectionView.showsHorizontalScrollIndicator = false
+        showCollectionView.contentInset = sectionInsets
+    }
+        
+    // MARK: - UICollectionViewDelegateFlowLayout
+    
+    func collectionView(_ collectionView: UICollectionView,
+                       layout collectionViewLayout: UICollectionViewLayout,
+                       sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let availableHeight = collectionView.bounds.height - (sectionInsets.top + sectionInsets.bottom)
+        let width = availableHeight / posterAspectRatio
+        
+        return CGSize(width: width, height: availableHeight)
+    }
+    
+    // MARK: - UICollectionViewDataSource
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return sampleShows.count // Will be replaced with actual show data later
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell",
+                                                    for: indexPath) as! ShowCell
+        cell.configure(with: sampleShows[indexPath.row])
+        return cell
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -227,4 +279,5 @@ class ShowsViewController: UIViewController {
             }
         }.resume()
     }
+    
 }
