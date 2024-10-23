@@ -7,7 +7,6 @@
 
 import UIKit
 // ShowCell.swift
-import UIKit
 
 class ShowCell: UICollectionViewCell {
     

@@ -65,8 +65,7 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
      
      func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell",
-                                                     for: indexPath) as! ShowCell
+         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell", for: indexPath) as! ShowCell
          cell.configure(with: shows[indexPath.row])
          return cell
      }
