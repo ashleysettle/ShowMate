@@ -10,16 +10,19 @@ import FirebaseAuth
 
 class ShowsViewController: UIViewController {
     
-    // Outlets
+    // API Key for TMDB
+    // TODO: CHANGE TO ACCESS TOKEN?
+    let apiKey = "93080f9cf388f053e991e750e536b3ff"
+    
     @IBOutlet weak var usernameLabel: UILabel!
     
-    // Lists for currently watching, watched, and to-watch TV shows
-    var currentlyWatching = [TVShow]()
-    var watched = [TVShow]()
-    var toWatch = [TVShow]()
+    // Properties to hold the lists of shows
+    var currentlyWatching: [TVShow] = []
+    var watched: [TVShow] = []
+    var toWatch: [TVShow] = []
     
-    // API Key for TMDB
-    let apiKey = "YOUR_API_KEY"
+    // Array to hold search results
+    var searchResults: [TVShow] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -29,6 +32,9 @@ class ShowsViewController: UIViewController {
         Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
             self?.updateDisplayName()
         }
+        
+        // Dummy show search
+        searchSubmitted(show: "The Office")
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -36,7 +42,6 @@ class ShowsViewController: UIViewController {
         updateDisplayName()
     }
     
-    // Update display name based on user authentication
     private func updateDisplayName() {
         if let user = Auth.auth().currentUser {
             usernameLabel.text = user.displayName
@@ -45,78 +50,181 @@ class ShowsViewController: UIViewController {
         }
     }
     
-    // Fetch TV show details
-    func fetchShowDetails(for showId: Int) {
-        let detailsUrl = "https://api.themoviedb.org/3/tv/\(showId)?api_key=\(apiKey)&append_to_response=credits"
-        
-        URLSession.shared.dataTask(with: URL(string: detailsUrl)!) { data, response, error in
-            guard let data = data, error == nil else {
-                print("Error fetching show details: \(error?.localizedDescription ?? "Unknown error")")
-                return
-            }
-            
-            do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                
-                // Parse show details here
-                let name = json?["name"] as? String ?? "N/A"
-                let description = json?["overview"] as? String ?? "N/A"
-                let genres = (json?["genres"] as? [[String: Any]])?.compactMap { $0["name"] as? String } ?? []
-                let firstAirDate = json?["first_air_date"] as? String ?? "N/A"
-                let lastAirDate = json?["last_air_date"] as? String ?? "N/A"
-                let numSeasons = json?["number_of_seasons"] as? Int ?? 0
-                let posterPath = json?["poster_path"] as? String ?? ""
-                let cast = (json?["credits"] as? [String: Any])?["cast"] as? [[String: Any]] ?? []
-                let castNames = cast.compactMap { $0["name"] as? String }
-                
-                // Fetch watch providers
-                self.fetchWatchProviders(for: showId) { providers in
-                    // Create a TVShow instance with the fetched data
-                    let tvShow = TVShow(name: name, description: description, genres: genres, firstAirDate: firstAirDate, lastAirDate: lastAirDate, numSeasons: numSeasons, posterPath: posterPath, cast: castNames, providers: providers)
-                    
-                    // TODO: conditionals for adding to list
-                    DispatchQueue.main.async {
-                        self.currentlyWatching.append(tvShow)
-                        self.updateUI() // Update the UI with the new show details
-                    }
-                }
-                
-            } catch {
-                print("Error parsing JSON: \(error.localizedDescription)")
-            }
-        }.resume()
-    }
-    
-    // Fetch watch providers for a TV show
-    // Use completion to handle once task completes
-    func fetchWatchProviders(for showId: Int, completion: @escaping ([String]) -> Void) {
-        let providerUrl = "https://api.themoviedb.org/3/tv/\(showId)/watch/providers?api_key=\(apiKey)"
-        
-        URLSession.shared.dataTask(with: URL(string: providerUrl)!) { data, response, error in
-            guard let data = data, error == nil else {
-                print("Error fetching providers: \(error?.localizedDescription ?? "Unknown error")")
-                completion([])
-                return
-            }
-            
-            do {
-                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-                let results = json?["results"] as? [String: Any]
-                let usProviders = results?["US"] as? [String: Any]
-                let providerNames = (usProviders?["flatrate"] as? [[String: Any]])?.compactMap { $0["provider_name"] as? String } ?? []
-                
-                completion(providerNames) // Return the provider names
-                
-            } catch {
-                print("Error parsing providers JSON: \(error.localizedDescription)")
-                completion([])
-            }
-        }.resume()
-    }
-    
     // UI update function
     // Want to see when lists are updated
     private func updateUI() {
         print("UI Updated with \(currentlyWatching.count) shows in 'Currently Watching'")
+    }
+    
+    // Triggered after a show name is searched
+    // TODO: show results as they type (beta)
+    // Return: TVShow object if created (TV Show found), otherwise null
+    private func searchSubmitted(show: String) {
+        fetchTVShowDetails(for: show) { tvShows in
+            if let tvShows = tvShows {
+                // Success: Array of TVShow objects was created
+                self.searchResults = tvShows // Store the results for later use
+                print("Shows found: \(tvShows.map { $0.name })")
+                
+                // TODO: display search results (title and picture) in dropdown
+            } else {
+                // Failure: No show was found
+                // TODO: display no resuplts found in results dropdown
+                print("No results found.")
+            }
+        }
+    }
+
+    // Returns an array of TV show objects w/ matching titles
+    // Only fetch poster and title for searching stage
+    func fetchTVShowDetails(for title: String, completion: @escaping ([TVShow]?) -> Void) {
+        let query = title.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? title
+        let searchUrl = "https://api.themoviedb.org/3/search/tv?api_key=\(apiKey)&query=\(query)"
+
+        URLSession.shared.dataTask(with: URL(string: searchUrl)!) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error fetching show details: \(error?.localizedDescription ?? "Unknown error")")
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                return
+            }
+
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                guard let results = json?["results"] as? [[String: Any]] else {
+                    print("No results found")
+                    DispatchQueue.main.async {
+                        completion(nil)
+                    }
+                    return
+                }
+
+                var tvShows: [TVShow] = []
+                for result in results {
+                    // Extract show ID
+                    let showId = result["id"] as? Int ?? 0
+                    let name = result["name"] as? String ?? "Unknown Title"
+                    let posterPath = result["poster_path"] as? String ?? "No Poster"
+                    let posterUrl = "https://image.tmdb.org/t/p/w500\(posterPath)"
+
+                    // Create a TVShow object for each result
+                    let tvShow = TVShow(name: name, showId: showId, posterPath: posterUrl)
+                    tvShows.append(tvShow)
+                }
+
+                // Return the array of TVShow objects
+                DispatchQueue.main.async {
+                    completion(tvShows)
+                }
+
+            } catch {
+                print("Error parsing JSON: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+            }
+        }.resume()
+    }
+    
+    // Call when an option is selected from dropdown (want ALL the show data now)
+    func fetchShowDetails(for showId: Int, completion: @escaping (TVShow?) -> Void) {
+        let detailsUrl = "https://api.themoviedb.org/3/tv/\(showId)?api_key=\(apiKey)&append_to_response=credits"
+        
+        URLSession.shared.dataTask(with: URL(string: detailsUrl)!) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error fetching detailed show information: \(error?.localizedDescription ?? "Unknown error")")
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+                return
+            }
+
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+
+                let name = json?["name"] as? String ?? "Unknown Title"
+                let description = json?["overview"] as? String ?? "N/A"
+                let firstAirDate = json?["first_air_date"] as? String ?? "N/A"
+                let lastAirDate = json?["last_air_date"] as? String ?? "N/A"
+                let genres = json?["genres"] as? [[String: Any]] ?? []
+                let numSeasons = json?["number_of_seasons"] as? Int ?? 0
+                let posterPath = json?["poster_path"] as? String ?? ""
+                let posterUrl = "https://image.tmdb.org/t/p/w500\(posterPath)"
+                let genreNames = genres.compactMap { $0["name"] as? String }
+                let cast = (json?["credits"] as? [String: Any])?["cast"] as? [[String: Any]] ?? []
+                let castNames = cast.compactMap { $0["name"] as? String }
+
+                // Fetch watch providers, then call completion
+                self.fetchWatchProviders(for: showId) { providers, providerLogoPaths in
+                    let tvShow = TVShow(
+                        name: name,
+                        showId: showId,
+                        description: description,
+                        genres: genreNames,
+                        firstAirDate: firstAirDate,
+                        lastAirDate: lastAirDate,
+                        numSeasons: numSeasons,
+                        posterPath: posterUrl,
+                        cast: castNames,
+                        providers: providers,
+                        providerLogoPaths: providerLogoPaths
+                    )
+                    DispatchQueue.main.async {
+                        completion(tvShow)
+                    }
+                }
+
+            } catch {
+                print("Error parsing JSON: \(error.localizedDescription)")
+                DispatchQueue.main.async {
+                    completion(nil)
+                }
+            }
+        }.resume()
+    }
+
+    // Fetch watch providers and update the TVShow object
+    func fetchWatchProviders(for showId: Int, completion: @escaping ([String], [String]) -> Void) {
+        let countryCode = Locale.current.region?.identifier ?? "US"
+        let providersUrl = "https://api.themoviedb.org/3/tv/\(showId)/watch/providers?api_key=\(apiKey)"
+        
+        URLSession.shared.dataTask(with: URL(string: providersUrl)!) { data, response, error in
+            guard let data = data, error == nil else {
+                print("Error fetching watch providers: \(error?.localizedDescription ?? "Unknown error")")
+                completion([], []) // Return empty arrays if error
+                return
+            }
+            
+            do {
+                let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+                var providerNames: [String] = []
+                var logoUrls: [String] = []
+                
+                if let results = json?["results"] as? [String: Any],
+                   let providerInfo = results[countryCode] as? [String: Any],
+                   let providerArray = providerInfo["flatrate"] as? [[String: Any]] {
+                    
+                    for provider in providerArray {
+                        if let providerName = provider["provider_name"] as? String {
+                            providerNames.append(providerName)
+                        }
+                        if let logoPath = provider["logo_path"] as? String {
+                            let logoUrl = "https://image.tmdb.org/t/p/w92\(logoPath)"
+                            logoUrls.append(logoUrl)
+                        }
+                    }
+                } else {
+                    print("No watch provider information available for \(countryCode)")
+                }
+                
+                // Return both the provider names and provider logo URLs
+                completion(providerNames, logoUrls)
+
+            } catch {
+                print("Error parsing watch providers JSON: \(error.localizedDescription)")
+                completion([], [])
+            }
+        }.resume()
     }
 }

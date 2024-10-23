@@ -230,9 +230,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="852"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="my shows" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B9G-zt-goe">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="my shows" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="B9G-zt-goe">
                                 <rect key="frame" x="175" y="378" width="76" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -253,6 +252,14 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="RV1-yv-Svr">
+                                <rect key="frame" x="106" y="541" width="181" height="35"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Trigger show display"/>
+                                <connections>
+                                    <segue destination="egx-NU-i2W" kind="show" id="Ki3-JR-Qco"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="7Ds-R6-xXl"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -260,7 +267,10 @@
                             <constraint firstItem="rW8-pI-Qw4" firstAttribute="top" secondItem="7Ds-R6-xXl" secondAttribute="top" id="0oi-ve-OQu"/>
                             <constraint firstItem="7Ds-R6-xXl" firstAttribute="trailing" secondItem="jCA-uk-ZW8" secondAttribute="trailing" constant="20" id="4Yp-Ht-I2z"/>
                             <constraint firstItem="jCA-uk-ZW8" firstAttribute="top" secondItem="7Ds-R6-xXl" secondAttribute="top" id="7c4-e7-jKc"/>
+                            <constraint firstItem="RV1-yv-Svr" firstAttribute="centerX" secondItem="tgw-rc-IIo" secondAttribute="centerX" id="Bx9-96-8tS"/>
+                            <constraint firstItem="RV1-yv-Svr" firstAttribute="top" secondItem="B9G-zt-goe" secondAttribute="bottom" constant="142" id="Uh8-XN-NJm"/>
                             <constraint firstItem="rW8-pI-Qw4" firstAttribute="leading" secondItem="7Ds-R6-xXl" secondAttribute="leading" constant="20" id="oY1-0Q-7zQ"/>
+                            <constraint firstItem="7Ds-R6-xXl" firstAttribute="bottom" secondItem="RV1-yv-Svr" secondAttribute="bottom" constant="227" id="omu-dU-Pg6"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="My Shows" image="bookmark" catalog="system" id="EXc-05-nBr"/>
@@ -272,6 +282,34 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8KC-Pq-H4c" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-146" y="1572"/>
+        </scene>
+        <!--Show Detail View Controller-->
+        <scene sceneID="WbZ-Pp-DFd">
+            <objects>
+                <viewController id="egx-NU-i2W" customClass="ShowDetailViewController" customModule="ShowMate" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="42X-AB-5jG">
+                        <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Printed out dummy show details to console" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="by1-hO-laG">
+                                <rect key="frame" x="33" y="410.66666666666669" width="327" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                        </subviews>
+                        <viewLayoutGuide key="safeArea" id="Zwy-05-cCr"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="by1-hO-laG" firstAttribute="centerX" secondItem="42X-AB-5jG" secondAttribute="centerX" id="IJY-vx-qUS"/>
+                            <constraint firstItem="by1-hO-laG" firstAttribute="centerY" secondItem="42X-AB-5jG" secondAttribute="centerY" id="kRh-qm-NoF"/>
+                        </constraints>
+                    </view>
+                    <navigationItem key="navigationItem" id="bu7-2p-vZr"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="XAq-nc-d9Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="-283.20610687022901" y="2233.8028169014087"/>
         </scene>
         <!--Settings-->
         <scene sceneID="9di-1B-CXC">
@@ -483,19 +521,19 @@
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="linkColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="opaqueSeparatorColor">
-            <color red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemGreenColor">
-            <color red="0.20392156859999999" green="0.78039215689999997" blue="0.34901960780000002" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.20392156862745098" green="0.7803921568627451" blue="0.34901960784313724" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

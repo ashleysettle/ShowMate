@@ -7,6 +7,7 @@
 
 class TVShow {
     var name: String
+    var showId: Int
     var description: String
     var genres: [String]
     var firstAirDate: String
@@ -15,9 +16,12 @@ class TVShow {
     var posterPath: String
     var cast: [String]
     var providers: [String]
+    var providerLogoPaths: [String]
+    var preview: Bool // true indicates only a search result, not added by user
     
-    init(name: String, description: String, genres: [String], firstAirDate: String, lastAirDate: String, numSeasons: Int, posterPath: String, cast: [String], providers: [String]) {
+    init(name: String, showId: Int, description: String, genres: [String], firstAirDate: String, lastAirDate: String, numSeasons: Int, posterPath: String, cast: [String], providers: [String], providerLogoPaths: [String]) {
         self.name = name
+        self.showId = showId
         self.description = description
         self.genres = genres
         self.firstAirDate = firstAirDate
@@ -26,5 +30,40 @@ class TVShow {
         self.posterPath = posterPath
         self.cast = cast
         self.providers = providers
+        self.providerLogoPaths = providerLogoPaths
+        self.preview = false
+    }
+    
+    // Initializer for search results
+    init(name: String, showId: Int, posterPath: String) {
+        self.name = name
+        self.showId = showId
+        self.posterPath = posterPath
+        self.description = "N/A"
+        self.genres = ["N/A"]
+        self.firstAirDate = "N/A"
+        self.lastAirDate = "N/A"
+        self.numSeasons = -1
+        self.cast = ["N/A"]
+        self.providers = ["N/A"]
+        self.providerLogoPaths = ["N/A"]
+        self.preview = true
+    }
+    
+    // prints details on TV show to console
+    func printDetails() {
+            print("TV Show Details:")
+            print("Name: \(name)")
+            print("ShowId: \(showId)")
+            print("Description: \(description)")
+            print("Genres: \(genres)")
+            print("First air date: \(firstAirDate)")
+            print("Last air date: \(lastAirDate)")
+            print("Number of Seasons: \(numSeasons)")
+            print("Poster Path: \(posterPath)")
+            print("Cast: \(cast)")
+            print("Providers: \(providers)")
+            print("Provider Logo Paths: \(providerLogoPaths)")
+            print("Is Search Preview: \(preview)")
     }
 }
