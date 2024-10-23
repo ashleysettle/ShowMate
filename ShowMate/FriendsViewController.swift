@@ -9,8 +9,10 @@ import UIKit
 import FirebaseAuth
 
 class FriendsViewController: UIViewController {
-
+    @IBOutlet weak var searchUsersTextField: UITextField!
     @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var statusScrollView: UIScrollView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         updateDisplayName()
@@ -32,6 +34,16 @@ class FriendsViewController: UIViewController {
         } else {
             usernameLabel.text = "N/A"
         }
+    }
+    
+    private func addMagnifyingGlass() {
+        // image for magnifying glass
+        let magnifyingGlassImageView = UIImageView(image: UIImage(systemName: "magnifyingGlass"))
+        magnifyingGlassImageView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
+        magnifyingGlassImageView.contentMode = .scaleAspectFit
+        searchUsersTextField.leftView = magnifyingGlassImageView
+        searchUsersTextField.leftViewMode = .always
+                
     }
     
 

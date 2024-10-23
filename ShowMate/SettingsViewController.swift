@@ -7,12 +7,15 @@
 
 import UIKit
 import FirebaseAuth
+//import FirebaseDatabaseInternal
 
 class SettingsViewController: UIViewController {
     
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var curUsername: UILabel!
+    @IBOutlet weak var segmentedVisibility: UISegmentedControl!
     var delegate:UIViewController!
+    //private var ref: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -25,6 +28,7 @@ class SettingsViewController: UIViewController {
         if let user = Auth.auth().currentUser {
             let displayName = user.displayName
             curUsername.text = "Current Username: \(displayName!)"
+            //loadVisibilitySetting(for: user.uid)
             
         }
     }
@@ -41,6 +45,15 @@ class SettingsViewController: UIViewController {
             usernameLabel.text = "N/A"
         }
     }
+    
+    /*private func loadVisibilitySetting(for uid: String) {
+            ref.child("users").child(uid).child("visibility").observeSingleEvent(of: .value) { snapshot in
+                if let visibility = snapshot.value as? String {
+                    // Set the segmented control's selected index based on the visibility value
+                    self.visibilitySegmentedControl.selectedSegmentIndex = (visibility == "public") ? 0 : 1
+                }
+            }
+        }*/
     
     
     @IBAction func logoutButtonPressed(_ sender: Any) {
