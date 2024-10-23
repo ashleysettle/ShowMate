@@ -35,19 +35,15 @@ class CreateAccountVC: UIViewController {
             }
         }
     }
-    
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == createSegueIdentifier,
-//           let nextVC = segue.destination as? LandingVC {
-//            nextVC.delegate = self
-//        }
-//    }
 
+    // Function for when an account is being created
     @IBAction func createAccountPressed(_ sender: Any) {
+        // Check to ensure that all fields are completed
         if(((emailTextField.text?.isEmpty) != nil) || ((usernameTextField.text?.isEmpty) != nil) || ((passwordText.text?.isEmpty) != nil) || ((confirmPasswordText.text?.isEmpty) != nil)) {
             errorMessage.text! = "Please fill out all fields."
             return
         }
+        
         // need to add username to createUser
         if(passwordText.text != confirmPasswordText.text){
             errorMessage.text = "Passwords do not match!"

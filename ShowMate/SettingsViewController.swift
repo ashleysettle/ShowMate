@@ -7,7 +7,6 @@
 
 import UIKit
 import FirebaseAuth
-//import FirebaseDatabaseInternal
 
 class SettingsViewController: UIViewController {
     
@@ -15,7 +14,6 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var curUsername: UILabel!
     @IBOutlet weak var segmentedVisibility: UISegmentedControl!
     var delegate:UIViewController!
-    //private var ref: DatabaseReference!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -28,16 +26,16 @@ class SettingsViewController: UIViewController {
         if let user = Auth.auth().currentUser {
             let displayName = user.displayName
             curUsername.text = "Current Username: \(displayName!)"
-            //loadVisibilitySetting(for: user.uid)
-            
         }
     }
     
+    // Function to make the username appear and update
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateDisplayName()
     }
     
+    // Updates the username
     private func updateDisplayName() {
         if let user = Auth.auth().currentUser {
             usernameLabel.text = user.displayName
@@ -45,17 +43,8 @@ class SettingsViewController: UIViewController {
             usernameLabel.text = "N/A"
         }
     }
-    
-    /*private func loadVisibilitySetting(for uid: String) {
-            ref.child("users").child(uid).child("visibility").observeSingleEvent(of: .value) { snapshot in
-                if let visibility = snapshot.value as? String {
-                    // Set the segmented control's selected index based on the visibility value
-                    self.visibilitySegmentedControl.selectedSegmentIndex = (visibility == "public") ? 0 : 1
-                }
-            }
-        }*/
-    
-    
+
+    // Logs the user out of the app
     @IBAction func logoutButtonPressed(_ sender: Any) {
         do {
             try Auth.auth().signOut()
@@ -64,6 +53,8 @@ class SettingsViewController: UIViewController {
             print("Sign out error")
         }
     }
+    
+    // An alert that allows the user to change username
     @IBAction func changeUsernamePressed(_ sender: Any) {
         let alert = UIAlertController(
             title: "Change Username",
@@ -84,6 +75,7 @@ class SettingsViewController: UIViewController {
                 return
             }
             
+            // updates the display name in the app
             self?.changeDisplayName(newDisplayName: newDisplayName) { error in
                 if let error = error {
                     self?.showError(message: error.localizedDescription)
@@ -97,6 +89,7 @@ class SettingsViewController: UIViewController {
         present(alert, animated: true)
     }
     
+    // Function to change the name that displays in the corner of the app
     func changeDisplayName(newDisplayName: String, completion: @escaping (Error?) -> Void) {
         guard let user = Auth.auth().currentUser else {
             completion(NSError(domain: "", code: -1, userInfo: [NSLocalizedDescriptionKey: "No user logged in"]))
@@ -113,6 +106,7 @@ class SettingsViewController: UIViewController {
         usernameLabel.text = newDisplayName
     }
     
+    // Function that creates an error alert
     private func showError(message: String) {
             let alert = UIAlertController(
                 title: "Error",
@@ -122,6 +116,4 @@ class SettingsViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "OK", style: .default))
             present(alert, animated: true)
         }
-    
-
 }

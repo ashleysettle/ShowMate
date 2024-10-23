@@ -11,6 +11,7 @@ import FirebaseAuth
 class FriendsViewController: UIViewController {
     @IBOutlet weak var searchUsersTextField: UITextField!
     @IBOutlet weak var usernameLabel: UILabel!
+    // ScrollView that will be used for friend status later
     @IBOutlet weak var statusScrollView: UIScrollView!
     
     override func viewDidLoad() {
@@ -28,6 +29,7 @@ class FriendsViewController: UIViewController {
         updateDisplayName()
     }
     
+    // Function that updates the display name in the corner
     private func updateDisplayName() {
         if let user = Auth.auth().currentUser {
             usernameLabel.text = user.displayName
@@ -35,17 +37,4 @@ class FriendsViewController: UIViewController {
             usernameLabel.text = "N/A"
         }
     }
-    
-    private func addMagnifyingGlass() {
-        // image for magnifying glass
-        let magnifyingGlassImageView = UIImageView(image: UIImage(systemName: "magnifyingGlass"))
-        magnifyingGlassImageView.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
-        magnifyingGlassImageView.contentMode = .scaleAspectFit
-        searchUsersTextField.leftView = magnifyingGlassImageView
-        searchUsersTextField.leftViewMode = .always
-                
-    }
-    
-
-
 }
