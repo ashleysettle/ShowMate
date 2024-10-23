@@ -64,6 +64,7 @@ class ViewController: UIViewController {
                             // Display name updated successfully
                         }
                     }
+                    self?.performSegue(withIdentifier: self!.signInSegueIdentifier, sender: nil)
                 }
             }
         }
@@ -81,6 +82,7 @@ class ViewController: UIViewController {
                         self.errorMessage.text = "\(error.localizedDescription)"
                     }else {
                         self.errorMessage.text = ""
+                        self.performSegue(withIdentifier: self.signInSegueIdentifier, sender: nil)
                     }
                 }
     }

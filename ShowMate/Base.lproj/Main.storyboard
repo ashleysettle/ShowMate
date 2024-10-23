@@ -53,7 +53,6 @@
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="signInPressed:" destination="BYZ-38-t0r" eventType="touchUpInside" id="ysf-a4-ZdK"/>
-                                    <segue destination="aj5-XC-GXX" kind="presentation" identifier="SignInSegue" modalPresentationStyle="fullScreen" id="W8Z-oH-CB7"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BZi-4a-tBI">
@@ -109,6 +108,7 @@
                         <outlet property="emailTextField" destination="cyk-Aa-fbP" id="ykw-Uy-086"/>
                         <outlet property="errorMessage" destination="tbF-Fk-HS5" id="tmA-OY-zcn"/>
                         <outlet property="passwordTextField" destination="XgH-5p-V9k" id="yZk-TS-1gJ"/>
+                        <segue destination="aj5-XC-GXX" kind="presentation" identifier="SignInSegue" modalPresentationStyle="fullScreen" id="TRL-av-CSL"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
