@@ -10,6 +10,7 @@
 		50BBC7B72CC6CB9800E03E3A /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 50BBC7B62CC6CB9800E03E3A /* FirebaseAuthCombine-Community */; };
 		50BBC7B92CC6CB9800E03E3A /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 50BBC7B82CC6CB9800E03E3A /* FirebaseCore */; };
 		876D18B52CC962A20067EA41 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 876D18B42CC962A20067EA41 /* FirebaseAuth */; };
+		B9BBACEB2CD433B1006A53A7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B9BBACEA2CD433B1006A53A7 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				50BBC7B92CC6CB9800E03E3A /* FirebaseCore in Frameworks */,
+				B9BBACEB2CD433B1006A53A7 /* FirebaseFirestore in Frameworks */,
 				876D18B52CC962A20067EA41 /* FirebaseAuth in Frameworks */,
 				50BBC7B72CC6CB9800E03E3A /* FirebaseAuthCombine-Community in Frameworks */,
 			);
@@ -98,6 +100,7 @@
 				50BBC7B62CC6CB9800E03E3A /* FirebaseAuthCombine-Community */,
 				50BBC7B82CC6CB9800E03E3A /* FirebaseCore */,
 				876D18B42CC962A20067EA41 /* FirebaseAuth */,
+				B9BBACEA2CD433B1006A53A7 /* FirebaseFirestore */,
 			);
 			productName = ShowMate;
 			productReference = B999BF912CB6F1FD003CCFD6 /* ShowMate.app */;
@@ -385,6 +388,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 50BBC7B32CC6CB9800E03E3A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseAuth;
+		};
+		B9BBACEA2CD433B1006A53A7 /* FirebaseFirestore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 50BBC7B32CC6CB9800E03E3A /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseFirestore;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

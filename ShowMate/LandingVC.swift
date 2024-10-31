@@ -1,13 +1,18 @@
 // LandingVC.swift
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     @IBOutlet weak var showCollectionView: UICollectionView!
     @IBOutlet weak var usernameLabel: UILabel!
     
-    let shows = ["pll", "office", "dwts", "bluey", "b99"]
+    private var watchingShows: [WatchingShow] = [] {
+            didSet {
+                showCollectionView.reloadData()
+            }
+        }
     
     private let sectionInsets = UIEdgeInsets(top: 0, left: 16, bottom: 0, right: 16)
     private let itemSpacing: CGFloat = 12
@@ -17,11 +22,33 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
         super.viewDidLoad()
         setupCollectionView()
         checkAuthAndUpdateUI()
+        loadWatchingList()
         
         Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
             self?.checkAuthAndUpdateUI()
         }
         
+    }
+    
+    private func loadWatchingList() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        let db = Firestore.firestore()
+        db.collection("users")
+            .document(userId)
+            .collection("watching")
+            .addSnapshotListener { [weak self] snapshot, error in
+                if let error = error {
+                    print("Error loading watching list: \(error)")
+                    return
+                }
+                
+                guard let documents = snapshot?.documents else { return }
+                
+                self?.watchingShows = documents.compactMap { document in
+                    WatchingShow.fromDictionary(document.data())
+                }
+            }
     }
     
     private func checkAuthAndUpdateUI() {
@@ -61,12 +88,13 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
     
     // MARK: - UICollectionViewDataSource
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return shows.count
+        return watchingShows.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell", for: indexPath) as! ShowCell
-        cell.configure(with: shows[indexPath.row])
+        let watchingShow = watchingShows[indexPath.row]
+        cell.configure(with: watchingShow.posterPath)
         return cell
     }
     

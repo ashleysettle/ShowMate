@@ -7,6 +7,7 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class ShowDetailViewController: UIViewController {
     
@@ -20,6 +21,7 @@ class ShowDetailViewController: UIViewController {
     @IBOutlet weak var firstAirDate: UILabel!
     @IBOutlet weak var numberOfSeasons: UILabel!
     @IBOutlet weak var genreLabel: UILabel!
+    @IBOutlet weak var currentlyWatchingButton: UIButton!
     var show: TVShow!
     
     override func viewDidLoad() {
@@ -61,5 +63,32 @@ class ShowDetailViewController: UIViewController {
         firstAirDate.text = "First Air Date: \(show.firstAirDate)"
         lastAirDate.text = "Last Air Date: \(show.lastAirDate)"
         show.printDetails()
+    }
+    @IBAction func currentlyWatchingButton(_ sender: Any) {
+        guard let userId = Auth.auth().currentUser?.uid,
+                      let show = show else { return }
+                
+        let db = Firestore.firestore()
+        let watchingRef = db.collection("users")
+            .document(userId)
+            .collection("watching")
+            .document(String(show.showId))
+        
+        // Simply add to watching
+        let watchingShow = WatchingShow(
+            showId: show.showId,
+            name: show.name,
+            posterPath: show.posterPath
+        )
+        
+        watchingRef.setData(watchingShow.toDictionary) { error in
+            if let error = error {
+                print("Error adding show: \(error)")
+            } else {
+                DispatchQueue.main.async {
+                    self.currentlyWatchingButton.tintColor = .green
+                }
+            }
+        }
     }
 }
