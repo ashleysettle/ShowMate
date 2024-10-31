@@ -103,26 +103,20 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
             }
             
             DispatchQueue.main.async {
+                print(detailedShow.name)
+                self?.performSegue(withIdentifier: "ShowDetailSegue", sender: detailedShow)
                 // Navigate to detail view controller
-                self?.showDetailView(for: detailedShow)
+                //self?.showDetailView(for: detailedShow)
             }
         }
     }
     
-    private func showDetailView(for show: TVShow) {
-        // If using storyboard:
-        guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "ShowDetailViewController") as? ShowDetailViewController else {
-            return
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ShowDetailSegue",
+           let destinationVC = segue.destination as? ShowDetailViewController,
+           let show = sender as? TVShow {
+            destinationVC.show = show
         }
-        
-        // Pass the show data to the detail view
-        detailVC.show = show
-        
-        // Present the detail view
-        navigationController?.pushViewController(detailVC, animated: true)
-        
-        // Or if you want to present modally:
-        // present(detailVC, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {

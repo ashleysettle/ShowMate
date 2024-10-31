@@ -10,47 +10,56 @@ import FirebaseAuth
 
 class ShowDetailViewController: UIViewController {
     
-    // TODO: add back button
-    
-    // Outlets
-    @IBOutlet weak var usernameLabel: UILabel!
-    
-    // LET SHOW HERE
-    // dummy for now
-    var show:TVShow!
+    //@IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var showTitleLabel: UILabel!
+    @IBOutlet weak var showImageView: UIImageView!
+    @IBOutlet weak var showDescriptionLabel: UILabel!
+    // Add other outlets as needed
+    @IBOutlet weak var providerLabel: UILabel!
+    @IBOutlet weak var lastAirDate: UILabel!
+    @IBOutlet weak var firstAirDate: UILabel!
+    @IBOutlet weak var numberOfSeasons: UILabel!
+    @IBOutlet weak var genreLabel: UILabel!
+    var show: TVShow!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-//        updateDisplayName()
-//        
-//        // Add authentication state listener
-//        Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
-//            self?.updateDisplayName()
-//        }
-        printStats()
+        
+        configureUI()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // updateDisplayName()
-    }
-    
-    // Update display name based on user authentication
-    // TODO: do we need to add username label?
-//    private func updateDisplayName() {
-//        if let user = Auth.auth().currentUser {
-//            usernameLabel.text = user.displayName
-//        } else {
-//            usernameLabel.text = "N/A"
-//        }
-//    }
-    
-    // print stats for show (take in obj)
-    private func printStats() {
+    private func configureUI() {
+        guard let show = show else { return }
+        
+        showTitleLabel.text = show.name
+        showDescriptionLabel.text = show.description
+        
+        guard let url = URL(string: show.posterPath) else {
+                print("Invalid URL: \(show.posterPath)")
+                return
+            }
+        // Set a placeholder image while loading
+       showImageView.image = UIImage(systemName: "photo.fill")
+       
+       URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+           guard let self = self,
+                 let data = data,
+                 error == nil,
+                 let image = UIImage(data: data) else {
+               print("Error loading image: \(error?.localizedDescription ?? "Unknown error")")
+               return
+           }
+           
+           // Update UI on main thread
+           DispatchQueue.main.async {
+               self.showImageView.image = image
+           }
+       }.resume()
+        providerLabel.text = show.providers.joined(separator: ", ")
+        genreLabel.text = "Genres: \(show.genres.joined(separator: ", "))"
+        numberOfSeasons.text = "Number of Seasons: \(show.numSeasons)"
+        firstAirDate.text = "First Air Date: \(show.firstAirDate)"
+        lastAirDate.text = "Last Air Date: \(show.lastAirDate)"
         show.printDetails()
     }
-    
 }
-
-
-
