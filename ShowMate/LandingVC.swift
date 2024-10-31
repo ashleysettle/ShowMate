@@ -21,6 +21,7 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
         Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
             self?.checkAuthAndUpdateUI()
         }
+        
     }
     
     private func checkAuthAndUpdateUI() {

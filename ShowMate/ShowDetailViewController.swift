@@ -17,7 +17,7 @@ class ShowDetailViewController: UIViewController {
     
     // LET SHOW HERE
     // dummy for now
-    let show = TVShow(name: "The Office", showId: 1234, description: "Dunder mifflin happenings", genres: ["comedy", "romance"], firstAirDate: "Spring 2000", lastAirDate: "Fall 2010", numSeasons: 9, posterPath: "temp path", cast: ["Michael", "Ryan", "Jim"], providers: ["providers here"], providerLogoPaths: ["dummy"])
+    var show:TVShow!
     
     override func viewDidLoad() {
         super.viewDidLoad()

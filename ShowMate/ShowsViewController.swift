@@ -16,6 +16,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     let apiKey = "93080f9cf388f053e991e750e536b3ff"
     
     @IBOutlet weak var usernameLabel: UILabel!
+    @IBOutlet weak var showNameTextField: UITextField!
     
     let sampleShows = ["pll","office","dwts","bluey","b99"]
     
@@ -41,10 +42,11 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
         Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
             self?.updateDisplayName()
         }
-        
-        searchSubmitted(show: "The Office")
     }
     
+    @IBAction func submitSearchButtonPressed(_ sender: Any) {
+        searchSubmitted(show: showNameTextField.text!)
+    }
     private func setupUI() {
         view.backgroundColor = .systemBackground
     }
@@ -79,14 +81,48 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     // MARK: - UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return sampleShows.count // Will be replaced with actual show data later
+        return searchResults.count // Will be replaced with actual show data later
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell",
                                                     for: indexPath) as! ShowCell
-        cell.configure(with: sampleShows[indexPath.row])
+        //let posterUrl = "https://image.tmdb.org/t/p/w500\(searchResults[indexPath.row].posterPath)"
+        cell.configure(with: searchResults[indexPath.row].posterPath)
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedShow = searchResults[indexPath.row]
+        
+        // Fetch full details for the selected show
+        fetchShowDetails(for: selectedShow.showId) { [weak self] detailedShow in
+            guard let detailedShow = detailedShow else {
+                print("Failed to fetch show details")
+                return
+            }
+            
+            DispatchQueue.main.async {
+                // Navigate to detail view controller
+                self?.showDetailView(for: detailedShow)
+            }
+        }
+    }
+    
+    private func showDetailView(for show: TVShow) {
+        // If using storyboard:
+        guard let detailVC = storyboard?.instantiateViewController(withIdentifier: "ShowDetailViewController") as? ShowDetailViewController else {
+            return
+        }
+        
+        // Pass the show data to the detail view
+        detailVC.show = show
+        
+        // Present the detail view
+        navigationController?.pushViewController(detailVC, animated: true)
+        
+        // Or if you want to present modally:
+        // present(detailVC, animated: true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -116,8 +152,11 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
             if let tvShows = tvShows {
                 // Success: Array of TVShow objects was created
                 self.searchResults = tvShows // Store the results for later use
-                print("Shows found: \(tvShows.map { $0.name })")
-                
+//                print("Shows found: \(self.searchResults.map { $0.name })")
+//                print("Images found: \(self.searchResults.map { $0.posterPath })")
+                DispatchQueue.main.async {
+                                self.showCollectionView.reloadData()
+                            }
                 // TODO: display search results (title and picture) in dropdown
             } else {
                 // Failure: No show was found
