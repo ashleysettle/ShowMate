@@ -7,21 +7,25 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class SettingsViewController: UIViewController {
     
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var curUsername: UILabel!
     @IBOutlet weak var segmentedVisibility: UISegmentedControl!
+    private let db = Firestore.firestore()
     var delegate:UIViewController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         updateDisplayName()
+        setupVisibilityControl()
         
         // Add authentication state listener
         Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
             self?.updateDisplayName()
+            self?.loadVisibilitySetting()
         }
         if let user = Auth.auth().currentUser {
             let displayName = user.displayName
@@ -115,5 +119,46 @@ class SettingsViewController: UIViewController {
             
             alert.addAction(UIAlertAction(title: "OK", style: .default))
             present(alert, animated: true)
+    }
+    
+    private func setupVisibilityControl() {
+        segmentedVisibility.addTarget(self,
+                                    action: #selector(visibilityChanged),
+                                    for: .valueChanged)
+        loadVisibilitySetting()
+    }
+    
+    private func loadVisibilitySetting() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        db.collection("users").document(userId).getDocument { [weak self] (document, error) in
+            if let document = document, document.exists {
+                let isPrivate = document.data()?["isPrivate"] as? Bool ?? false
+                DispatchQueue.main.async {
+                    self?.segmentedVisibility.selectedSegmentIndex = isPrivate ? 1 : 0
+                }
+            } else {
+                // Set default visibility to public if no setting exists
+                self?.updateVisibilitySetting(isPrivate: false)
+            }
         }
+    }
+    
+    @objc private func visibilityChanged() {
+        let isPrivate = segmentedVisibility.selectedSegmentIndex == 1
+        updateVisibilitySetting(isPrivate: isPrivate)
+    }
+    
+    private func updateVisibilitySetting(isPrivate: Bool) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        db.collection("users").document(userId).setData([
+            "isPrivate": isPrivate,
+            "lastUpdated": FieldValue.serverTimestamp()
+        ], merge: true) { [weak self] error in
+            if let error = error {
+                self?.showError(message: "Failed to update visibility: \(error.localizedDescription)")
+            }
+        }
+    }
 }
