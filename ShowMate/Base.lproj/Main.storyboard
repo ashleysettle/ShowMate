@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -229,53 +229,74 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Search Users" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ihx-uE-Tpt">
-                                <rect key="frame" x="32" y="89" width="154" height="25"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xxN-tk-Fin">
+                                <rect key="frame" x="20" y="297" width="88" height="25"/>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="25"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="v7b-kc-C4Q">
-                                <rect key="frame" x="32" y="134" width="341" height="34"/>
-                                <constraints>
-                                    <constraint firstAttribute="width" constant="341" id="Rhz-kq-XHP"/>
-                                </constraints>
-                                <fontDescription key="fontDescription" type="system" pointSize="14"/>
-                                <textInputTraits key="textInputTraits"/>
-                            </textField>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xxN-tk-Fin">
-                                <rect key="frame" x="32" y="218" width="88" height="25"/>
-                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="25"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LWB-L3-R4u">
-                                <rect key="frame" x="20" y="273" width="357" height="476"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LWB-L3-R4u">
+                                <rect key="frame" x="20" y="337" width="357" height="412"/>
                                 <viewLayoutGuide key="contentLayoutGuide" id="AB9-Av-dst"/>
                                 <viewLayoutGuide key="frameLayoutGuide" id="LiN-OV-Z0A"/>
                             </scrollView>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4wB-r8-MCc">
+                                <rect key="frame" x="20" y="182" width="357" height="101"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <viewLayoutGuide key="contentLayoutGuide" id="m1J-7d-3RG"/>
+                                <viewLayoutGuide key="frameLayoutGuide" id="v0d-dG-CzI"/>
+                            </scrollView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Search Users" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ihx-uE-Tpt">
+                                <rect key="frame" x="20" y="91" width="154" height="25"/>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <searchBar contentMode="redraw" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="jTh-Vr-DH5">
+                                <rect key="frame" x="16" y="132" width="283" height="56"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="285" id="KAQ-br-gDz"/>
+                                </constraints>
+                                <textInputTraits key="textInputTraits"/>
+                                <connections>
+                                    <outlet property="delegate" destination="9TZ-zV-6i8" id="Mcu-vD-bPh"/>
+                                </connections>
+                            </searchBar>
+                            <button opaque="NO" contentMode="scaleToFill" ambiguous="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="mpd-Xd-0Sa">
+                                <rect key="frame" x="303" y="137" width="74" height="29"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="plain" title="Submit">
+                                    <fontDescription key="titleFontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="15"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="submitSearchButtonPressed:" destination="nmK-ID-HSj" eventType="touchUpInside" id="9Xe-gD-zDo"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="QW5-Hz-FYd"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="mpd-Xd-0Sa" firstAttribute="leading" secondItem="jTh-Vr-DH5" secondAttribute="trailing" constant="4" id="Cvm-xZ-aav"/>
+                            <constraint firstItem="mpd-Xd-0Sa" firstAttribute="top" secondItem="393-oe-kc2" secondAttribute="bottom" constant="97" id="DyB-6a-pJ5"/>
+                            <constraint firstItem="xxN-tk-Fin" firstAttribute="top" secondItem="ihx-uE-Tpt" secondAttribute="bottom" constant="181" id="G2l-Gz-RGO"/>
                             <constraint firstItem="xxN-tk-Fin" firstAttribute="leading" secondItem="QW5-Hz-FYd" secondAttribute="leading" constant="32" id="IF9-Ys-Lyk"/>
-                            <constraint firstItem="v7b-kc-C4Q" firstAttribute="top" secondItem="ihx-uE-Tpt" secondAttribute="bottom" constant="15" id="OcS-ZW-IYn"/>
                             <constraint firstItem="393-oe-kc2" firstAttribute="top" secondItem="QW5-Hz-FYd" secondAttribute="top" id="WWl-Ts-wCS"/>
+                            <constraint firstItem="LWB-L3-R4u" firstAttribute="top" secondItem="xxN-tk-Fin" secondAttribute="bottom" constant="15" id="Yt0-d0-ziZ"/>
                             <constraint firstItem="mJt-kr-ZUo" firstAttribute="top" secondItem="QW5-Hz-FYd" secondAttribute="top" id="bXr-GC-fdQ"/>
                             <constraint firstItem="QW5-Hz-FYd" firstAttribute="trailing" secondItem="393-oe-kc2" secondAttribute="trailing" constant="20" id="hrP-Es-MlD"/>
-                            <constraint firstItem="xxN-tk-Fin" firstAttribute="top" secondItem="v7b-kc-C4Q" secondAttribute="bottom" constant="50" id="itJ-Rv-Ean"/>
                             <constraint firstItem="mJt-kr-ZUo" firstAttribute="leading" secondItem="QW5-Hz-FYd" secondAttribute="leading" constant="20" id="jEV-wo-pn0"/>
                             <constraint firstItem="ihx-uE-Tpt" firstAttribute="leading" secondItem="QW5-Hz-FYd" secondAttribute="leading" constant="32" id="rxQ-8K-O77"/>
                             <constraint firstItem="ihx-uE-Tpt" firstAttribute="top" secondItem="mJt-kr-ZUo" secondAttribute="bottom" constant="60" id="srE-Wc-zH6"/>
-                            <constraint firstItem="v7b-kc-C4Q" firstAttribute="leading" secondItem="QW5-Hz-FYd" secondAttribute="leading" constant="32" id="yXH-jD-jTZ"/>
+                            <constraint firstItem="jTh-Vr-DH5" firstAttribute="top" secondItem="ihx-uE-Tpt" secondAttribute="bottom" constant="13" id="ua8-sq-v6v"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Friends" image="person.3" catalog="system" id="1s8-pc-dZM"/>
                     <connections>
-                        <outlet property="searchUsersTextField" destination="v7b-kc-C4Q" id="SC5-Um-yhC"/>
-                        <outlet property="statusScrollView" destination="LWB-L3-R4u" id="JJR-ju-LkT"/>
-                        <outlet property="usernameLabel" destination="393-oe-kc2" id="FlD-CA-0Jp"/>
+                        <outlet property="friendsScrollView" destination="LWB-L3-R4u" id="DSc-q2-XSY"/>
+                        <outlet property="searchBar" destination="jTh-Vr-DH5" id="tNU-79-h0Q"/>
+                        <outlet property="searchResultsScrollView" destination="4wB-r8-MCc" id="ECf-ib-MGW"/>
+                        <outlet property="submitButton" destination="mpd-Xd-0Sa" id="kbz-pE-2qG"/>
+                        <outlet property="usernameLabel" destination="393-oe-kc2" id="0VW-vs-MuW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="Gqh-p0-A7Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -470,7 +491,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="39Y-jh-eFf">
-                                <rect key="frame" x="92.333333333333329" y="511" width="208.33333333333343" height="34"/>
+                                <rect key="frame" x="92.333333333333329" y="511" width="208.33333333333337" height="40"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="40" id="F5D-QX-lvw"/>
                                 </constraints>
@@ -722,16 +743,16 @@
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="linkColor">
-            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="opaqueSeparatorColor">
-            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>
