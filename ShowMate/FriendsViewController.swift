@@ -55,8 +55,7 @@ class FriendsViewController: UIViewController {
         updateDisplayName()
         loadFriends()
     }
-    
-    // MARK: - UI Setup
+
     private func setupUI() {
         setupSearchBar()
         setupSubmitButton()

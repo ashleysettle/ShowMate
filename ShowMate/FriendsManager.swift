@@ -15,14 +15,12 @@ class FriendsManager {
         self.currentUserId = userId
     }
     
-    // MARK: - Profile Management
-    func updatePrivacySettings(isPublic: Bool) async throws {
+   /* func updatePrivacySettings(isPublic: Bool) async throws {
         try await db.collection("users").document(currentUserId).updateData([
             "is_public": isPublic
         ])
     }
     
-    // MARK: - Friend Operations
     func sendFriendRequest(to userId: String) async throws {
         // Verify target user exists and is public or already friends
         let targetUser = try await db.collection("users").document(userId).getDocument()
@@ -75,7 +73,7 @@ class FriendsManager {
         ], forDocument: otherUserRef)
         
         try await batch.commit()
-    }
+    }*/
     
     // MARK: - User Discovery
     func searchUsers(by username: String, limit: Int = 20) async throws -> [UserProfile] {
