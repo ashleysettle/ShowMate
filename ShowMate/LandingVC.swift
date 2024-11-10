@@ -98,6 +98,13 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
         return cell
     }
     
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let selectedShow = watchingShows[indexPath.row]
+        print(selectedShow.name)
+    }
+    
+    
+    
     private func updateDisplayName() {
         if let user = Auth.auth().currentUser {
             usernameLabel.text = user.displayName

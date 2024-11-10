@@ -9,12 +9,7 @@ import UIKit
 // ShowCell.swift
 
 class ShowCell: UICollectionViewCell {
-    
-    @IBOutlet weak var showPosterImage: UIImageView! {
-        didSet {
-            setupUI()
-        }
-    }
+    @IBOutlet weak var showPosterImage: UIImageView!
     
     override func awakeFromNib() {
         super.awakeFromNib()
@@ -43,15 +38,13 @@ class ShowCell: UICollectionViewCell {
         layer.cornerRadius = 10
     }
     
-    // Update configure method to handle URLs
     func configure(with posterUrl: String) {
-        // Show a loading state or placeholder while image loads
-        showPosterImage.image = UIImage(named: "placeholder") // Optional: add a placeholder image
-        
         guard let url = URL(string: posterUrl) else {
             print("Invalid URL: \(posterUrl)")
             return
         }
+        
+        showPosterImage.image = UIImage(systemName: "photo.fill")
         
         URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
             guard let self = self,
@@ -70,6 +63,6 @@ class ShowCell: UICollectionViewCell {
     
     override func prepareForReuse() {
         super.prepareForReuse()
-        showPosterImage?.image = nil
+        showPosterImage.image = nil
     }
 }

@@ -8,7 +8,7 @@
 import UIKit
 import FirebaseAuth
 
-class ShowsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout{
+class ShowsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate{
     
     @IBOutlet weak var showCollectionView: UICollectionView!
     // API Key for TMDB
@@ -16,9 +16,8 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     let apiKey = "93080f9cf388f053e991e750e536b3ff"
     
     @IBOutlet weak var usernameLabel: UILabel!
-    @IBOutlet weak var showNameTextField: UITextField!
+    @IBOutlet weak var showSearchBar: UISearchBar!
     
-    let sampleShows = ["pll","office","dwts","bluey","b99"]
     
     // Properties to hold the lists of shows
     var currentlyWatching: [TVShow] = []
@@ -35,7 +34,6 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setupUI()
         setupCollectionView()
         updateDisplayName()
         
@@ -44,12 +42,12 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
     }
     
-    @IBAction func submitSearchButtonPressed(_ sender: Any) {
-        searchSubmitted(show: showNameTextField.text!)
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+        searchBar.resignFirstResponder() // Dismiss keyboard
+        searchSubmitted(show: searchText)
     }
-    private func setupUI() {
-        view.backgroundColor = .systemBackground
-    }
+    
     
     private func setupCollectionView() {
         showCollectionView.delegate = self
@@ -85,9 +83,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell",
-                                                    for: indexPath) as! ShowCell
-        //let posterUrl = "https://image.tmdb.org/t/p/w500\(searchResults[indexPath.row].posterPath)"
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell", for: indexPath) as! ShowCell
         cell.configure(with: searchResults[indexPath.row].posterPath)
         return cell
     }

@@ -11,11 +11,9 @@ import FirebaseFirestore
 
 class ShowDetailViewController: UIViewController {
     
-    //@IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var showTitleLabel: UILabel!
     @IBOutlet weak var showImageView: UIImageView!
     @IBOutlet weak var showDescriptionLabel: UILabel!
-    // Add other outlets as needed
     @IBOutlet weak var providerLabel: UILabel!
     @IBOutlet weak var lastAirDate: UILabel!
     @IBOutlet weak var firstAirDate: UILabel!
@@ -40,7 +38,6 @@ class ShowDetailViewController: UIViewController {
                 print("Invalid URL: \(show.posterPath)")
                 return
             }
-        // Set a placeholder image while loading
        showImageView.image = UIImage(systemName: "photo.fill")
        
        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
@@ -57,7 +54,9 @@ class ShowDetailViewController: UIViewController {
                self.showImageView.image = image
            }
        }.resume()
-        providerLabel.text = show.providers.joined(separator: ", ")
+        providerLabel.sizeToFit()
+        providerLabel.text = "Where to Watch: \(show.providers.joined(separator: ", "))"
+        genreLabel.sizeToFit()
         genreLabel.text = "Genres: \(show.genres.joined(separator: ", "))"
         numberOfSeasons.text = "Number of Seasons: \(show.numSeasons)"
         firstAirDate.text = "First Air Date: \(show.firstAirDate)"

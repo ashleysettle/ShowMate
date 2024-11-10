@@ -26,6 +26,11 @@ struct WatchingShow {
               let posterPath = dict["posterPath"] as? String else {
             return nil
         }
-        return WatchingShow(showId: showId, name: name, posterPath: posterPath)
+        
+        return WatchingShow(
+            showId: showId,
+            name: name,
+            posterPath: posterPath
+        )
     }
 }
