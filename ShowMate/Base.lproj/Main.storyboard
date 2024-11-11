@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -232,23 +232,6 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xxN-tk-Fin">
-                                <rect key="frame" x="20" y="297" width="88" height="25"/>
-                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="25"/>
-                                <nil key="textColor"/>
-                                <nil key="highlightedColor"/>
-                            </label>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" translatesAutoresizingMaskIntoConstraints="NO" id="LWB-L3-R4u">
-                                <rect key="frame" x="20" y="337" width="357" height="412"/>
-                                <viewLayoutGuide key="contentLayoutGuide" id="AB9-Av-dst"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="LiN-OV-Z0A"/>
-                            </scrollView>
-                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="4wB-r8-MCc">
-                                <rect key="frame" x="20" y="182" width="357" height="101"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <viewLayoutGuide key="contentLayoutGuide" id="m1J-7d-3RG"/>
-                                <viewLayoutGuide key="frameLayoutGuide" id="v0d-dG-CzI"/>
-                            </scrollView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Search Users" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ihx-uE-Tpt">
                                 <rect key="frame" x="20" y="91" width="154" height="25"/>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="25"/>
@@ -275,6 +258,20 @@
                                     <action selector="submitSearchButtonPressed:" destination="nmK-ID-HSj" eventType="touchUpInside" id="9Xe-gD-zDo"/>
                                 </connections>
                             </button>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="pzB-cL-Jfu">
+                                <rect key="frame" x="18" y="201" width="357" height="91"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xxN-tk-Fin">
+                                <rect key="frame" x="20" y="310" width="88" height="25"/>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="4L4-Wy-ige">
+                                <rect key="frame" x="20" y="353" width="353" height="435"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                            </tableView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="QW5-Hz-FYd"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -282,22 +279,24 @@
                             <constraint firstItem="mpd-Xd-0Sa" firstAttribute="leading" secondItem="jTh-Vr-DH5" secondAttribute="trailing" constant="4" id="Cvm-xZ-aav"/>
                             <constraint firstItem="mpd-Xd-0Sa" firstAttribute="top" secondItem="393-oe-kc2" secondAttribute="bottom" constant="97" id="DyB-6a-pJ5"/>
                             <constraint firstItem="xxN-tk-Fin" firstAttribute="top" secondItem="ihx-uE-Tpt" secondAttribute="bottom" constant="181" id="G2l-Gz-RGO"/>
+                            <constraint firstItem="pzB-cL-Jfu" firstAttribute="top" secondItem="jTh-Vr-DH5" secondAttribute="bottom" constant="13" id="HEs-qc-UsG"/>
                             <constraint firstItem="xxN-tk-Fin" firstAttribute="leading" secondItem="QW5-Hz-FYd" secondAttribute="leading" constant="32" id="IF9-Ys-Lyk"/>
+                            <constraint firstItem="xxN-tk-Fin" firstAttribute="top" secondItem="pzB-cL-Jfu" secondAttribute="bottom" constant="8" symbolic="YES" id="UOX-ej-a2p"/>
                             <constraint firstItem="393-oe-kc2" firstAttribute="top" secondItem="QW5-Hz-FYd" secondAttribute="top" id="WWl-Ts-wCS"/>
-                            <constraint firstItem="LWB-L3-R4u" firstAttribute="top" secondItem="xxN-tk-Fin" secondAttribute="bottom" constant="15" id="Yt0-d0-ziZ"/>
                             <constraint firstItem="mJt-kr-ZUo" firstAttribute="top" secondItem="QW5-Hz-FYd" secondAttribute="top" id="bXr-GC-fdQ"/>
                             <constraint firstItem="QW5-Hz-FYd" firstAttribute="trailing" secondItem="393-oe-kc2" secondAttribute="trailing" constant="20" id="hrP-Es-MlD"/>
                             <constraint firstItem="mJt-kr-ZUo" firstAttribute="leading" secondItem="QW5-Hz-FYd" secondAttribute="leading" constant="20" id="jEV-wo-pn0"/>
                             <constraint firstItem="ihx-uE-Tpt" firstAttribute="leading" secondItem="QW5-Hz-FYd" secondAttribute="leading" constant="32" id="rxQ-8K-O77"/>
                             <constraint firstItem="ihx-uE-Tpt" firstAttribute="top" secondItem="mJt-kr-ZUo" secondAttribute="bottom" constant="60" id="srE-Wc-zH6"/>
                             <constraint firstItem="jTh-Vr-DH5" firstAttribute="top" secondItem="ihx-uE-Tpt" secondAttribute="bottom" constant="13" id="ua8-sq-v6v"/>
+                            <constraint firstItem="4L4-Wy-ige" firstAttribute="top" secondItem="xxN-tk-Fin" secondAttribute="bottom" constant="18" id="wfK-9k-crx"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Friends" image="person.3" catalog="system" id="1s8-pc-dZM"/>
                     <connections>
-                        <outlet property="friendsScrollView" destination="LWB-L3-R4u" id="DSc-q2-XSY"/>
+                        <outlet property="currentFriendsTable" destination="4L4-Wy-ige" id="M2u-yC-l0i"/>
+                        <outlet property="resultsTable" destination="pzB-cL-Jfu" id="lDb-ue-31a"/>
                         <outlet property="searchBar" destination="jTh-Vr-DH5" id="tNU-79-h0Q"/>
-                        <outlet property="searchResultsScrollView" destination="4wB-r8-MCc" id="ECf-ib-MGW"/>
                         <outlet property="submitButton" destination="mpd-Xd-0Sa" id="kbz-pE-2qG"/>
                         <outlet property="usernameLabel" destination="393-oe-kc2" id="0VW-vs-MuW"/>
                     </connections>
@@ -729,16 +728,16 @@
             <color white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="linkColor">
-            <color red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.0" green="0.47843137254901963" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="opaqueSeparatorColor">
-            <color red="0.77647058820000003" green="0.77647058820000003" blue="0.7843137255" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="0.77647058823529413" green="0.77647058823529413" blue="0.78431372549019607" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
         <systemColor name="systemBackgroundColor">
             <color white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
         </systemColor>
         <systemColor name="systemRedColor">
-            <color red="1" green="0.23137254900000001" blue="0.18823529410000001" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+            <color red="1" green="0.23137254901960785" blue="0.18823529411764706" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
         </systemColor>
     </resources>
 </document>

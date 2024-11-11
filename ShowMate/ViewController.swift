@@ -13,10 +13,12 @@ class ViewController: UIViewController {
     let signInSegueIdentifier = "SignInSegue"
     
     override func viewDidLoad() {
+        print("app opened")
         super.viewDidLoad()
         
         // Only check auth state on cold launch
         if let user = Auth.auth().currentUser {
+            print("logged in")
             self.performSegue(withIdentifier: self.signInSegueIdentifier, sender: nil)
         }
         

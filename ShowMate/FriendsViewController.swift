@@ -24,15 +24,17 @@ class FriendsViewController: UIViewController {
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var submitButton: UIButton!
-    @IBOutlet weak var searchResultsScrollView: UIScrollView!
-    @IBOutlet weak var friendsScrollView: UIScrollView!
+    @IBOutlet weak var resultsTable: UITableView!
+    @IBOutlet weak var currentFriendsTable: UITableView!
     
+    var resultsFromSearch = [UserProfile]()
     private var searchResultsStackView: UIStackView!
     private var friendsStackView: UIStackView!
     private var friendsManager: FriendsManager?
     
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
+        print("opened")
         super.viewDidLoad()
         setupUI()
         updateDisplayName()
@@ -59,8 +61,6 @@ class FriendsViewController: UIViewController {
     private func setupUI() {
         setupSearchBar()
         setupSubmitButton()
-        setupSearchResultsView()
-        setupFriendsView()
     }
     
     private func setupSearchBar() {
@@ -77,42 +77,6 @@ class FriendsViewController: UIViewController {
         submitButton.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
     }
     
-    private func setupSearchResultsView() {
-        // Setup search results stack view
-        searchResultsStackView = UIStackView()
-        searchResultsStackView.axis = .vertical
-        searchResultsStackView.spacing = 8
-        searchResultsStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        searchResultsScrollView.addSubview(searchResultsStackView)
-        
-        NSLayoutConstraint.activate([
-            searchResultsStackView.topAnchor.constraint(equalTo: searchResultsScrollView.contentLayoutGuide.topAnchor),
-            searchResultsStackView.leadingAnchor.constraint(equalTo: searchResultsScrollView.leadingAnchor, constant: 16),
-            searchResultsStackView.trailingAnchor.constraint(equalTo: searchResultsScrollView.trailingAnchor, constant: -16),
-            searchResultsStackView.bottomAnchor.constraint(equalTo: searchResultsScrollView.contentLayoutGuide.bottomAnchor),
-            searchResultsStackView.widthAnchor.constraint(equalTo: searchResultsScrollView.widthAnchor, constant: -32)
-        ])
-    }
-    
-    private func setupFriendsView() {
-        // Setup friends stack view
-        friendsStackView = UIStackView()
-        friendsStackView.axis = .vertical
-        friendsStackView.spacing = 8
-        friendsStackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        friendsScrollView.addSubview(friendsStackView)
-        
-        NSLayoutConstraint.activate([
-            friendsStackView.topAnchor.constraint(equalTo: friendsScrollView.contentLayoutGuide.topAnchor),
-            friendsStackView.leadingAnchor.constraint(equalTo: friendsScrollView.leadingAnchor, constant: 16),
-            friendsStackView.trailingAnchor.constraint(equalTo: friendsScrollView.trailingAnchor, constant: -16),
-            friendsStackView.bottomAnchor.constraint(equalTo: friendsScrollView.contentLayoutGuide.bottomAnchor),
-            friendsStackView.widthAnchor.constraint(equalTo: friendsScrollView.widthAnchor, constant: -32)
-        ])
-    }
-    
     // MARK: - Actions
     @objc private func submitButtonTapped() {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
@@ -127,7 +91,10 @@ class FriendsViewController: UIViewController {
             do {
                 let users = try await friendsManager.searchUsers(by: searchText)
                 await MainActor.run {
-                    self.displaySearchResults(users)
+                    self.resultsFromSearch = users
+                    print(self.resultsFromSearch)
+                    self.resultsTable.reloadData()
+                    //self.displaySearchResults(users)
                 }
             } catch {
                 print("Search error: \(error)")
@@ -139,24 +106,24 @@ class FriendsViewController: UIViewController {
     }
     
     private func clearSearchResults() {
-        searchResultsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        resultsFromSearch.removeAll()
+        resultsTable.reloadData()
     }
     
     private func displaySearchResults(_ users: [UserProfile]) {
         clearSearchResults()
+        self.resultsFromSearch = users
         
         if users.isEmpty {
             let emptyLabel = UILabel()
             emptyLabel.text = "No users found"
             emptyLabel.textAlignment = .center
             emptyLabel.textColor = .gray
-            searchResultsStackView.addArrangedSubview(emptyLabel)
+            resultsTable.tableFooterView = emptyLabel
         } else {
-            users.forEach { user in
-                let userView = createUserView(for: user, isSearchResult: true)
-                searchResultsStackView.addArrangedSubview(userView)
-            }
+            resultsTable.tableFooterView = nil
         }
+        resultsTable.reloadData()
     }
     
     private func loadFriends() {
@@ -175,7 +142,7 @@ class FriendsViewController: UIViewController {
     }
     
     private func displayFriends(_ friends: [UserProfile]) {
-        friendsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
+        /*friendsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
         
         if friends.isEmpty {
             let emptyLabel = UILabel()
@@ -188,10 +155,10 @@ class FriendsViewController: UIViewController {
                 let friendView = createUserView(for: friend, isSearchResult: false)
                 friendsStackView.addArrangedSubview(friendView)
             }
-        }
+        }*/
     }
     
-    private func createUserView(for user: UserProfile, isSearchResult: Bool) -> UIView {
+    /*private func createUserView(for user: UserProfile, isSearchResult: Bool) -> UIView {
         let container = UIView()
         container.backgroundColor = .systemBackground
         container.layer.cornerRadius = 8
@@ -235,7 +202,7 @@ class FriendsViewController: UIViewController {
         ])
         
         return container
-    }
+    }*/
     
     @objc private func sendFriendRequest(_ sender: UIButton) {
         // TODO: Implement send friend request
@@ -259,5 +226,29 @@ extension FriendsViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
         submitButtonTapped()
+    }
+}
+
+extension FriendsViewController: UITableViewDataSource {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return resultsFromSearch.count // Number of search results
+    }
+
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath)
+        
+        // Configure the cell
+        let user = resultsFromSearch[indexPath.row]
+        cell.textLabel?.text = user.username
+        
+        // Optionally, configure other properties (like image or friend status) if needed
+        return cell
+    }
+}
+
+extension FriendsViewController: UITableViewDelegate {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let user = resultsFromSearch[indexPath.row]
+        // Handle the tap, e.g., show more info or send a friend request
     }
 }
