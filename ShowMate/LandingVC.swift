@@ -100,9 +100,19 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedShow = watchingShows[indexPath.row]
-        print(selectedShow.name)
+        DispatchQueue.main.async {
+            print(selectedShow.name)
+            self.performSegue(withIdentifier: "StatusUpdateSegue", sender: selectedShow)
+        }
     }
     
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "StatusUpdateSegue",
+           let nextVC = segue.destination as? StatusUpdateViewController {
+            nextVC.delegate = self
+            nextVC.show = sender as? WatchingShow
+        }
+    }
     
     
     private func updateDisplayName() {

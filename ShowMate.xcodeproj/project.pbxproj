@@ -10,10 +10,12 @@
 		50BBC7B72CC6CB9800E03E3A /* FirebaseAuthCombine-Community in Frameworks */ = {isa = PBXBuildFile; productRef = 50BBC7B62CC6CB9800E03E3A /* FirebaseAuthCombine-Community */; };
 		50BBC7B92CC6CB9800E03E3A /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 50BBC7B82CC6CB9800E03E3A /* FirebaseCore */; };
 		876D18B52CC962A20067EA41 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = 876D18B42CC962A20067EA41 /* FirebaseAuth */; };
+		B97C77CD2CE27C95005CD7EA /* StatusUpdateViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B97C77CC2CE27C95005CD7EA /* StatusUpdateViewController.swift */; };
 		B9BBACEB2CD433B1006A53A7 /* FirebaseFirestore in Frameworks */ = {isa = PBXBuildFile; productRef = B9BBACEA2CD433B1006A53A7 /* FirebaseFirestore */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		B97C77CC2CE27C95005CD7EA /* StatusUpdateViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StatusUpdateViewController.swift; sourceTree = "<group>"; };
 		B999BF912CB6F1FD003CCFD6 /* ShowMate.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ShowMate.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -63,6 +65,7 @@
 		B999BF882CB6F1FD003CCFD6 = {
 			isa = PBXGroup;
 			children = (
+				B97C77CC2CE27C95005CD7EA /* StatusUpdateViewController.swift */,
 				B999BF932CB6F1FD003CCFD6 /* ShowMate */,
 				876D18B32CC962960067EA41 /* Frameworks */,
 				B999BF922CB6F1FD003CCFD6 /* Products */,
@@ -158,6 +161,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				B97C77CD2CE27C95005CD7EA /* StatusUpdateViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

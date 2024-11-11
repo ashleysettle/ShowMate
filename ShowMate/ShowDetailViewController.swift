@@ -63,6 +63,7 @@ class ShowDetailViewController: UIViewController {
         lastAirDate.text = "Last Air Date: \(show.lastAirDate)"
         show.printDetails()
     }
+    
     @IBAction func currentlyWatchingButton(_ sender: Any) {
         guard let userId = Auth.auth().currentUser?.uid,
                       let show = show else { return }
@@ -77,7 +78,9 @@ class ShowDetailViewController: UIViewController {
         let watchingShow = WatchingShow(
             showId: show.showId,
             name: show.name,
-            posterPath: show.posterPath
+            posterPath: show.posterPath,
+            numSeasons: show.numSeasons,
+            status: WatchingShow.ShowStatus(season: 1, episode: 1)
         )
         
         watchingRef.setData(watchingShow.toDictionary) { error in
