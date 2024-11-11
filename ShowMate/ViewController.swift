@@ -1,24 +1,27 @@
-// ViewController.swift
+//
+//  ViewController.swift
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
 class ViewController: UIViewController {
-    // fields for inputting login information
+    // Fields for inputting login information
     @IBOutlet weak var passwordTextField: UITextField!
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var errorMessage: UILabel!
     
-    // variable names for segues
+    // Variable names for segues
     let createAccountSegueIdentifier = "CreateAccountSegue"
     let signInSegueIdentifier = "SignInSegue"
     
+    // Instance of UserManager to handle Firestore interactions
+    private let userManager = UserManager()
+    
     override func viewDidLoad() {
-        print("app opened")
         super.viewDidLoad()
         
         // Only check auth state on cold launch
         if let user = Auth.auth().currentUser {
-            print("logged in")
             self.performSegue(withIdentifier: self.signInSegueIdentifier, sender: nil)
         }
         
@@ -59,21 +62,31 @@ class ViewController: UIViewController {
             let emailField = alert.textFields![1]
             let passwordField = alert.textFields![2]
             
-            // Create a new user
+            // Create a new user with Firebase Authentication
             Auth.auth().createUser(withEmail: emailField.text!, password: passwordField.text!) { [weak self] (authResult, error) in
                 if let error = error as NSError? {
                     self?.errorMessage.text = "\(error.localizedDescription)"
-                } else {
+                } else if let userId = authResult?.user.uid {
                     // Set display name
                     let changeRequest = authResult?.user.createProfileChangeRequest()
                     changeRequest?.displayName = displayNameField.text
-                    
                     changeRequest?.commitChanges { [weak self] (error) in
                         if let error = error {
                             self?.errorMessage.text = "\(error.localizedDescription)"
                         } else {
-                            self?.errorMessage.text = ""
-                            self?.performSegue(withIdentifier: self?.signInSegueIdentifier ?? "", sender: nil)
+                            // Add user to Firestore after setting display name
+                            Task {
+                                do {
+                                    try await self?.userManager.addUserToFirestore(
+                                        userId: userId,
+                                        username: displayNameField.text ?? "NewUser"
+                                    )
+                                    self?.errorMessage.text = ""
+                                    self?.performSegue(withIdentifier: self?.signInSegueIdentifier ?? "", sender: nil)
+                                } catch {
+                                    self?.errorMessage.text = "Error adding user to Firestore: \(error.localizedDescription)"
+                                }
+                            }
                         }
                     }
                 }
@@ -94,16 +107,16 @@ class ViewController: UIViewController {
             return
         }
         
-        // Connects to firebase to log user in
+        // Connects to Firebase to log user in
         Auth.auth().signIn(withEmail: email, password: password) { [weak self] (authResult, error) in
             if let error = error as NSError? {
                 self?.errorMessage.text = "\(error.localizedDescription)"
             } else {
                 self?.errorMessage.text = ""
-                // After successful sign in
+                // After successful sign in, perform segue
                 self?.performSegue(withIdentifier: self?.signInSegueIdentifier ?? "", sender: nil)
 
-                // Change to:
+                // Set the root view controller after sign-in
                 if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
                     sceneDelegate.checkAuthAndSetRootViewController()
                 }
