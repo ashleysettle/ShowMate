@@ -199,10 +199,7 @@ extension FriendsViewController: UITableViewDataSource {
         
         // Configure the cell
         let user = resultsFromSearch[indexPath.row]
-        let usernameOnly = user.username
-        print("only username: \(usernameOnly)")
         cell.textLabel?.text = user.username
-        print("username: \(String(describing: user.username))")
         // Optionally, configure other properties (like image or friend status) if needed
         return cell
     }
