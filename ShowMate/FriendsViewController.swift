@@ -27,6 +27,7 @@ class FriendsViewController: UIViewController {
     @IBOutlet weak var resultsTable: UITableView!
     @IBOutlet weak var currentFriendsTable: UITableView!
     
+    let searchUserCellID = "userCell"
     var resultsFromSearch = [UserProfile]()
     private var searchResultsStackView: UIStackView!
     private var friendsStackView: UIStackView!
@@ -34,8 +35,11 @@ class FriendsViewController: UIViewController {
     
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
-        print("opened")
+        resultsTable.dataSource = self
+        resultsTable.delegate = self
         super.viewDidLoad()
+        resultsTable.register(UITableViewCell.self, forCellReuseIdentifier: searchUserCellID)
+        resultsTable.frame = CGRect(x: 0, y: 263, width: view.frame.width, height: 400)
         setupUI()
         updateDisplayName()
         
@@ -92,9 +96,8 @@ class FriendsViewController: UIViewController {
                 let users = try await friendsManager.searchUsers(by: searchText)
                 await MainActor.run {
                     self.resultsFromSearch = users
-                    print(self.resultsFromSearch)
+                    print("results : \(self.resultsFromSearch)")
                     self.resultsTable.reloadData()
-                    //self.displaySearchResults(users)
                 }
             } catch {
                 print("Search error: \(error)")
@@ -103,6 +106,8 @@ class FriendsViewController: UIViewController {
                 }
             }
         }
+        print("Table frame:", resultsTable.frame)
+        resultsTable.reloadData()
     }
     
     private func clearSearchResults() {
@@ -158,52 +163,6 @@ class FriendsViewController: UIViewController {
         }*/
     }
     
-    /*private func createUserView(for user: UserProfile, isSearchResult: Bool) -> UIView {
-        let container = UIView()
-        container.backgroundColor = .systemBackground
-        container.layer.cornerRadius = 8
-        container.layer.borderWidth = 1
-        container.layer.borderColor = UIColor.systemGray5.cgColor
-        
-        let stackView = UIStackView()
-        stackView.axis = .horizontal
-        stackView.spacing = 8
-        stackView.alignment = .center
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        let nameLabel = UILabel()
-        nameLabel.text = user.username
-        stackView.addArrangedSubview(nameLabel)
-        
-        let spacer = UIView()
-        stackView.addArrangedSubview(spacer)
-        
-        let button = UIButton(type: .system)
-        button.tag = stackView.arrangedSubviews.count
-        
-        if isSearchResult {
-            button.setTitle("Add Friend", for: .normal)
-            button.addTarget(self, action: #selector(sendFriendRequest(_:)), for: .touchUpInside)
-        } else {
-            button.setTitle("Remove", for: .normal)
-            button.tintColor = .systemRed
-            button.addTarget(self, action: #selector(removeFriend(_:)), for: .touchUpInside)
-        }
-        
-        stackView.addArrangedSubview(button)
-        container.addSubview(stackView)
-        
-        NSLayoutConstraint.activate([
-            container.heightAnchor.constraint(equalToConstant: 50),
-            stackView.topAnchor.constraint(equalTo: container.topAnchor, constant: 8),
-            stackView.leadingAnchor.constraint(equalTo: container.leadingAnchor, constant: 16),
-            stackView.trailingAnchor.constraint(equalTo: container.trailingAnchor, constant: -16),
-            stackView.bottomAnchor.constraint(equalTo: container.bottomAnchor, constant: -8)
-        ])
-        
-        return container
-    }*/
-    
     @objc private func sendFriendRequest(_ sender: UIButton) {
         // TODO: Implement send friend request
     }
@@ -231,16 +190,19 @@ extension FriendsViewController: UISearchBarDelegate {
 
 extension FriendsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        print("num rows: \(resultsFromSearch.count)")
         return resultsFromSearch.count // Number of search results
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "UserCell", for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: searchUserCellID, for: indexPath)
         
         // Configure the cell
         let user = resultsFromSearch[indexPath.row]
+        let usernameOnly = user.username
+        print("only username: \(usernameOnly)")
         cell.textLabel?.text = user.username
-        
+        print("username: \(String(describing: user.username))")
         // Optionally, configure other properties (like image or friend status) if needed
         return cell
     }
