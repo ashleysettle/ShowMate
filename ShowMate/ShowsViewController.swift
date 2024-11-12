@@ -181,17 +181,26 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let selectedShow = searchResults[indexPath.row]
-        
-        fetchShowDetails(for: selectedShow.showId) { [weak self] detailedShow in
-            guard let detailedShow = detailedShow else {
-                print("Failed to fetch show details")
-                return
+        switch collectionView {
+        case currentlyWatchingCV:
+            let show = currentlyWatching[indexPath.row]
+            performSegue(withIdentifier: "StatusSegue", sender: show)
+            
+        case showCollectionView:
+            let show = searchResults[indexPath.row]
+            fetchShowDetails(for: show.showId) { [weak self] detailedShow in
+                guard let detailedShow = detailedShow else { return }
+                DispatchQueue.main.async {
+                    self?.performSegue(withIdentifier: "ShowDetailSegue", sender: detailedShow)
+                }
             }
             
-            DispatchQueue.main.async {
-                self?.performSegue(withIdentifier: "ShowDetailSegue", sender: detailedShow)
-            }
+        case watchlistCV:
+            let show = watchlist[indexPath.row]
+            performSegue(withIdentifier: "ShowDetailSegue", sender: show)
+            
+        default:
+            break
         }
     }
     
@@ -200,6 +209,16 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
            let destinationVC = segue.destination as? ShowDetailViewController,
            let show = sender as? TVShow {
             destinationVC.show = show
+            destinationVC.delegate = self
+        }else if segue.identifier == "StatusSegue", let destinationVC = segue.destination as? StatusUpdateViewController, let show = sender as? TVShow {
+            let watchingShow = WatchingShow(
+                showId: show.showId,
+                name: show.name,
+                posterPath: show.posterPath,
+                numSeasons: show.numSeasons,
+                status: .init(season: 1, episode: 1)
+            )
+            destinationVC.show = watchingShow
             destinationVC.delegate = self
         }
     }

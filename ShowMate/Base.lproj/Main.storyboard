@@ -56,7 +56,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BZi-4a-tBI">
-                                <rect key="frame" x="116.66666666666669" y="559" width="160" height="38"/>
+                                <rect key="frame" x="116.66666666666669" y="557" width="160" height="38"/>
                                 <color key="tintColor" systemColor="labelColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Create Account">
@@ -226,14 +226,14 @@
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="I'm on season:" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Zxh-ma-N2X">
                                 <rect key="frame" x="16" y="332" width="122" height="43"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="episode:" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="IIn-h2-rMP">
                                 <rect key="frame" x="211" y="333" width="73" height="43"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="17"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
@@ -250,12 +250,12 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="5mF-Qn-eWM">
-                                <rect key="frame" x="140" y="433" width="122" height="29"/>
+                                <rect key="frame" x="140" y="432" width="122" height="32"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <color key="tintColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="gray" title="Save Progress">
-                                    <fontDescription key="titleFontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="15"/>
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="15"/>
                                 </buttonConfiguration>
                                 <connections>
                                     <action selector="saveProgressButton:" destination="vPO-TM-2NB" eventType="touchUpInside" id="yEm-wz-iXz"/>
@@ -267,7 +267,7 @@
                             </imageView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Wr0-AN-vRI"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                     </view>
                     <navigationItem key="navigationItem" id="Pzk-bX-hme"/>
                     <connections>
@@ -568,11 +568,12 @@
                         <outlet property="usernameLabel" destination="jCA-uk-ZW8" id="twD-LP-hX4"/>
                         <outlet property="watchlistCV" destination="BkF-Wk-9nI" id="jb4-6x-GRV"/>
                         <segue destination="egx-NU-i2W" kind="show" identifier="ShowDetailSegue" id="PCc-xD-bHC"/>
+                        <segue destination="vPO-TM-2NB" kind="show" identifier="StatusSegue" id="Ba2-ch-PeW"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8KC-Pq-H4c" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-147.32824427480915" y="1571.8309859154931"/>
+            <point key="canvasLocation" x="-106" y="1572"/>
         </scene>
         <!--Show Detail View Controller-->
         <scene sceneID="WbZ-Pp-DFd">
@@ -583,32 +584,35 @@
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show Title" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UTN-Ht-50l">
-                                <rect key="frame" x="0.0" y="50" width="393" height="25"/>
+                                <rect key="frame" x="0.0" y="50" width="393" height="30"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="FMm-Vw-6aC"/>
+                                </constraints>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W6" family="Hiragino Mincho ProN" pointSize="25"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="o6C-px-xu0">
-                                <rect key="frame" x="10" y="85" width="150" height="200"/>
+                                <rect key="frame" x="10" y="90" width="150" height="200"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="150" id="com-Q5-W1v"/>
                                     <constraint firstAttribute="height" constant="200" id="nnb-gb-o0O"/>
                                 </constraints>
                             </imageView>
-                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Genres: Horror, comedy, your mom wraps texts" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nL1-OU-BIl">
+                            <label opaque="NO" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Genres: Horror, comedy, your mom wraps texts" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="nL1-OU-BIl">
                                 <rect key="frame" x="10" y="316" width="367" height="29"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="First Air Date:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="w9H-M3-tgu">
-                                <rect key="frame" x="165" y="140.33333333333334" width="218" height="20.333333333333343"/>
+                                <rect key="frame" x="165" y="145.33333333333334" width="218" height="20.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Last Air Date:" textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="hiL-UQ-CNh">
-                                <rect key="frame" x="165" y="165.66666666666666" width="218" height="20.333333333333343"/>
+                                <rect key="frame" x="165" y="170.66666666666666" width="218" height="20.333333333333343"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -634,22 +638,19 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Number of Seasons: " textAlignment="right" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9U2-JL-ogG">
-                                <rect key="frame" x="165" y="115" width="218" height="20.333333333333343"/>
+                                <rect key="frame" x="165" y="119.99999999999999" width="218" height="20.333333333333329"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Where to Watch: Disney plus, your moms house, netflix" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xpD-v1-lWn">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" misplaced="YES" text="Where to Watch: Disney plus, your moms house, netflix" lineBreakMode="wordWrap" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xpD-v1-lWn">
                                 <rect key="frame" x="10" y="293" width="367" height="30"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Show description" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="15" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fM4-8u-ESr">
-                                <rect key="frame" x="10" y="366" width="373" height="200"/>
-                                <constraints>
-                                    <constraint firstAttribute="height" constant="200" id="eD7-rJ-lI4"/>
-                                </constraints>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Show description" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="15" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="fM4-8u-ESr">
+                                <rect key="frame" x="10" y="371" width="373" height="422"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -682,6 +683,7 @@
                             <constraint firstItem="Zwy-05-cCr" firstAttribute="trailing" secondItem="39Y-jh-eFf" secondAttribute="trailing" constant="10" id="qzl-bb-HRp"/>
                             <constraint firstItem="xpD-v1-lWn" firstAttribute="top" secondItem="o6C-px-xu0" secondAttribute="bottom" constant="10" id="rCF-Qm-vj5"/>
                             <constraint firstItem="w9H-M3-tgu" firstAttribute="leading" secondItem="o6C-px-xu0" secondAttribute="trailing" constant="5" id="rbQ-ZT-5Cd"/>
+                            <constraint firstItem="Zwy-05-cCr" firstAttribute="bottom" secondItem="fM4-8u-ESr" secondAttribute="bottom" constant="30" id="uQy-by-WM9"/>
                             <constraint firstItem="Zwy-05-cCr" firstAttribute="trailing" secondItem="9U2-JL-ogG" secondAttribute="trailing" constant="10" id="v3b-kE-9CJ"/>
                             <constraint firstItem="Zwy-05-cCr" firstAttribute="trailing" secondItem="UTN-Ht-50l" secondAttribute="trailing" id="vI8-O8-zgC"/>
                             <constraint firstItem="hiL-UQ-CNh" firstAttribute="leading" secondItem="o6C-px-xu0" secondAttribute="trailing" constant="5" id="zfj-cL-psb"/>
@@ -703,7 +705,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="XAq-nc-d9Z" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-147.32824427480915" y="2280.9859154929577"/>
+            <point key="canvasLocation" x="-106.10687022900763" y="2307.7464788732395"/>
         </scene>
         <!--Settings-->
         <scene sceneID="9di-1B-CXC">
@@ -885,6 +887,9 @@
             <point key="canvasLocation" x="-624" y="701"/>
         </scene>
     </scenes>
+    <inferredMetricsTieBreakers>
+        <segue reference="Ba2-ch-PeW"/>
+    </inferredMetricsTieBreakers>
     <resources>
         <image name="bookmark" catalog="system" width="110" height="128"/>
         <image name="gearshape" catalog="system" width="128" height="123"/>
