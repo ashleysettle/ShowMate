@@ -30,6 +30,11 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        updateDisplayName()
+    }
+    
     private func loadWatchingList() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         

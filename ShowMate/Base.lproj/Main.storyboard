@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="collection view cell content view" minToolsVersion="11.0"/>
@@ -30,7 +30,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="email" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="cyk-Aa-fbP">
-                                <rect key="frame" x="71.666666666666686" y="444" width="250" height="34"/>
+                                <rect key="frame" x="71.666666666666686" y="344" width="250" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="DNP-Mz-C9b"/>
                                 </constraints>
@@ -38,7 +38,7 @@
                                 <textInputTraits key="textInputTraits"/>
                             </textField>
                             <textField opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="248" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="password" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="XgH-5p-V9k">
-                                <rect key="frame" x="71.666666666666686" y="503" width="250" height="34"/>
+                                <rect key="frame" x="71.666666666666686" y="403" width="250" height="34"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="250" id="6VP-yP-a3Y"/>
                                 </constraints>
@@ -46,7 +46,7 @@
                                 <textInputTraits key="textInputTraits" secureTextEntry="YES"/>
                             </textField>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="tln-8e-Bxl">
-                                <rect key="frame" x="151" y="582" width="91" height="34"/>
+                                <rect key="frame" x="151" y="482" width="91" height="34"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="tinted" title="Sign In">
                                     <fontDescription key="titleFontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="20"/>
@@ -56,7 +56,7 @@
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="BZi-4a-tBI">
-                                <rect key="frame" x="111" y="657" width="171" height="34"/>
+                                <rect key="frame" x="111" y="557" width="171" height="34"/>
                                 <color key="tintColor" systemColor="labelColor"/>
                                 <state key="normal" title="Button"/>
                                 <buttonConfiguration key="configuration" style="plain" title="Create Account">
@@ -67,7 +67,7 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Sign In" textAlignment="center" lineBreakMode="wordWrap" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Mtn-RT-TzY">
-                                <rect key="frame" x="130.33333333333331" y="344" width="132.33333333333331" height="60"/>
+                                <rect key="frame" x="130.33333333333331" y="244" width="132.33333333333331" height="60"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="60" id="tpd-q5-jSO"/>
                                 </constraints>
@@ -99,7 +99,7 @@
                             <constraint firstItem="IB8-Ej-pSf" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="aHS-lU-gVa"/>
                             <constraint firstItem="cyk-Aa-fbP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="h8V-ee-YZT"/>
                             <constraint firstItem="cyk-Aa-fbP" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="jtX-Nc-cS7"/>
-                            <constraint firstItem="Mtn-RT-TzY" firstAttribute="top" secondItem="IB8-Ej-pSf" secondAttribute="bottom" constant="150" id="puH-q5-tPv"/>
+                            <constraint firstItem="Mtn-RT-TzY" firstAttribute="top" secondItem="IB8-Ej-pSf" secondAttribute="bottom" constant="50" id="puH-q5-tPv"/>
                             <constraint firstItem="wAH-RM-gmZ" firstAttribute="centerX" secondItem="8bC-Xf-vdC" secondAttribute="centerX" id="vSt-GW-bb0"/>
                         </constraints>
                     </view>

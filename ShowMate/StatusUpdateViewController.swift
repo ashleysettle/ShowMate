@@ -9,7 +9,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
-class StatusUpdateViewController: UIViewController {
+class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
     
     var delegate:UIViewController!
     var show:WatchingShow!
@@ -21,10 +21,24 @@ class StatusUpdateViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        episodeTextField.delegate = self
+        seasonTextField.delegate = self
         showTitleLabel.text = show.name
         seasonTextField.text = String(show.status.season)
         episodeTextField.text = String(show.status.episode)
         loadPosterImage()
+    }
+    // Called when 'return' key pressed
+
+    func textFieldShouldReturn(_ textField:UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
+    }
+    
+    // Called when the user clicks on the view outside of the UITextField
+
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     private func loadPosterImage() {
