@@ -7,9 +7,19 @@
 
 import UIKit
 import FirebaseAuth
+import FirebaseFirestore
 
-class ShowsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate{
+protocol ShowListUpdateDelegate: AnyObject {
+    func showAddedToWatching(_ show: TVShow)
+    func showAddedToWishlist(_ show: TVShow)
+    func showRemovedFromWatching(_ show: TVShow)
+    func showRemovedFromWishlist(_ show: TVShow)
+}
+
+class ShowsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, ShowListUpdateDelegate{
     
+    @IBOutlet weak var watchlistCV: UICollectionView!
+    @IBOutlet weak var currentlyWatchingCV: UICollectionView!
     @IBOutlet weak var showCollectionView: UICollectionView!
     // API Key for TMDB
     // TODO: CHANGE TO ACCESS TOKEN?
@@ -22,7 +32,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     // Properties to hold the lists of shows
     var currentlyWatching: [TVShow] = []
     var watched: [TVShow] = []
-    var toWatch: [TVShow] = []
+    var watchlist: [TVShow] = []
     
     // Array to hold search results
     var searchResults: [TVShow] = []
@@ -36,7 +46,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
         super.viewDidLoad()
         setupCollectionView()
         updateDisplayName()
-        
+        fetchUserLists()
         Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
             self?.updateDisplayName()
         }
@@ -50,21 +60,78 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     
     
     private func setupCollectionView() {
-        showCollectionView.delegate = self
-        showCollectionView.dataSource = self
-        
-        // Configure layout
-        let layout = UICollectionViewFlowLayout()
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = itemSpacing
-        layout.minimumLineSpacing = itemSpacing
-        showCollectionView.collectionViewLayout = layout
-        
-        showCollectionView.backgroundColor = .clear
-        showCollectionView.showsHorizontalScrollIndicator = false
-        showCollectionView.contentInset = sectionInsets
+        [showCollectionView, currentlyWatchingCV, watchlistCV].forEach { collectionView in
+            collectionView?.delegate = self
+            collectionView?.dataSource = self
+            
+            let layout = UICollectionViewFlowLayout()
+            layout.scrollDirection = .horizontal
+            layout.minimumInteritemSpacing = itemSpacing
+            layout.minimumLineSpacing = itemSpacing
+            collectionView?.collectionViewLayout = layout
+            
+            collectionView?.backgroundColor = .clear
+            collectionView?.showsHorizontalScrollIndicator = false
+            collectionView?.contentInset = sectionInsets
+        }
     }
         
+    private func fetchUserLists() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        let db = Firestore.firestore()
+        
+        // Fetch Currently Watching
+        fetchShowsFromCollection(userId: userId, collectionName: "watching") { [weak self] shows in
+            self?.currentlyWatching = shows
+            DispatchQueue.main.async {
+                self?.currentlyWatchingCV.reloadData()
+            }
+        }
+        
+        // Fetch Watchlist
+        fetchShowsFromCollection(userId: userId, collectionName: "wish") { [weak self] shows in
+            self?.watchlist = shows
+            DispatchQueue.main.async {
+                self?.watchlistCV.reloadData()
+            }
+        }
+    }
+    
+    private func fetchShowsFromCollection(userId: String, collectionName: String, completion: @escaping ([TVShow]) -> Void) {
+        let db = Firestore.firestore()
+        db.collection("users")
+            .document(userId)
+            .collection(collectionName)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error fetching \(collectionName): \(error)")
+                    completion([])
+                    return
+                }
+                
+                var shows: [TVShow] = []
+                let group = DispatchGroup()
+                
+                snapshot?.documents.forEach { document in
+                    group.enter()
+                    let data = document.data()
+                    if let showId = data["showId"] as? Int {
+                        self.fetchShowDetails(for: showId) { show in
+                            if let show = show {
+                                shows.append(show)
+                            }
+                            group.leave()
+                        }
+                    } else {
+                        group.leave()
+                    }
+                }
+                
+                group.notify(queue: .main) {
+                    completion(shows)
+                }
+            }
+    }
     // MARK: - UICollectionViewDelegateFlowLayout
     
     func collectionView(_ collectionView: UICollectionView,
@@ -79,19 +146,43 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     // MARK: - UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return searchResults.count // Will be replaced with actual show data later
+        switch collectionView {
+        case showCollectionView:
+            return searchResults.count
+        case currentlyWatchingCV:
+            return currentlyWatching.count
+        case watchlistCV:
+            return watchlist.count
+        default:
+            return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "ShowCell", for: indexPath) as! ShowCell
-        cell.configure(with: searchResults[indexPath.row].posterPath)
+                
+        let show: TVShow?
+        switch collectionView {
+        case showCollectionView:
+            show = searchResults[indexPath.row]
+        case currentlyWatchingCV:
+            show = currentlyWatching[indexPath.row]
+        case watchlistCV:
+            show = watchlist[indexPath.row]
+        default:
+            show = nil
+        }
+        
+        if let show = show {
+            cell.configure(with: show.posterPath)
+        }
+        
         return cell
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let selectedShow = searchResults[indexPath.row]
         
-        // Fetch full details for the selected show
         fetchShowDetails(for: selectedShow.showId) { [weak self] detailedShow in
             guard let detailedShow = detailedShow else {
                 print("Failed to fetch show details")
@@ -99,10 +190,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
             }
             
             DispatchQueue.main.async {
-                print(detailedShow.name)
                 self?.performSegue(withIdentifier: "ShowDetailSegue", sender: detailedShow)
-                // Navigate to detail view controller
-                //self?.showDetailView(for: detailedShow)
             }
         }
     }
@@ -112,12 +200,14 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
            let destinationVC = segue.destination as? ShowDetailViewController,
            let show = sender as? TVShow {
             destinationVC.show = show
+            destinationVC.delegate = self
         }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateDisplayName()
+        fetchUserLists()
     }
     
     private func updateDisplayName() {
@@ -125,6 +215,44 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
             usernameLabel.text = user.displayName
         } else {
             usernameLabel.text = "N/A"
+        }
+    }
+    
+    // MARK: - ShowListUpdateDelegate
+        
+    func showAddedToWatching(_ show: TVShow) {
+        if !currentlyWatching.contains(where: { $0.showId == show.showId }) {
+            currentlyWatching.append(show)
+            DispatchQueue.main.async {
+                self.currentlyWatchingCV.reloadData()
+            }
+        }
+    }
+    
+    func showAddedToWishlist(_ show: TVShow) {
+        if !watchlist.contains(where: { $0.showId == show.showId }) {
+            watchlist.append(show)
+            DispatchQueue.main.async {
+                self.watchlistCV.reloadData()
+            }
+        }
+    }
+    
+    func showRemovedFromWatching(_ show: TVShow) {
+        if let index = currentlyWatching.firstIndex(where: { $0.showId == show.showId }) {
+            currentlyWatching.remove(at: index)
+            DispatchQueue.main.async {
+                self.currentlyWatchingCV.reloadData()
+            }
+        }
+    }
+    
+    func showRemovedFromWishlist(_ show: TVShow) {
+        if let index = watchlist.firstIndex(where: { $0.showId == show.showId }) {
+            watchlist.remove(at: index)
+            DispatchQueue.main.async {
+                self.watchlistCV.reloadData()
+            }
         }
     }
     

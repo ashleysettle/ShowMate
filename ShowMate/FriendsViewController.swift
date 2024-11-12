@@ -64,7 +64,6 @@ class FriendsViewController: UIViewController {
 
     private func setupUI() {
         setupSearchBar()
-        setupSubmitButton()
     }
     
     private func setupSearchBar() {
@@ -72,21 +71,7 @@ class FriendsViewController: UIViewController {
         searchBar.delegate = self
         searchBar.searchBarStyle = .minimal
     }
-    
-    private func setupSubmitButton() {
-        submitButton.setTitle("Search", for: .normal)
-        submitButton.backgroundColor = .systemBlue
-        submitButton.setTitleColor(.white, for: .normal)
-        submitButton.layer.cornerRadius = 8
-        submitButton.addTarget(self, action: #selector(submitButtonTapped), for: .touchUpInside)
-    }
-    
-    // MARK: - Actions
-    @objc private func submitButtonTapped() {
-        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
-        performSearch(with: searchText)
-    }
-    
+        
     // MARK: - Search and Display Methods
     private func performSearch(with searchText: String) {
         guard let friendsManager = friendsManager else { return }
@@ -183,8 +168,8 @@ class FriendsViewController: UIViewController {
 // MARK: - UISearchBarDelegate
 extension FriendsViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-        submitButtonTapped()
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+        performSearch(with: searchText)
     }
 }
 

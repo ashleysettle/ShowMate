@@ -66,6 +66,7 @@ class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
                 self?.posterView.image = image
             }
         }.resume() // Don't forget to call resume()!
+        
     }
     
     @IBAction func saveProgressButton(_ sender: Any) {
