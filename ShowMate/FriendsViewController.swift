@@ -199,29 +199,6 @@ class FriendsViewController: UIViewController {
         // TODO: Implement remove friend
     }
     
-    @objc private func addFriendButtonTapped(_ sender: UIButton) {
-        let userIndex = sender.tag
-        let friendUser = resultsFromSearch[userIndex]
-        
-        Task {
-            do {
-                try await friendsManager?.addFriend(friendId: friendUser.uid)
-                print("Friend added successfully!")
-                
-                // Optionally, update the button to show "Added" after adding friend
-                await MainActor.run {
-                    sender.setTitle("Added", for: .normal)
-                    sender.isEnabled = false
-                    loadFriends()
-                    currentFriendsTable.reloadData()
-                    print("added friend and should have loadsed table!!!")
-                }
-            } catch {
-                print("Error adding friend: \(error)")
-            }
-        }
-    }
-    
     
     private func updateDisplayName() {
         if let user = Auth.auth().currentUser {
@@ -231,16 +208,21 @@ class FriendsViewController: UIViewController {
         }
     }
     
-    func addFriendButtonTapped(for user: UserProfile, button: UIButton) {
+    func addFriendButtonTapped(user: UserProfile, button: UIButton) {
         Task{
             do{
                 try await friendsManager?.addFriend(friendId: user.uid)
                 await MainActor.run {
-                    button.setTitle("Unfollow", for: .normal)
+                    button.setTitle("Added", for: .normal)
                     button.isEnabled = false
+                    self.loadFriends()
                 }
             } catch {
                 print("Error")
+                await MainActor.run {
+                    button.setTitle(user.isPublic ? "Follow" : "Request", for: .normal)
+                    button.isEnabled = true
+                }
             }
         }
     }
@@ -266,27 +248,23 @@ extension FriendsViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == resultsTable {
-            let cell = tableView.dequeueReusableCell(withIdentifier: searchUserCellID, for: indexPath) as! UserTableViewCell
-            
-            // Configure the cell
-            let user = resultsFromSearch[indexPath.row]
-            cell.searchResultUserLabel.text = user.username
-            cell.followButton.setTitle(user.isPublic ? "Follow" : "Request", for: .normal)
-            // Optionally, configure other properties (like image or friend status) if needed
-            cell.onFollowButtonTapped = { [weak self] in self?.addFriendButtonTapped(cell.followButton)}
-            print("HERE HERE HERE")
-            return cell
-        } else {
-            let cell = tableView.dequeueReusableCell(withIdentifier: currentFriendsID, for: indexPath) as! currentFriendsTableViewCell
-                        let friend = currentFriendsList[indexPath.row]
-                        
-                        // Configure current friends cell
-                        cell.friendUserName.text = friend.username
-                        print("CAME HERE!!!")
-                        return cell
+            if tableView == resultsTable {
+                let cell = tableView.dequeueReusableCell(withIdentifier: searchUserCellID, for: indexPath) as! UserTableViewCell
+                let user = resultsFromSearch[indexPath.row]
+                cell.searchResultUserLabel.text = user.username
+                cell.followButton.setTitle(user.isPublic ? "Follow" : "Request", for: .normal)
+                cell.onFollowButtonTapped = { [weak self] in
+                    self?.addFriendButtonTapped(user: user, button: cell.followButton)
+                }
+                return cell
+            } else if tableView == currentFriendsTable {
+                let cell = tableView.dequeueReusableCell(withIdentifier: currentFriendsID, for: indexPath) as! currentFriendsTableViewCell
+                let friend = currentFriendsList[indexPath.row]
+                cell.friendUserName.text = friend.username
+                return cell
+            }
+            return UITableViewCell()
         }
-    }
 }
 
 extension FriendsViewController: UITableViewDelegate {
