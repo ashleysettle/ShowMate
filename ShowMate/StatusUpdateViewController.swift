@@ -13,6 +13,7 @@ class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
     
     var delegate:UIViewController!
     var show:WatchingShow!
+    var tvShow:TVShow!
     
     @IBOutlet weak var showTitleLabel: UILabel!
     @IBOutlet weak var posterView: UIImageView!
@@ -21,12 +22,55 @@ class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        episodeTextField.delegate = self
-        seasonTextField.delegate = self
-        showTitleLabel.text = show.name
-        seasonTextField.text = String(show.status.season)
-        episodeTextField.text = String(show.status.episode)
-        loadPosterImage()
+        // Fetch the watching status when the view loads
+        if let tvShow = tvShow {
+            fetchWatchingShow(for: tvShow.showId) { [weak self] watchingShow in
+                DispatchQueue.main.async {
+                    self?.show = watchingShow ?? WatchingShow(
+                        showId: tvShow.showId,
+                        name: tvShow.name,
+                        posterPath: tvShow.posterPath,
+                        numSeasons: tvShow.numSeasons,
+                        status: .init(season: 1, episode: 1)
+                    )
+                    // Update your UI here
+                    self?.episodeTextField.delegate = self
+                    self?.seasonTextField.delegate = self
+                    self?.showTitleLabel.text = self?.show.name
+                    self?.seasonTextField.text = String(self?.show.status.season ?? 1)
+                    self?.episodeTextField.text = String(self?.show.status.episode ?? 1)
+                    self?.loadPosterImage()
+                }
+            }
+        }
+    }
+    
+    private func fetchWatchingShow(for showId: Int, completion: @escaping (WatchingShow?) -> Void) {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            completion(nil)
+            return
+        }
+        
+        let db = Firestore.firestore()
+        db.collection("users")
+            .document(userId)
+            .collection("watching")
+            .whereField("showId", isEqualTo: showId)
+            .getDocuments { snapshot, error in
+                if let error = error {
+                    print("Error fetching watching show: \(error)")
+                    completion(nil)
+                    return
+                }
+                
+                guard let document = snapshot?.documents.first,
+                      let watchingShow = WatchingShow.fromDictionary(document.data()) else {
+                    completion(nil)
+                    return
+                }
+                
+                completion(watchingShow)
+            }
     }
     // Called when 'return' key pressed
 

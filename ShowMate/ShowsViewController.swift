@@ -18,6 +18,7 @@ protocol ShowListUpdateDelegate: AnyObject {
 
 class ShowsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, ShowListUpdateDelegate{
     
+    @IBOutlet weak var scrollView: UIScrollView!
     @IBOutlet weak var watchlistCV: UICollectionView!
     @IBOutlet weak var currentlyWatchingCV: UICollectionView!
     @IBOutlet weak var showCollectionView: UICollectionView!
@@ -28,6 +29,9 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var showSearchBar: UISearchBar!
     
+    @IBOutlet weak var watchlistLabel: UILabel!
+    @IBOutlet weak var currentlyWatchingLabel: UILabel!
+    @IBOutlet weak var searchLabel: UILabel!
     
     // Properties to hold the lists of shows
     var currentlyWatching: [TVShow] = []
@@ -50,6 +54,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
         Auth.auth().addStateDidChangeListener { [weak self] (auth, user) in
             self?.updateDisplayName()
         }
+        fixScrollViewConstraints()
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
@@ -73,6 +78,75 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
             collectionView?.backgroundColor = .clear
             collectionView?.showsHorizontalScrollIndicator = false
             collectionView?.contentInset = sectionInsets
+        }
+    }
+    
+    private func fixScrollViewConstraints() {
+        scrollView.alwaysBounceVertical = true
+        scrollView.alwaysBounceHorizontal = false
+        scrollView.showsVerticalScrollIndicator = true
+        scrollView.showsHorizontalScrollIndicator = false
+        scrollView.subviews.forEach { $0.translatesAutoresizingMaskIntoConstraints = false }
+        
+        // Configure the width of elements to match the scroll view's width
+        if let searchShowsLabel = searchLabel {
+            NSLayoutConstraint.activate([
+                searchShowsLabel.topAnchor.constraint(equalTo: scrollView.contentLayoutGuide.topAnchor, constant: 20),
+                searchShowsLabel.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor, constant: 16),
+                searchShowsLabel.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor, constant: -16)
+            ])
+        }
+        
+        if let searchBar = showSearchBar {
+            NSLayoutConstraint.activate([
+                searchBar.topAnchor.constraint(equalTo: searchLabel?.bottomAnchor ?? scrollView.contentLayoutGuide.topAnchor, constant: 20),
+                searchBar.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor),
+                searchBar.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor)
+            ])
+        }
+        
+        if let searchResults = showCollectionView {
+            NSLayoutConstraint.activate([
+                searchResults.topAnchor.constraint(equalTo: showSearchBar?.bottomAnchor ?? scrollView.contentLayoutGuide.topAnchor, constant: 20),
+                searchResults.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor),
+                searchResults.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor),
+                searchResults.heightAnchor.constraint(equalToConstant: 200)
+            ])
+        }
+        
+        if let currentlyWatchingLabel = currentlyWatchingLabel {
+            NSLayoutConstraint.activate([
+                currentlyWatchingLabel.topAnchor.constraint(equalTo: showCollectionView?.bottomAnchor ?? scrollView.contentLayoutGuide.topAnchor, constant: 20),
+                currentlyWatchingLabel.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor, constant: 16),
+                currentlyWatchingLabel.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor, constant: -16)
+            ])
+        }
+        
+        if let currentlyWatching = currentlyWatchingCV {
+            NSLayoutConstraint.activate([
+                currentlyWatching.topAnchor.constraint(equalTo: currentlyWatchingLabel?.bottomAnchor ?? scrollView.contentLayoutGuide.topAnchor, constant: 12),
+                currentlyWatching.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor),
+                currentlyWatching.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor),
+                currentlyWatching.heightAnchor.constraint(equalToConstant: 200)
+            ])
+        }
+        
+        if let watchlistLabel = watchlistLabel {
+            NSLayoutConstraint.activate([
+                watchlistLabel.topAnchor.constraint(equalTo: currentlyWatchingCV?.bottomAnchor ?? scrollView.contentLayoutGuide.topAnchor, constant: 20),
+                watchlistLabel.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor, constant: 16),
+                watchlistLabel.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor, constant: -16)
+            ])
+        }
+        
+        if let watchlist = watchlistCV {
+            NSLayoutConstraint.activate([
+                watchlist.topAnchor.constraint(equalTo: watchlistLabel?.bottomAnchor ?? scrollView.contentLayoutGuide.topAnchor, constant: 12),
+                watchlist.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor),
+                watchlist.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor),
+                watchlist.heightAnchor.constraint(equalToConstant: 200),
+                watchlist.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -20)
+            ])
         }
     }
         
@@ -211,17 +285,11 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
             destinationVC.show = show
             destinationVC.delegate = self
         }else if segue.identifier == "StatusSegue", let destinationVC = segue.destination as? StatusUpdateViewController, let show = sender as? TVShow {
-            let watchingShow = WatchingShow(
-                showId: show.showId,
-                name: show.name,
-                posterPath: show.posterPath,
-                numSeasons: show.numSeasons,
-                status: .init(season: 1, episode: 1)
-            )
-            destinationVC.show = watchingShow
-            destinationVC.delegate = self
+                destinationVC.tvShow = show
+                destinationVC.delegate = self
         }
     }
+
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
