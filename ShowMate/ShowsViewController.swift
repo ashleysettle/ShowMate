@@ -23,7 +23,6 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     @IBOutlet weak var currentlyWatchingCV: UICollectionView!
     @IBOutlet weak var showCollectionView: UICollectionView!
     // API Key for TMDB
-    // TODO: CHANGE TO ACCESS TOKEN?
     let apiKey = "93080f9cf388f053e991e750e536b3ff"
     
     @IBOutlet weak var usernameLabel: UILabel!
@@ -438,7 +437,15 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
 
             do {
                 let json = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-
+                // DEBUGGING: PRINTS ALL SHOW DETAILS
+                // let prettyPrintedData = try JSONSerialization.data(withJSONObject: json, options: .prettyPrinted)
+                    
+                // Convert Data to String for printing
+                // if let jsonString = String(data: prettyPrintedData, encoding: .utf8) {
+                    // print("Serialized JSON:\n", jsonString)
+                // }
+                // END OF JSON PRINT
+                
                 let name = json?["name"] as? String ?? "Unknown Title"
                 let description = json?["overview"] as? String ?? "N/A"
                 let firstAirDate = json?["first_air_date"] as? String ?? "N/A"
@@ -450,6 +457,27 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
                 let genreNames = genres.compactMap { $0["name"] as? String }
                 let cast = (json?["credits"] as? [String: Any])?["cast"] as? [[String: Any]] ?? []
                 let castNames = cast.compactMap { $0["name"] as? String }
+                var episodesPerSeason: [Int] = []
+                // attempt to get season specific info (# episodes)
+                if let seasons = json?["seasons"] as? [[String: Any]] {
+        
+                    // Find episode count for each season
+                    // Don't add season if number 0
+                    for season in seasons {
+                        if let seasonNumber = season["season_number"] as? Int,
+                           seasonNumber != 0,
+                           let episodeCount = season["episode_count"] as? Int {
+                            episodesPerSeason.append(episodeCount)
+                        }
+                    }
+                    
+                    // TODO: remove, just for testing
+                    print("Episodes per season for show \(name): \(episodesPerSeason)")
+                } else {
+                    // I don't think this should happen
+                    print("No seasons found")
+                }
+                    
 
                 // Fetch watch providers, then call completion
                 self.fetchWatchProviders(for: showId) { providers, providerLogoPaths in
@@ -464,7 +492,8 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
                         posterPath: posterUrl,
                         cast: castNames,
                         providers: providers,
-                        providerLogoPaths: providerLogoPaths
+                        providerLogoPaths: providerLogoPaths,
+                        episodesPerSeason: episodesPerSeason
                     )
                     DispatchQueue.main.async {
                         completion(tvShow)
