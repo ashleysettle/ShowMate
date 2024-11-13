@@ -12,7 +12,20 @@ import FirebaseFirestore
 class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
     
     var delegate:UIViewController!
-    var show:WatchingShow!
+    var show: WatchingShow? {
+        didSet {
+            if isViewLoaded {
+                updateUI()
+            }
+        }
+    }
+    var tvShow: TVShow? {
+        didSet {
+            if isViewLoaded {
+                fetchWatchingShow()
+            }
+        }
+    }
     
     @IBOutlet weak var showTitleLabel: UILabel!
     @IBOutlet weak var posterView: UIImageView!
@@ -23,10 +36,56 @@ class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
         super.viewDidLoad()
         episodeTextField.delegate = self
         seasonTextField.delegate = self
+        if show != nil {
+            updateUI()
+        } else if tvShow != nil {
+            fetchWatchingShow()
+        }
+    }
+    
+    private func updateUI() {
+        guard let show = show else { return }
         showTitleLabel.text = show.name
         seasonTextField.text = String(show.status.season)
         episodeTextField.text = String(show.status.episode)
         loadPosterImage()
+    }
+    
+    private func fetchWatchingShow() {
+        guard let tvShow = tvShow else { return }
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        let db = Firestore.firestore()
+        db.collection("users")
+            .document(userId)
+            .collection("watching")
+            .whereField("showId", isEqualTo: tvShow.showId)
+            .getDocuments { [weak self] snapshot, error in
+                if let error = error {
+                    print("Error fetching watching show: \(error)")
+                    return
+                }
+                
+                if let document = snapshot?.documents.first,
+                   let watchingShow = WatchingShow.fromDictionary(document.data()) {
+                    // Existing watching show found
+                    DispatchQueue.main.async {
+                        self?.show = watchingShow
+                    }
+                } else {
+                    // Create new watching show
+                    let newShow = WatchingShow(
+                        showId: tvShow.showId,
+                        name: tvShow.name,
+                        posterPath: tvShow.posterPath,
+                        numSeasons: tvShow.numSeasons,
+                        status: .init(season: 1, episode: 1)
+                    )
+                    DispatchQueue.main.async {
+                        self?.show = newShow
+                    }
+                }
+            }
     }
     // Called when 'return' key pressed
 
@@ -43,10 +102,10 @@ class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
     
     private func loadPosterImage() {
         let baseURL = "https://image.tmdb.org/t/p/w500"
-        let imageURLString = show.posterPath.hasPrefix("http") ? show.posterPath : baseURL + show.posterPath
+        let imageURLString = show!.posterPath.hasPrefix("http") ? show!.posterPath : baseURL + show!.posterPath
         
         guard let url = URL(string: imageURLString) else {
-            print("Invalid URL: \(show.posterPath)")
+            print("Invalid URL: \(show!.posterPath)")
             return
         }
         
@@ -81,10 +140,10 @@ class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
         
         let newStatus = WatchingShow.ShowStatus(season: season, episode: episode)
         let updatedShow = WatchingShow(
-            showId: show.showId,
-            name: show.name,
-            posterPath: show.posterPath,
-            numSeasons: show.numSeasons,
+            showId: show!.showId,
+            name: show!.name,
+            posterPath: show!.posterPath,
+            numSeasons: show!.numSeasons,
             status: newStatus
         )
         
@@ -92,7 +151,7 @@ class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
         let watchingRef = db.collection("users")
             .document(userId)
             .collection("watching")
-            .document(String(show.showId))
+            .document(String(show!.showId))
         
         watchingRef.setData(updatedShow.toDictionary) { [weak self] error in
             if let error = error {
