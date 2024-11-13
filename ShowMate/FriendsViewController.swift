@@ -21,6 +21,12 @@ struct UserProfile : Codable {
 class UserTableViewCell: UITableViewCell {
     @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var searchResultUserLabel: UILabel!
+    var onFollowButtonTapped: (() -> Void)?
+    
+    @IBAction func followButtonTapped(_ sender: UIButton) {
+        onFollowButtonTapped?()
+    }
+    
 }
 
 class FriendsViewController: UIViewController {
@@ -30,7 +36,7 @@ class FriendsViewController: UIViewController {
     @IBOutlet weak var resultsTable: UITableView!
     @IBOutlet weak var currentFriendsTable: UITableView!
     
-
+    
     let searchUserCellID = "userCell"
     var resultsFromSearch = [UserProfile]()
     private var searchResultsStackView: UIStackView!
@@ -42,7 +48,7 @@ class FriendsViewController: UIViewController {
         resultsTable.dataSource = self
         resultsTable.delegate = self
         super.viewDidLoad()
-
+        
         resultsTable.frame = CGRect(x: 0, y: 263, width: view.frame.width, height: 400)
         setupUI()
         updateDisplayName()
@@ -65,7 +71,7 @@ class FriendsViewController: UIViewController {
         updateDisplayName()
         loadFriends()
     }
-
+    
     private func setupUI() {
         setupSearchBar()
     }
@@ -75,7 +81,7 @@ class FriendsViewController: UIViewController {
         searchBar.delegate = self
         searchBar.searchBarStyle = .minimal
     }
-        
+    
     // MARK: - Search and Display Methods
     private func performSearch(with searchText: String) {
         guard let friendsManager = friendsManager else { return }
@@ -133,22 +139,22 @@ class FriendsViewController: UIViewController {
     }
     
     /*private func handleFriendAction(for user: UserProfile) {
-            guard let friendsManager = friendsManager else { return }
-
-            if user.friendIds.contains(friendsManager.userId) {
-                // Already friends, so remove friend
-                removeFriend(user)
-            } else if user.friendRequestIds.contains(friendsManager.userId) {
-                // Friend request sent, so cancel the request
-                cancelFriendRequest(user)
-            } else if user.isPublic {
-                // Public account, send friend request automatically
-                sendFriendRequest(user)
-            } else {
-                // Private account, send friend request to wait for approval
-                sendFriendRequest(user)
-            }
-        }*/
+     guard let friendsManager = friendsManager else { return }
+     
+     if user.friendIds.contains(friendsManager.userId) {
+     // Already friends, so remove friend
+     removeFriend(user)
+     } else if user.friendRequestIds.contains(friendsManager.userId) {
+     // Friend request sent, so cancel the request
+     cancelFriendRequest(user)
+     } else if user.isPublic {
+     // Public account, send friend request automatically
+     sendFriendRequest(user)
+     } else {
+     // Private account, send friend request to wait for approval
+     sendFriendRequest(user)
+     }
+     }*/
     
     @objc private func sendFriendRequest(_ sender: UIButton) {
         // TODO: Implement send friend request
@@ -158,6 +164,25 @@ class FriendsViewController: UIViewController {
         // TODO: Implement remove friend
     }
     
+    @objc private func addFriendButtonTapped(_ sender: UIButton) {
+        let userIndex = sender.tag
+        let friendUser = resultsFromSearch[userIndex]
+        
+        Task {
+            do {
+                try await friendsManager?.addFriend(friendId: friendUser.uid)
+                print("Friend added successfully!")
+                
+                // Optionally, update the button to show "Added" after adding friend
+                sender.setTitle("Added", for: .normal)
+                sender.isEnabled = false
+            } catch {
+                print("Error adding friend: \(error)")
+            }
+        }
+    }
+    
+    
     private func updateDisplayName() {
         if let user = Auth.auth().currentUser {
             usernameLabel.text = user.displayName
@@ -165,7 +190,23 @@ class FriendsViewController: UIViewController {
             usernameLabel.text = "N/A"
         }
     }
+    
+    func addFriendButtonTapped(for user: UserProfile, button: UIButton) {
+        Task{
+            do{
+                try await friendsManager?.addFriend(friendId: user.uid)
+                await MainActor.run {
+                    button.setTitle("Unfollow", for: .normal)
+                    button.isEnabled = false
+                }
+            } catch {
+                print("Error")
+            }
+        }
+    }
 }
+
+
 
 // MARK: - UISearchBarDelegate
 extension FriendsViewController: UISearchBarDelegate {
@@ -190,6 +231,7 @@ extension FriendsViewController: UITableViewDataSource {
         cell.searchResultUserLabel.text = user.username
         cell.followButton.setTitle(user.isPublic ? "Follow" : "Request", for: .normal)
         // Optionally, configure other properties (like image or friend status) if needed
+        cell.onFollowButtonTapped = { [weak self] in self?.addFriendButtonTapped(cell.followButton)}
         return cell
     }
 }

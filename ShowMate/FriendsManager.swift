@@ -15,6 +15,22 @@ class FriendsManager {
         self.currentUserId = userId
     }
     
+    func addFriend(friendId: String) async throws {
+        // Reference to the current user's document
+        let userRef = db.collection("users").document(currentUserId)
+        
+        // Use arrayUnion to add the friend ID to friend_ids
+        try await userRef.updateData([
+            "friend_ids": FieldValue.arrayUnion([friendId])
+        ])
+        
+        print("Successfully added \(friendId) to \(currentUserId)'s friend list")
+    }
+    
+
+    
+
+    
    /* func updatePrivacySettings(isPublic: Bool) async throws {
         try await db.collection("users").document(currentUserId).updateData([
             "is_public": isPublic
