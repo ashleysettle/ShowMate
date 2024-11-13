@@ -17,24 +17,20 @@ class ShowCell: UICollectionViewCell {
     }
     
     private func setupUI() {
-        // Content view setup
         contentView.backgroundColor = .clear
         backgroundColor = .clear
         
-        // Image view setup
         showPosterImage.contentMode = .scaleToFill
         showPosterImage.clipsToBounds = true
         showPosterImage.layer.cornerRadius = 10
         showPosterImage.layer.masksToBounds = true
         
-        // Add shadow to cell
         layer.shadowColor = UIColor.black.cgColor
         layer.shadowOffset = CGSize(width: 0, height: 4)
         layer.shadowOpacity = 0.3
         layer.shadowRadius = 5
         layer.masksToBounds = false
         
-        // This ensures the shadow appears with the rounded corners
         layer.cornerRadius = 10
     }
     

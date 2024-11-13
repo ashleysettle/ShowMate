@@ -45,6 +45,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     private let itemSpacing: CGFloat = 12
     private let posterAspectRatio: CGFloat = 1.5
     
+    // MARK: View setup
     override func viewDidLoad() {
         super.viewDidLoad()
         setupCollectionView()
@@ -142,9 +143,9 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
     }
         
+    // MARK: fetch user's lists from firebase
     private func fetchUserLists() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
-        let db = Firestore.firestore()
         
         // Fetch Currently Watching
         fetchShowsFromCollection(userId: userId, collectionName: "watching") { [weak self] shows in
@@ -198,7 +199,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
                 }
             }
     }
-    // MARK: - UICollectionViewDelegateFlowLayout
+    // MARK: - Collection View
     
     func collectionView(_ collectionView: UICollectionView,
                        layout collectionViewLayout: UICollectionViewLayout,
@@ -208,8 +209,6 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
         
         return CGSize(width: width, height: availableHeight)
     }
-    
-    // MARK: - UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
@@ -335,11 +334,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
     }
     
-    // UI update function
-    // Want to see when lists are updated
-    private func updateUI() {
-        print("UI Updated with \(currentlyWatching.count) shows in 'Currently Watching'")
-    }
+    // MARK: Search bar
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchText.isEmpty {
@@ -366,6 +361,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
     }
 
+    // MARK: API 
     // Returns an array of TV show objects w/ matching titles
     // Only fetch poster and title for searching stage
     func fetchTVShowDetails(for title: String, completion: @escaping ([TVShow]?) -> Void) {

@@ -54,7 +54,6 @@ class ShowDetailViewController: UIViewController {
                return
            }
            
-           // Update UI on main thread
            DispatchQueue.main.async {
                self.showImageView.image = image
            }
@@ -134,7 +133,7 @@ class ShowDetailViewController: UIViewController {
                         print("Error removing show: \(error)")
                     } else {
                         DispatchQueue.main.async {
-                            self.currentlyWatchingButton.tintColor = .systemBlue // or your default color
+                            self.currentlyWatchingButton.tintColor = .systemBlue
                             self.delegate?.showRemovedFromWatching(show)
                         }
                     }
