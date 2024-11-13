@@ -18,15 +18,19 @@ struct UserProfile : Codable {
     }
 }
 
+class UserTableViewCell: UITableViewCell {
+    @IBOutlet weak var followButton: UIButton!
+    @IBOutlet weak var searchResultUserLabel: UILabel!
+}
 
 class FriendsViewController: UIViewController {
     // MARK: - UI Components
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var searchBar: UISearchBar!
-    @IBOutlet weak var submitButton: UIButton!
     @IBOutlet weak var resultsTable: UITableView!
     @IBOutlet weak var currentFriendsTable: UITableView!
     
+
     let searchUserCellID = "userCell"
     var resultsFromSearch = [UserProfile]()
     private var searchResultsStackView: UIStackView!
@@ -38,7 +42,7 @@ class FriendsViewController: UIViewController {
         resultsTable.dataSource = self
         resultsTable.delegate = self
         super.viewDidLoad()
-        resultsTable.register(UITableViewCell.self, forCellReuseIdentifier: searchUserCellID)
+
         resultsTable.frame = CGRect(x: 0, y: 263, width: view.frame.width, height: 400)
         setupUI()
         updateDisplayName()
@@ -122,31 +126,29 @@ class FriendsViewController: UIViewController {
         Task {
             do {
                 let friends = try await friendsManager.getFriends()
-                await MainActor.run {
-                    self.displayFriends(friends)
-                }
             } catch {
                 print("Error loading friends: \(error)")
             }
         }
     }
     
-    private func displayFriends(_ friends: [UserProfile]) {
-        /*friendsStackView.arrangedSubviews.forEach { $0.removeFromSuperview() }
-        
-        if friends.isEmpty {
-            let emptyLabel = UILabel()
-            emptyLabel.text = "No friends yet"
-            emptyLabel.textAlignment = .center
-            emptyLabel.textColor = .gray
-            friendsStackView.addArrangedSubview(emptyLabel)
-        } else {
-            friends.forEach { friend in
-                let friendView = createUserView(for: friend, isSearchResult: false)
-                friendsStackView.addArrangedSubview(friendView)
+    /*private func handleFriendAction(for user: UserProfile) {
+            guard let friendsManager = friendsManager else { return }
+
+            if user.friendIds.contains(friendsManager.userId) {
+                // Already friends, so remove friend
+                removeFriend(user)
+            } else if user.friendRequestIds.contains(friendsManager.userId) {
+                // Friend request sent, so cancel the request
+                cancelFriendRequest(user)
+            } else if user.isPublic {
+                // Public account, send friend request automatically
+                sendFriendRequest(user)
+            } else {
+                // Private account, send friend request to wait for approval
+                sendFriendRequest(user)
             }
         }*/
-    }
     
     @objc private func sendFriendRequest(_ sender: UIButton) {
         // TODO: Implement send friend request
@@ -180,11 +182,13 @@ extension FriendsViewController: UITableViewDataSource {
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: searchUserCellID, for: indexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: searchUserCellID, for: indexPath) as! UserTableViewCell
+        //let cell = tableView.dequeueReusableCell(withIdentifier: searchUserCellID, for: indexPath)
         
         // Configure the cell
         let user = resultsFromSearch[indexPath.row]
-        cell.textLabel?.text = user.username
+        cell.searchResultUserLabel.text = user.username
+        cell.followButton.setTitle(user.isPublic ? "Follow" : "Request", for: .normal)
         // Optionally, configure other properties (like image or friend status) if needed
         return cell
     }
