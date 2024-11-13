@@ -29,6 +29,10 @@ class UserTableViewCell: UITableViewCell {
     
 }
 
+class currentFriendsTableViewCell: UITableViewCell{
+    @IBOutlet weak var friendUserName: UILabel!
+}
+
 class FriendsViewController: UIViewController {
     // MARK: - UI Components
     @IBOutlet weak var usernameLabel: UILabel!
@@ -38,7 +42,9 @@ class FriendsViewController: UIViewController {
     
     
     let searchUserCellID = "userCell"
+    let currentFriendsID = "currentFriendsCellId"
     var resultsFromSearch = [UserProfile]()
+    var currentFriendsList = [UserProfile]()
     private var searchResultsStackView: UIStackView!
     private var friendsStackView: UIStackView!
     private var friendsManager: FriendsManager?
@@ -47,9 +53,12 @@ class FriendsViewController: UIViewController {
     override func viewDidLoad() {
         resultsTable.dataSource = self
         resultsTable.delegate = self
+        currentFriendsTable.dataSource = self
+        currentFriendsTable.delegate = self
         super.viewDidLoad()
-        
+        loadFriends()
         resultsTable.frame = CGRect(x: 0, y: 263, width: view.frame.width, height: 400)
+        currentFriendsTable.frame = CGRect(x: 0, y: 263, width: view.frame.width, height: 400)
         setupUI()
         updateDisplayName()
         
@@ -127,15 +136,41 @@ class FriendsViewController: UIViewController {
     }
     
     private func loadFriends() {
-        guard let friendsManager = friendsManager else { return }
-        
-        Task {
-            do {
-                let friends = try await friendsManager.getFriends()
-            } catch {
-                print("Error loading friends: \(error)")
+        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
+           let db = Firestore.firestore()
+           
+           db.collection("users").document(currentUserID).getDocument { (document, error) in
+               if let document = document, document.exists {
+                   if let friendIDs = document.get("friend_ids") as? [String] {
+                       Task {
+                           await self.fetchFriendsProfiles(friendIDs) // Call the async function with await
+                       }
+                   }
+               } else {
+                   print("User document not found or error occurred: \(error?.localizedDescription ?? "No error description")")
+               }
+           }
+    }
+    
+    func fetchFriendsProfiles(_ friendIDs: [String]) async {
+        let db = Firestore.firestore()
+            var friends = [UserProfile]()
+            
+            for friendID in friendIDs {
+                do {
+                    let document = try await db.collection("users").document(friendID).getDocument()
+                    if let friendProfile = try? document.data(as: UserProfile.self) {
+                        friends.append(friendProfile)
+                    }
+                } catch {
+                    print("Error fetching friend profile: \(error)")
+                }
             }
-        }
+            print("grabbing current friends: \(friends)")
+            await MainActor.run {
+                self.currentFriendsList = friends
+                self.currentFriendsTable.reloadData() // Reload the table displaying friends
+            }
     }
     
     /*private func handleFriendAction(for user: UserProfile) {
@@ -174,8 +209,13 @@ class FriendsViewController: UIViewController {
                 print("Friend added successfully!")
                 
                 // Optionally, update the button to show "Added" after adding friend
-                sender.setTitle("Added", for: .normal)
-                sender.isEnabled = false
+                await MainActor.run {
+                    sender.setTitle("Added", for: .normal)
+                    sender.isEnabled = false
+                    loadFriends()
+                    currentFriendsTable.reloadData()
+                    print("added friend and should have loadsed table!!!")
+                }
             } catch {
                 print("Error adding friend: \(error)")
             }
@@ -218,27 +258,43 @@ extension FriendsViewController: UISearchBarDelegate {
 
 extension FriendsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("num rows: \(resultsFromSearch.count)")
-        return resultsFromSearch.count // Number of search results
+        if tableView == resultsTable {
+            return resultsFromSearch.count // Number of search results
+        } else {
+            return currentFriendsList.count
+        }
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: searchUserCellID, for: indexPath) as! UserTableViewCell
-        //let cell = tableView.dequeueReusableCell(withIdentifier: searchUserCellID, for: indexPath)
-        
-        // Configure the cell
-        let user = resultsFromSearch[indexPath.row]
-        cell.searchResultUserLabel.text = user.username
-        cell.followButton.setTitle(user.isPublic ? "Follow" : "Request", for: .normal)
-        // Optionally, configure other properties (like image or friend status) if needed
-        cell.onFollowButtonTapped = { [weak self] in self?.addFriendButtonTapped(cell.followButton)}
-        return cell
+        if tableView == resultsTable {
+            let cell = tableView.dequeueReusableCell(withIdentifier: searchUserCellID, for: indexPath) as! UserTableViewCell
+            
+            // Configure the cell
+            let user = resultsFromSearch[indexPath.row]
+            cell.searchResultUserLabel.text = user.username
+            cell.followButton.setTitle(user.isPublic ? "Follow" : "Request", for: .normal)
+            // Optionally, configure other properties (like image or friend status) if needed
+            cell.onFollowButtonTapped = { [weak self] in self?.addFriendButtonTapped(cell.followButton)}
+            print("HERE HERE HERE")
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: currentFriendsID, for: indexPath) as! currentFriendsTableViewCell
+                        let friend = currentFriendsList[indexPath.row]
+                        
+                        // Configure current friends cell
+                        cell.friendUserName.text = friend.username
+                        print("CAME HERE!!!")
+                        return cell
+        }
     }
 }
 
 extension FriendsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let user = resultsFromSearch[indexPath.row]
-        // Handle the tap, e.g., show more info or send a friend request
+        if tableView == resultsTable {
+            let user = resultsFromSearch[indexPath.row]
+        } else {
+            let friend = currentFriendsList[indexPath.row]
+        }
     }
 }
