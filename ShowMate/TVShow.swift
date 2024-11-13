@@ -17,9 +17,10 @@ class TVShow {
     var cast: [String]
     var providers: [String]
     var providerLogoPaths: [String]
+    var episodesPerSeason: [Int] // length of array = num seasons
     var preview: Bool // true indicates only a search result, not added by user
     
-    init(name: String, showId: Int, description: String, genres: [String], firstAirDate: String, lastAirDate: String, numSeasons: Int, posterPath: String, cast: [String], providers: [String], providerLogoPaths: [String]) {
+    init(name: String, showId: Int, description: String, genres: [String], firstAirDate: String, lastAirDate: String, numSeasons: Int, posterPath: String, cast: [String], providers: [String], providerLogoPaths: [String], episodesPerSeason: [Int]) {
         self.name = name
         self.showId = showId
         self.description = description
@@ -31,6 +32,7 @@ class TVShow {
         self.cast = cast
         self.providers = providers
         self.providerLogoPaths = providerLogoPaths
+        self.episodesPerSeason = episodesPerSeason
         self.preview = false
     }
     
@@ -47,6 +49,7 @@ class TVShow {
         self.cast = ["N/A"]
         self.providers = ["N/A"]
         self.providerLogoPaths = ["N/A"]
+        self.episodesPerSeason = [-1]
         self.preview = true
     }
     
