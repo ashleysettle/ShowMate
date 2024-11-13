@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23094" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="23504" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina6_12" orientation="portrait" appearance="light"/>
     <dependencies>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23084"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="23506"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="System colors in document resources" minToolsVersion="11.0"/>
         <capability name="UIMenu" message="Requires Xcode 11 or later." minToolsVersion="11.0" requiredIntegratedClassName="UICommandDiff"/>
@@ -338,37 +338,45 @@
                                     <constraint firstAttribute="width" constant="357" id="xTg-rh-am1"/>
                                 </constraints>
                                 <prototypes>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" reuseIdentifier="userCell" id="h8R-86-UQ2" customClass="UserTableViewCell" customModule="ShowMate" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="userCell" id="0pX-2b-CSL" customClass="UserTableViewCell" customModule="ShowMate" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="50" width="357" height="43.666667938232422"/>
                                         <autoresizingMask key="autoresizingMask"/>
-                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="h8R-86-UQ2" id="eNd-mQ-dck">
+                                        <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="0pX-2b-CSL" id="69i-z6-Zn4">
                                             <rect key="frame" x="0.0" y="0.0" width="357" height="43.666667938232422"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="C98-Dn-ca8">
-                                                    <rect key="frame" x="244" y="4" width="90" height="35"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <state key="normal" title="Button"/>
-                                                    <buttonConfiguration key="configuration" style="plain" title="follow"/>
-                                                    <connections>
-                                                        <action selector="followButtonTapped:" destination="h8R-86-UQ2" eventType="touchUpInside" id="HMq-HW-WMh"/>
-                                                    </connections>
-                                                </button>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="LVM-U1-sas">
-                                                    <rect key="frame" x="38" y="11" width="42" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kL2-pr-T26">
+                                                    <rect key="frame" x="5" y="11.333333333333336" width="100" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="100" id="Qe5-1f-2So"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
+                                                <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="VOv-sf-ghO">
+                                                    <rect key="frame" x="279" y="4.3333333333333321" width="73" height="35"/>
+                                                    <state key="normal" title="Button"/>
+                                                    <buttonConfiguration key="configuration" style="plain" title="Follow"/>
+                                                    <connections>
+                                                        <action selector="followButtonTapped:" destination="0pX-2b-CSL" eventType="touchUpInside" id="hqm-5S-wgT"/>
+                                                    </connections>
+                                                </button>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstAttribute="trailing" secondItem="VOv-sf-ghO" secondAttribute="trailing" constant="5" id="Fss-gy-e3D"/>
+                                                <constraint firstItem="kL2-pr-T26" firstAttribute="centerY" secondItem="69i-z6-Zn4" secondAttribute="centerY" id="LkN-4a-8kS"/>
+                                                <constraint firstItem="VOv-sf-ghO" firstAttribute="centerY" secondItem="69i-z6-Zn4" secondAttribute="centerY" id="Ryn-8d-Xja"/>
+                                                <constraint firstItem="kL2-pr-T26" firstAttribute="leading" secondItem="69i-z6-Zn4" secondAttribute="leading" constant="5" id="UM7-aW-GyT"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
-                                            <outlet property="followButton" destination="C98-Dn-ca8" id="2zt-Ld-7O6"/>
-                                            <outlet property="searchResultUserLabel" destination="LVM-U1-sas" id="7jV-yh-J6u"/>
+                                            <outlet property="followButton" destination="VOv-sf-ghO" id="Ukx-hE-bKZ"/>
+                                            <outlet property="searchResultUserLabel" destination="kL2-pr-T26" id="MqW-Jn-go4"/>
                                         </connections>
                                     </tableViewCell>
                                 </prototypes>
+                                <sections/>
                             </tableView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" ambiguous="YES" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="-1" estimatedSectionHeaderHeight="-1" sectionFooterHeight="-1" estimatedSectionFooterHeight="-1" translatesAutoresizingMaskIntoConstraints="NO" id="4L4-Wy-ige">
                                 <rect key="frame" x="20" y="438" width="353" height="350"/>
@@ -381,14 +389,20 @@
                                             <rect key="frame" x="0.0" y="0.0" width="353" height="66"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pHe-Zh-sTy">
-                                                    <rect key="frame" x="54" y="12" width="42" height="21"/>
-                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="pHe-Zh-sTy">
+                                                    <rect key="frame" x="10" y="22.666666666666671" width="100" height="21"/>
+                                                    <constraints>
+                                                        <constraint firstAttribute="width" constant="100" id="Qcz-Ok-1f5"/>
+                                                    </constraints>
                                                     <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                     <nil key="textColor"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>
+                                            <constraints>
+                                                <constraint firstItem="pHe-Zh-sTy" firstAttribute="centerY" secondItem="p2y-Oi-Jqw" secondAttribute="centerY" id="QKv-zV-275"/>
+                                                <constraint firstItem="pHe-Zh-sTy" firstAttribute="leading" secondItem="p2y-Oi-Jqw" secondAttribute="leading" constant="10" id="dTG-YJ-ZQM"/>
+                                            </constraints>
                                         </tableViewCellContentView>
                                         <connections>
                                             <outlet property="friendUserName" destination="pHe-Zh-sTy" id="Ja9-qh-uRd"/>
@@ -396,8 +410,8 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Friends" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xxN-tk-Fin">
-                                <rect key="frame" x="20" y="386" width="88" height="25"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" misplaced="YES" text="Following" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="xxN-tk-Fin">
+                                <rect key="frame" x="20" y="386" width="115" height="25"/>
                                 <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="25"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
@@ -406,9 +420,9 @@
                         <viewLayoutGuide key="safeArea" id="QW5-Hz-FYd"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
+                            <constraint firstItem="4L4-Wy-ige" firstAttribute="top" secondItem="xxN-tk-Fin" secondAttribute="bottom" constant="5" id="36U-He-cZo"/>
                             <constraint firstItem="QW5-Hz-FYd" firstAttribute="trailing" secondItem="jTh-Vr-DH5" secondAttribute="trailing" id="A7e-a6-JkA"/>
                             <constraint firstItem="xxN-tk-Fin" firstAttribute="top" secondItem="ihx-uE-Tpt" secondAttribute="bottom" constant="181" id="G2l-Gz-RGO"/>
-                            <constraint firstItem="4L4-Wy-ige" firstAttribute="top" secondItem="xxN-tk-Fin" secondAttribute="bottom" constant="27" id="GE8-4s-53X"/>
                             <constraint firstItem="pzB-cL-Jfu" firstAttribute="top" secondItem="jTh-Vr-DH5" secondAttribute="bottom" constant="13" id="HEs-qc-UsG"/>
                             <constraint firstItem="xxN-tk-Fin" firstAttribute="leading" secondItem="QW5-Hz-FYd" secondAttribute="leading" constant="32" id="IF9-Ys-Lyk"/>
                             <constraint firstItem="393-oe-kc2" firstAttribute="top" secondItem="QW5-Hz-FYd" secondAttribute="top" id="WWl-Ts-wCS"/>

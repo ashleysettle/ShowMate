@@ -340,6 +340,31 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     private func updateUI() {
         print("UI Updated with \(currentlyWatching.count) shows in 'Currently Watching'")
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchText.isEmpty {
+            searchResults = []
+            showCollectionView.reloadData()
+        }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
+        
+        fetchTVShowDetails(for: searchText) { [weak self] shows in
+            DispatchQueue.main.async {
+                if let shows = shows {
+                    self?.searchResults = shows
+                    self?.showCollectionView.reloadData()
+                    print("Found \(shows.count) shows matching search")
+                } else {
+                    self?.searchResults = []
+                    self?.showCollectionView.reloadData()
+                    print("No shows found or error occurred")
+                }
+            }
+        }
+    }
 
     // Returns an array of TV show objects w/ matching titles
     // Only fetch poster and title for searching stage

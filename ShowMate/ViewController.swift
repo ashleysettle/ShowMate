@@ -51,13 +51,11 @@ class ViewController: UIViewController, UITextFieldDelegate {
 
     // Function for create account alert
     @IBAction func createAccountPressed(_ sender: Any) {
-        // Alert pops up when pressed
         let alert = UIAlertController(
-            title: "Get Started",
-            message: "Create an account",
-            preferredStyle: .alert)
-        
-        // Text fields to input information to create account
+                    title: "Get Started",
+                    message: "Create an account",
+                    preferredStyle: .alert)
+                
         alert.addTextField { (tfDisplayName) in
             tfDisplayName.placeholder = "Enter your username"
         }
@@ -66,41 +64,76 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
         alert.addTextField { (tfPassword) in
             tfPassword.placeholder = "Enter your password"
-            tfPassword.isSecureTextEntry = true  // Hide password
+            tfPassword.isSecureTextEntry = true
         }
         
         let cancelAction = UIAlertAction(title: "Cancel", style: .cancel)
         let saveAction = UIAlertAction(title: "Save", style: .default) { [weak self] _ in
-            guard let self = self else { return }
+            guard let self = self,
+                  let displayName = alert.textFields?[0].text, !displayName.isEmpty,
+                  let email = alert.textFields?[1].text, !email.isEmpty,
+                  let password = alert.textFields?[2].text, !password.isEmpty else {
+                self?.errorMessage.text = "Please fill in all fields"
+                return
+            }
             
-            let displayNameField = alert.textFields![0]
-            let emailField = alert.textFields![1]
-            let passwordField = alert.textFields![2]
-            
-            // Create a new user with Firebase Authentication
-            Auth.auth().createUser(withEmail: emailField.text!, password: passwordField.text!) { [weak self] (authResult, error) in
+            // First create the user in Firebase Auth
+            Auth.auth().createUser(withEmail: email, password: password) { [weak self] (authResult, error) in
+                guard let self = self else { return }
+                
                 if let error = error as NSError? {
-                    self?.errorMessage.text = "\(error.localizedDescription)"
-                } else if let userId = authResult?.user.uid {
-                    // Set display name
-                    let changeRequest = authResult?.user.createProfileChangeRequest()
-                    changeRequest?.displayName = displayNameField.text
-                    changeRequest?.commitChanges { [weak self] (error) in
-                        if let error = error {
-                            self?.errorMessage.text = "\(error.localizedDescription)"
-                        } else {
-                            // Add user to Firestore after setting display name
-                            Task {
-                                do {
-                                    try await self?.userManager.addUserToFirestore(
-                                        userId: userId,
-                                        username: displayNameField.text ?? "NewUser"
-                                    )
-                                    self?.errorMessage.text = ""
-                                    self?.performSegue(withIdentifier: self?.signInSegueIdentifier ?? "", sender: nil)
-                                } catch {
-                                    self?.errorMessage.text = "Error adding user to Firestore: \(error.localizedDescription)"
+                    DispatchQueue.main.async {
+                        self.errorMessage.text = "\(error.localizedDescription)"
+                    }
+                    return
+                }
+                
+                guard let userId = authResult?.user.uid else {
+                    DispatchQueue.main.async {
+                        self.errorMessage.text = "Failed to get user ID"
+                    }
+                    return
+                }
+                
+                print("Created user with ID: \(userId)")
+                
+                // Update display name
+                let changeRequest = authResult?.user.createProfileChangeRequest()
+                changeRequest?.displayName = displayName
+                
+                changeRequest?.commitChanges { [weak self] (error) in
+                    guard let self = self else { return }
+                    
+                    if let error = error {
+                        DispatchQueue.main.async {
+                            self.errorMessage.text = "Error setting display name: \(error.localizedDescription)"
+                        }
+                        return
+                    }
+                    
+                    // Add user to Firestore
+                    Task {
+                        do {
+                            try await self.userManager.addUserToFirestore(
+                                userId: userId,
+                                username: displayName
+                            )
+                            
+                            print("Successfully added user to Firestore with ID: \(userId)")
+                            
+                            await MainActor.run {
+                                self.errorMessage.text = ""
+                                self.performSegue(withIdentifier: self.signInSegueIdentifier, sender: nil)
+                                
+                                // Update root view controller
+                                if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+                                    sceneDelegate.checkAuthAndSetRootViewController()
                                 }
+                            }
+                        } catch {
+                            await MainActor.run {
+                                self.errorMessage.text = "Error adding user to Firestore: \(error.localizedDescription)"
+                                print("Firestore error: \(error)")
                             }
                         }
                     }
@@ -139,3 +172,5 @@ class ViewController: UIViewController, UITextFieldDelegate {
         }
     }
 }
+
+
