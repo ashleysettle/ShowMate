@@ -56,13 +56,6 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
         fixScrollViewConstraints()
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        guard let searchText = searchBar.text, !searchText.isEmpty else { return }
-        searchBar.resignFirstResponder() // Dismiss keyboard
-        searchSubmitted(show: searchText)
-    }
-    
-    
     private func setupCollectionView() {
         [showCollectionView, currentlyWatchingCV, watchlistCV].forEach { collectionView in
             collectionView?.delegate = self
@@ -346,28 +339,6 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     // Want to see when lists are updated
     private func updateUI() {
         print("UI Updated with \(currentlyWatching.count) shows in 'Currently Watching'")
-    }
-    
-    // Triggered after a show name is searched
-    // TODO: show results as they type (beta)
-    // Return: TVShow object if created (TV Show found), otherwise null
-    private func searchSubmitted(show: String) {
-        fetchTVShowDetails(for: show) { tvShows in
-            if let tvShows = tvShows {
-                // Success: Array of TVShow objects was created
-                self.searchResults = tvShows // Store the results for later use
-//                print("Shows found: \(self.searchResults.map { $0.name })")
-//                print("Images found: \(self.searchResults.map { $0.posterPath })")
-                DispatchQueue.main.async {
-                                self.showCollectionView.reloadData()
-                            }
-                // TODO: display search results (title and picture) in dropdown
-            } else {
-                // Failure: No show was found
-                // TODO: display no resuplts found in results dropdown
-                print("No results found.")
-            }
-        }
     }
 
     // Returns an array of TV show objects w/ matching titles
