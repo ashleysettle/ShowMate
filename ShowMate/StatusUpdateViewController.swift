@@ -29,15 +29,13 @@ class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var showTitleLabel: UILabel!
     @IBOutlet weak var posterView: UIImageView!
-    // @IBOutlet weak var episodeTextField: UITextField!
-    // @IBOutlet weak var seasonTextField: UITextField!
-    @IBOutlet weak var seasonPicker: UIButton!
-    @IBOutlet weak var episodePicker: UIButton!
+    @IBOutlet weak var episodeTextField: UITextField!
+    @IBOutlet weak var seasonTextField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // episodeTextField.delegate = self
-        // seasonTextField.delegate = self
+        episodeTextField.delegate = self
+        seasonTextField.delegate = self
         if show != nil {
             updateUI()
         } else if tvShow != nil {
@@ -48,8 +46,8 @@ class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
     private func updateUI() {
         guard let show = show else { return }
         showTitleLabel.text = show.name
-        // seasonTextField.text = String(show.status.season)
-        // episodeTextField.text = String(show.status.episode)
+        seasonTextField.text = String(show.status.season)
+        episodeTextField.text = String(show.status.episode)
         loadPosterImage()
     }
     
@@ -130,7 +128,7 @@ class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
         
     }
     
-    /*@IBAction func saveProgressButton(_ sender: Any) {
+    @IBAction func saveProgressButton(_ sender: Any) {
         guard let seasonText = seasonTextField.text,
               let episodeText = episodeTextField.text,
               let season = Int(seasonText),
@@ -164,6 +162,6 @@ class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
                 }
             }
         }
-    }*/
+    }
     
 }

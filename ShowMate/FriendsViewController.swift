@@ -88,6 +88,8 @@ class FriendsViewController: UIViewController {
         setupUI()
         updateDisplayName()
         setupTableViews()
+        
+        searchBar.autocapitalizationType = .none
            
         if let currentUserId = Auth.auth().currentUser?.uid {
             friendsManager = FriendsManager(userId: currentUserId)
