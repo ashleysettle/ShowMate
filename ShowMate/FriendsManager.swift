@@ -9,12 +9,14 @@ import FirebaseFirestore
 
 class FriendsManager {
     private let db = Firestore.firestore()
+    // Identifier for users
     private let currentUserId: String
     
     init(userId: String) {
         self.currentUserId = userId
     }
     
+    // Function that connects to Firebase to add friend
     func addFriend(friendId: String) async throws {
         // Reference to the current user's document
         let userRef = db.collection("users").document(currentUserId)
@@ -23,75 +25,9 @@ class FriendsManager {
         try await userRef.updateData([
             "friend_ids": FieldValue.arrayUnion([friendId])
         ])
-        
-        print("Successfully added \(friendId) to \(currentUserId)'s friend list")
     }
     
-
-    
-
-    
-   /* func updatePrivacySettings(isPublic: Bool) async throws {
-        try await db.collection("users").document(currentUserId).updateData([
-            "is_public": isPublic
-        ])
-    }
-    
-    func sendFriendRequest(to userId: String) async throws {
-        // Verify target user exists and is public or already friends
-        let targetUser = try await db.collection("users").document(userId).getDocument()
-        guard let userData = targetUser.data(),
-              (userData["is_public"] as? Bool == true ||
-               (userData["friend_ids"] as? [String])?.contains(currentUserId) == true) else {
-            throw NSError(domain: "FriendsManager", code: 403, userInfo: [
-                NSLocalizedDescriptionKey: "User is private or not found"
-            ])
-        }
-        
-        // Add to pending requests
-        try await db.collection("users").document(userId).updateData([
-            "friend_request_ids": FieldValue.arrayUnion([currentUserId])
-        ])
-    }
-    
-    func acceptFriendRequest(from userId: String) async throws {
-        let batch = db.batch()
-        
-        // Add each user to the other's friend list
-        let currentUserRef = db.collection("users").document(currentUserId)
-        let otherUserRef = db.collection("users").document(userId)
-        
-        batch.updateData([
-            "friend_ids": FieldValue.arrayUnion([userId]),
-            "friend_request_ids": FieldValue.arrayRemove([userId])
-        ], forDocument: currentUserRef)
-        
-        batch.updateData([
-            "friend_ids": FieldValue.arrayUnion([currentUserId])
-        ], forDocument: otherUserRef)
-        
-        try await batch.commit()
-    }
-    
-    func removeFriend(userId: String) async throws {
-        let batch = db.batch()
-        
-        // Remove each user from the other's friend list
-        let currentUserRef = db.collection("users").document(currentUserId)
-        let otherUserRef = db.collection("users").document(userId)
-        
-        batch.updateData([
-            "friend_ids": FieldValue.arrayRemove([userId])
-        ], forDocument: currentUserRef)
-        
-        batch.updateData([
-            "friend_ids": FieldValue.arrayRemove([currentUserId])
-        ], forDocument: otherUserRef)
-        
-        try await batch.commit()
-    }*/
-    
-    // MARK: - User Discovery
+    // Uses inputted username to search for users in the database
     func searchUsers(by username: String, limit: Int = 20) async throws -> [UserProfile] {
         let snapshot = try await db.collection("users")
             .whereField("username", isGreaterThanOrEqualTo: username)
@@ -99,6 +35,7 @@ class FriendsManager {
             .limit(to: limit)
             .getDocuments()
         
+        // Checks if the user is public
         return try snapshot.documents.compactMap { document -> UserProfile? in
             let data = document.data()
             guard let isPublic = data["is_public"] as? Bool else { return nil }
@@ -110,12 +47,11 @@ class FriendsManager {
                     return nil
                 }
             }
-            
             return try document.data(as: UserProfile.self)
         }
     }
     
-    // MARK: - Friend List
+    // Returns the list of friends the user currently has
     func getFriends() async throws -> [UserProfile] {
         let currentUser = try await db.collection("users").document(currentUserId).getDocument()
         guard let friendIds = try currentUser.data()?["friend_ids"] as? [String] else {
@@ -125,7 +61,8 @@ class FriendsManager {
         if friendIds.isEmpty { return [] }
         
         // Fetch all friend profiles
-        let chunks = friendIds.chunked(into: 10) // Firestore limits to 10 items in whereField(in:)
+        // Firestore limits to 10 items
+        let chunks = friendIds.chunked(into: 10)
         var allFriends: [UserProfile] = []
         
         for chunk in chunks {
@@ -140,7 +77,7 @@ class FriendsManager {
         return allFriends
     }
 }
-// MARK: - Helper Extensions
+// Helper function to create an array
 extension Array {
     func chunked(into size: Int) -> [[Element]] {
         stride(from: 0, to: count, by: size).map {

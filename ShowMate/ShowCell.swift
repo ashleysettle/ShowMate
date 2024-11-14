@@ -6,7 +6,6 @@
 //
 
 import UIKit
-// ShowCell.swift
 
 class ShowCell: UICollectionViewCell {
     @IBOutlet weak var showPosterImage: UIImageView!

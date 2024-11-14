@@ -2,6 +2,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
+// Struct containing the attributes of a user
 struct UserProfile: Codable {
     let uid: String
     let username: String
@@ -18,15 +19,18 @@ struct UserProfile: Codable {
     }
 }
 
+// Custom table view cell for user search results
 class UserTableViewCell: UITableViewCell {
     @IBOutlet weak var followButton: UIButton!
     @IBOutlet weak var searchResultUserLabel: UILabel!
     var onFollowButtonTapped: (() -> Void)?
     
+    // Function when the follow button has been pressed
     @IBAction func followButtonTapped(_ sender: UIButton) {
         onFollowButtonTapped?()
     }
     
+    // Formatting for the cell
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -40,12 +44,13 @@ class UserTableViewCell: UITableViewCell {
         let padding: CGFloat = 8
         contentView.frame = contentView.frame.inset(by: UIEdgeInsets(top: padding, left: 0, bottom: padding, right: 0))
     }
-    
 }
 
+// Custom table view cell for the current friends of the user
 class currentFriendsTableViewCell: UITableViewCell{
     @IBOutlet weak var friendUserName: UILabel!
     
+    // Formatting for the cell
     override func layoutSubviews() {
         super.layoutSubviews()
         
@@ -56,46 +61,42 @@ class currentFriendsTableViewCell: UITableViewCell{
 }
 
 class FriendsViewController: UIViewController {
-    // MARK: - UI Components
+    // Labels and buttons from UI
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var searchBar: UISearchBar!
     @IBOutlet weak var resultsTable: UITableView!
     @IBOutlet weak var currentFriendsTable: UITableView!
     
-    
+    // Cell ID and list to populate user search results table
     let searchUserCellID = "userCell"
-    let currentFriendsID = "currentFriendsCellId"
     var resultsFromSearch = [UserProfile]()
+    // Cell ID and list to populate current friends table
+    let currentFriendsID = "currentFriendsCellId"
     var currentFriendsList = [UserProfile]()
-    private var searchResultsStackView: UIStackView!
-    private var friendsStackView: UIStackView!
     private var friendsManager: FriendsManager?
-    
     private var friendsListener: ListenerRegistration?
     
-    // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
-               
-           resultsTable.dataSource = self
-           resultsTable.delegate = self
-           currentFriendsTable.dataSource = self
-           currentFriendsTable.delegate = self
-           
-           setupUI()
-           updateDisplayName()
+        // Table set up for user results and current friends
+        resultsTable.dataSource = self
+        resultsTable.delegate = self
+        currentFriendsTable.dataSource = self
+        currentFriendsTable.delegate = self
+        
+        // UI set up
+        setupUI()
+        updateDisplayName()
         setupTableViews()
            
-           if let currentUserId = Auth.auth().currentUser?.uid {
-               friendsManager = FriendsManager(userId: currentUserId)
-               setupFriendsListener() // Set up real-time listener
-           }
-           
-           // Debug frames
-           print("Results table frame: \(resultsTable.frame)")
-           print("Current friends table frame: \(currentFriendsTable.frame)")
+        if let currentUserId = Auth.auth().currentUser?.uid {
+            friendsManager = FriendsManager(userId: currentUserId)
+            // Set up real-time listener
+            setupFriendsListener()
+        }
     }
     
+    // Function to set up the tables visually
     private func setupTableViews() {
         // Remove frame setting and use constraints instead
         resultsTable.translatesAutoresizingMaskIntoConstraints = false
@@ -138,25 +139,19 @@ class FriendsViewController: UIViewController {
         currentFriendsTable.estimatedRowHeight = 44
     }
     
+    // Helper function to help set up UI
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        
-        // Print frames for debugging
-        print("Results Table Frame: \(resultsTable.frame)")
-        print("Current Friends Table Frame: \(currentFriendsTable.frame)")
-        print("Results Table Content Size: \(resultsTable.contentSize)")
-        print("Current Friends Table Content Size: \(currentFriendsTable.contentSize)")
     }
     
-    // Add this delegate method to ensure proper cell layout
+    // Helper method to ensure table is at correct height
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 60 // Or whatever height you want for the cells
+        return 60
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         updateDisplayName()
-        // Remove loadFriends() here as we're using real-time listener
     }
     
     private func setupFriendsListener() {
@@ -201,26 +196,28 @@ class FriendsViewController: UIViewController {
             }
     }
     
+    // Helper function that sets up UI
     private func setupUI() {
         setupSearchBar()
     }
     
+    // Helper function that sets up UI
     private func setupSearchBar() {
         searchBar.placeholder = "Search users..."
         searchBar.delegate = self
         searchBar.searchBarStyle = .minimal
     }
     
-    // MARK: - Search and Display Methods
+    // Method that searches for user
     private func performSearch(with searchText: String) {
         guard let friendsManager = friendsManager else { return }
         
+        // Searches for user
         Task {
             do {
                 let users = try await friendsManager.searchUsers(by: searchText)
                 await MainActor.run {
                     self.resultsFromSearch = users
-                    print("results : \(self.resultsFromSearch)")
                     self.resultsTable.reloadData()
                 }
             } catch {
@@ -230,15 +227,16 @@ class FriendsViewController: UIViewController {
                 }
             }
         }
-        print("Table frame:", resultsTable.frame)
         resultsTable.reloadData()
     }
     
+    // Clears search results
     private func clearSearchResults() {
         resultsFromSearch.removeAll()
         resultsTable.reloadData()
     }
     
+    // Displays search results and reloads the table
     private func displaySearchResults(_ users: [UserProfile]) {
         clearSearchResults()
         self.resultsFromSearch = users
@@ -255,15 +253,17 @@ class FriendsViewController: UIViewController {
         resultsTable.reloadData()
     }
     
+    // Function that loads the current friends of the user
     private func loadFriends() {
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
            let db = Firestore.firestore()
            
+            // Uses user id to fetch current friends from database
            db.collection("users").document(currentUserID).getDocument { (document, error) in
                if let document = document, document.exists {
                    if let friendIDs = document.get("friend_ids") as? [String] {
                        Task {
-                           await self.fetchFriendsProfiles(friendIDs) // Call the async function with await
+                           await self.fetchFriendsProfiles(friendIDs)
                        }
                    }
                } else {
@@ -272,20 +272,19 @@ class FriendsViewController: UIViewController {
            }
     }
     
+    // Helper function for loading current friends of the user
     func fetchFriendsProfiles(_ friendIDs: [String]) async {
-        print("Starting to fetch profiles for friends: \(friendIDs)")
         let db = Firestore.firestore()
         var friends = [UserProfile]()
         
+        // Retrieves each friend in friend list of user
         for friendID in friendIDs {
             do {
                 let document = try await db.collection("users").document(friendID).getDocument()
-                print("Fetched document for friendID: \(friendID)")
                 
                 if document.exists {
                     if let friendProfile = try? document.data(as: UserProfile.self) {
                         friends.append(friendProfile)
-                        print("Successfully decoded profile for: \(friendProfile.username)")
                     } else {
                         print("Failed to decode profile for friendID: \(friendID)")
                     }
@@ -297,42 +296,22 @@ class FriendsViewController: UIViewController {
             }
         }
         
-        print("Finished fetching all profiles, found \(friends.count) friends")
-        
+        // Reloads the table
         await MainActor.run {
             self.currentFriendsList = friends
             self.currentFriendsTable.reloadData()
-            print("Updated UI with \(self.currentFriendsList.count) friends")
         }
     }
     
-    /*private func handleFriendAction(for user: UserProfile) {
-     guard let friendsManager = friendsManager else { return }
-     
-     if user.friendIds.contains(friendsManager.userId) {
-     // Already friends, so remove friend
-     removeFriend(user)
-     } else if user.friendRequestIds.contains(friendsManager.userId) {
-     // Friend request sent, so cancel the request
-     cancelFriendRequest(user)
-     } else if user.isPublic {
-     // Public account, send friend request automatically
-     sendFriendRequest(user)
-     } else {
-     // Private account, send friend request to wait for approval
-     sendFriendRequest(user)
-     }
-     }*/
-    
+    // Function to be implemented in final release
     @objc private func sendFriendRequest(_ sender: UIButton) {
-        // TODO: Implement send friend request
     }
     
+    // Function to be implemented in final release
     @objc private func removeFriend(_ sender: UIButton) {
-        // TODO: Implement remove friend
     }
     
-    
+    // Updates the display name in the corner of the screen
     private func updateDisplayName() {
         if let user = Auth.auth().currentUser {
             usernameLabel.text = user.displayName
@@ -341,19 +320,21 @@ class FriendsViewController: UIViewController {
         }
     }
     
+    // Adds friend when follow button is pressed
     func addFriendButtonTapped(user: UserProfile, button: UIButton) {
         guard let friendsManager = friendsManager else { return }
         
+        // Changes whether the user has already been followed
         button.isEnabled = false
         
         Task {
             do {
-                print("Starting to add friend with ID: \(user.uid)")
+                // Adds friend with user id from search result
                 try await friendsManager.addFriend(friendId: user.uid)
                 
+                // Changes the button when friend is added
                 await MainActor.run {
                     button.setTitle("Added", for: .normal)
-                    print("Successfully added friend, listener should update automatically")
                 }
             } catch {
                 print("Error adding friend: \(error)")
@@ -366,24 +347,24 @@ class FriendsViewController: UIViewController {
     }
 }
 
-
-
-// MARK: - UISearchBarDelegate
+// Search Bar
 extension FriendsViewController: UISearchBarDelegate {
+    // Function for when the search bar is clicked, uses performSearch helper method
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
         performSearch(with: searchText)
     }
 }
 
+// Functions needed for the search result and current friend tables
 extension FriendsViewController: UITableViewDataSource {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         let count = tableView == resultsTable ? resultsFromSearch.count : currentFriendsList.count
-        print("\(tableView == resultsTable ? "Results" : "Friends") table showing \(count) rows")
         return count
     }
 
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // Search result table
         if tableView == resultsTable {
             let cell = tableView.dequeueReusableCell(withIdentifier: searchUserCellID, for: indexPath) as! UserTableViewCell
             let user = resultsFromSearch[indexPath.row]
@@ -398,13 +379,12 @@ extension FriendsViewController: UITableViewDataSource {
             cell.onFollowButtonTapped = { [weak self] in
                 self?.addFriendButtonTapped(user: user, button: cell.followButton)
             }
-            
             return cell
+        // Current Friend Table
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: currentFriendsID, for: indexPath) as! currentFriendsTableViewCell
             let friend = currentFriendsList[indexPath.row]
             cell.friendUserName.text = friend.username
-            print("Configuring friends cell with username: \(friend.username)")
             return cell
         }
     }
@@ -412,8 +392,10 @@ extension FriendsViewController: UITableViewDataSource {
 
 extension FriendsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        // Search result table
         if tableView == resultsTable {
             let user = resultsFromSearch[indexPath.row]
+        // Current friend table
         } else {
             let friend = currentFriendsList[indexPath.row]
         }
