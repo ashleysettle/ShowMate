@@ -1,16 +1,10 @@
-//
-//  ShowDetailViewController.swift
-//  ShowMate
-//
-//  Created by Victoria Plaxton on 10/22/24.
-//
 
 import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
 class ShowDetailViewController: UIViewController {
-    
+    // MARK: - Outlets
     @IBOutlet weak var showTitleLabel: UILabel!
     @IBOutlet weak var showImageView: UIImageView!
     @IBOutlet weak var showDescriptionLabel: UILabel!
@@ -22,16 +16,20 @@ class ShowDetailViewController: UIViewController {
     @IBOutlet weak var currentlyWatchingButton: UIButton!
     @IBOutlet weak var watchlistButton: UIButton!
     
+    // MARK: - Properties
     var show: TVShow!
     weak var delegate: ShowListUpdateDelegate?
+    private var isInWatchingList = false
+    private var isInWishlist = false
     
+    // MARK: - Lifecycle Methods
     override func viewDidLoad() {
         super.viewDidLoad()
         configureUI()
-        checkIfShowIsBeingWatched()
-        checkIfShowIsWished()
+        checkShowStatus()
     }
     
+    // MARK: - UI Configuration
     private func configureUI() {
         guard let show = show else { return }
         
@@ -39,176 +37,161 @@ class ShowDetailViewController: UIViewController {
         showDescriptionLabel.text = show.description
         showDescriptionLabel.sizeToFit()
         
-        guard let url = URL(string: show.posterPath) else {
-                print("Invalid URL: \(show.posterPath)")
-                return
-            }
-       showImageView.image = UIImage(systemName: "photo.fill")
-       
-       URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
-           guard let self = self,
-                 let data = data,
-                 error == nil,
-                 let image = UIImage(data: data) else {
-               print("Error loading image: \(error?.localizedDescription ?? "Unknown error")")
-               return
-           }
-           
-           DispatchQueue.main.async {
-               self.showImageView.image = image
-           }
-       }.resume()
         providerLabel.text = "Where to Watch: \(show.providers.joined(separator: ", "))"
-        genreLabel.sizeToFit()
         genreLabel.text = "Genres: \(show.genres.joined(separator: ", "))"
+        genreLabel.sizeToFit()
+        
         numberOfSeasons.text = "Number of Seasons: \(show.numSeasons)"
         firstAirDate.text = "First Air Date: \(show.firstAirDate)"
         lastAirDate.text = "Last Air Date: \(show.lastAirDate)"
+        
+        loadPosterImage()
+        updateButtonStates()
     }
     
-    func checkIfShowIsBeingWatched() {
-        guard let userId = Auth.auth().currentUser?.uid,
-              let show = show else { return }
+    private func loadPosterImage() {
+        guard let url = URL(string: show.posterPath) else {
+            print("Invalid URL: \(show.posterPath)")
+            return
+        }
         
-        let db = Firestore.firestore()
-        let watchingRef = db.collection("users")
-            .document(userId)
-            .collection("watching")
-            .document(String(show.showId))
+        showImageView.image = UIImage(systemName: "photo.fill")
         
-        watchingRef.getDocument { [weak self] (document, error) in
-            guard let self = self else { return }
+        URLSession.shared.dataTask(with: url) { [weak self] data, response, error in
+            if let error = error {
+                print("Error loading image: \(error.localizedDescription)")
+                return
+            }
+            
+            guard let data = data,
+                  let image = UIImage(data: data) else {
+                print("Error creating image from data")
+                return
+            }
             
             DispatchQueue.main.async {
-                if let document = document, document.exists {
-                    self.currentlyWatchingButton.tintColor = .gray
-                } else {
-                    self.currentlyWatchingButton.tintColor = .systemBlue // or your default color
-                }
+                self?.showImageView.image = image
             }
+        }.resume()
+    }
+    
+    private func updateButtonStates() {
+        currentlyWatchingButton.tintColor = isInWatchingList ? .gray : .systemBlue
+        watchlistButton.tintColor = isInWishlist ? .gray : .systemBlue
+    }
+    
+    // MARK: - Show Status Checking
+    private func checkShowStatus() {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        let group = DispatchGroup()
+        
+        // Check watching status
+        group.enter()
+        TVShow.watchingCollection(userId: userId)
+            .document(String(show.showId))
+            .getDocument { [weak self] document, error in
+                self?.isInWatchingList = document?.exists ?? false
+                group.leave()
+            }
+        
+        // Check wishlist status
+        group.enter()
+        TVShow.wishlistCollection(userId: userId)
+            .document(String(show.showId))
+            .getDocument { [weak self] document, error in
+                self?.isInWishlist = document?.exists ?? false
+                group.leave()
+            }
+        
+        group.notify(queue: .main) { [weak self] in
+            self?.updateButtonStates()
         }
     }
     
-    func checkIfShowIsWished() {
-        guard let userId = Auth.auth().currentUser?.uid,
-              let show = show else { return }
+    // MARK: - Button Actions
+    @IBAction func currentlyWatchingButtonTapped(_ sender: Any) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
         
-        let db = Firestore.firestore()
-        let wishRef = db.collection("users")
-            .document(userId)
-            .collection("wish")
+        let watchingRef = TVShow.watchingCollection(userId: userId)
             .document(String(show.showId))
         
-        wishRef.getDocument { [weak self] (document, error) in
-            guard let self = self else { return }
-            
-            DispatchQueue.main.async {
-                if let document = document, document.exists {
-                    self.watchlistButton.tintColor = .gray
-                } else {
-                    self.watchlistButton.tintColor = .systemBlue
+        if isInWatchingList {
+            // Remove from watching list
+            watchingRef.delete { [weak self] error in
+                guard let self = self else { return }
+                if let error = error {
+                    print("Error removing show: \(error)")
+                    return
                 }
-            }
-        }
-    }
-    
-    @IBAction func currentlyWatchingButton(_ sender: Any) {
-        guard let userId = Auth.auth().currentUser?.uid,
-              let show = show else { return }
-        
-        let db = Firestore.firestore()
-        let watchingRef = db.collection("users")
-            .document(userId)
-            .collection("watching")
-            .document(String(show.showId))
-        
-        // First check if the show is already being watched
-        watchingRef.getDocument { [weak self] (document, error) in
-            guard let self = self else { return }
-            
-            if let document = document, document.exists {
-                // Show is already being watched, remove it
-                watchingRef.delete { error in
-                    if let error = error {
-                        print("Error removing show: \(error)")
-                    } else {
-                        DispatchQueue.main.async {
-                            self.currentlyWatchingButton.tintColor = .systemBlue
-                            self.delegate?.showRemovedFromWatching(show)
-                        }
-                    }
-                }
-            } else {
-                // Add to watching
-                let watchingShow = WatchingShow(
-                    showId: show.showId,
-                    name: show.name,
-                    posterPath: show.posterPath,
-                    numSeasons: show.numSeasons,
-                    status: WatchingShow.ShowStatus(season: 1, episode: 1)
-                )
                 
-                watchingRef.setData(watchingShow.toDictionary) { error in
-                    if let error = error {
-                        print("Error adding show: \(error)")
-                    } else {
-                        DispatchQueue.main.async {
-                            self.currentlyWatchingButton.tintColor = .gray
-                            self.delegate?.showAddedToWatching(show)
-                        }
-                    }
+                self.isInWatchingList = false
+                self.delegate?.showRemovedFromWatching(self.show)
+                
+                DispatchQueue.main.async {
+                    self.updateButtonStates()
+                }
+            }
+        } else {
+            // Add to watching list
+            var updatedShow = show
+            updatedShow!.watchingStatus = TVShow.WatchingStatus(season: 1, episode: 1)
+            
+            watchingRef.setData(updatedShow!.toDictionary) { [weak self] error in
+                guard let self = self else { return }
+                if let error = error {
+                    print("Error adding show: \(error)")
+                    return
+                }
+                
+                self.isInWatchingList = true
+                self.delegate?.showAddedToWatching(updatedShow!)
+                
+                DispatchQueue.main.async {
+                    self.updateButtonStates()
                 }
             }
         }
     }
     
-    @IBAction func addToWatchingButton(_ sender: Any) {
-        guard let userId = Auth.auth().currentUser?.uid,
-              let show = show else { return }
+    @IBAction func watchlistButtonTapped(_ sender: Any) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
         
-        let db = Firestore.firestore()
-        let wishRef = db.collection("users")
-            .document(userId)
-            .collection("wish")
+        let wishRef = TVShow.wishlistCollection(userId: userId)
             .document(String(show.showId))
         
-        // First check if the show is already being watched
-        wishRef.getDocument { [weak self] (document, error) in
-            guard let self = self else { return }
-            
-            if let document = document, document.exists {
-                // Show is already being watched, remove it
-                wishRef.delete { error in
-                    if let error = error {
-                        print("Error removing show: \(error)")
-                    } else {
-                        DispatchQueue.main.async {
-                            self.watchlistButton.tintColor = .systemBlue
-                            self.delegate?.showRemovedFromWishlist(show)
-                        }
-                    }
+        if isInWishlist {
+            // Remove from wishlist
+            wishRef.delete { [weak self] error in
+                guard let self = self else { return }
+                if let error = error {
+                    print("Error removing show from wishlist: \(error)")
+                    return
                 }
-            } else {
-                // Add to watching
-                let wishShow = WishShow(
-                    showId: show.showId,
-                    name: show.name,
-                    posterPath: show.posterPath,
-                    providerNames: show.providers
-                )
                 
-                wishRef.setData(wishShow.toDictionary) { error in
-                    if let error = error {
-                        print("Error adding show: \(error)")
-                    } else {
-                        DispatchQueue.main.async {
-                            self.watchlistButton.tintColor = .gray
-                            self.delegate?.showAddedToWishlist(show)
-                        }
-                    }
+                self.isInWishlist = false
+                self.delegate?.showRemovedFromWishlist(self.show)
+                
+                DispatchQueue.main.async {
+                    self.updateButtonStates()
+                }
+            }
+        } else {
+            // Add to wishlist
+            wishRef.setData(show.toDictionary) { [weak self] error in
+                guard let self = self else { return }
+                if let error = error {
+                    print("Error adding show to wishlist: \(error)")
+                    return
+                }
+                
+                self.isInWishlist = true
+                self.delegate?.showAddedToWishlist(self.show)
+                
+                DispatchQueue.main.async {
+                    self.updateButtonStates()
                 }
             }
         }
-
     }
 }

@@ -8,7 +8,7 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
     @IBOutlet weak var showCollectionView: UICollectionView!
     @IBOutlet weak var usernameLabel: UILabel!
     
-    private var watchingShows: [WatchingShow] = [] {
+    private var watchingShows: [TVShow] = [] {
             didSet {
                 showCollectionView.reloadData()
             }
@@ -38,10 +38,8 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
     private func loadWatchingList() {
         guard let userId = Auth.auth().currentUser?.uid else { return }
         
-        let db = Firestore.firestore()
-        db.collection("users")
-            .document(userId)
-            .collection("watching")
+        // Use the static collection reference from TVShow
+        TVShow.watchingCollection(userId: userId)
             .addSnapshotListener { [weak self] snapshot, error in
                 if let error = error {
                     print("Error loading watching list: \(error)")
@@ -51,8 +49,10 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
                 guard let documents = snapshot?.documents else { return }
                 
                 self?.watchingShows = documents.compactMap { document in
-                    WatchingShow.fromDictionary(document.data())
+                    TVShow.fromDictionary(document.data())
                 }
+                
+                print("Loaded \(self?.watchingShows.count ?? 0) watching shows")
             }
     }
     
@@ -115,7 +115,7 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
         if segue.identifier == "StatusUpdateSegue",
            let nextVC = segue.destination as? StatusUpdateViewController {
             nextVC.delegate = self
-            nextVC.show = sender as? WatchingShow
+            nextVC.show = sender as? TVShow
         }
     }
     

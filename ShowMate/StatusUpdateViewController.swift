@@ -9,84 +9,50 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
-class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
+class StatusUpdateViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
     
     var delegate:UIViewController!
-    var show: WatchingShow? {
-        didSet {
-            if isViewLoaded {
-                updateUI()
-            }
-        }
-    }
-    var tvShow: TVShow? {
-        didSet {
-            if isViewLoaded {
-                fetchWatchingShow()
-            }
-        }
-    }
+    var show: TVShow!
     
     @IBOutlet weak var showTitleLabel: UILabel!
     @IBOutlet weak var posterView: UIImageView!
-    @IBOutlet weak var episodeTextField: UITextField!
-    @IBOutlet weak var seasonTextField: UITextField!
+    
+    @IBOutlet weak var seasonPicker: UIPickerView!
+    @IBOutlet weak var episodePicker: UIPickerView!
+    
+    private var selectedSeason: Int = 1
+    private var selectedEpisode: Int = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        episodeTextField.delegate = self
-        seasonTextField.delegate = self
+        seasonPicker.delegate = self
+        seasonPicker.dataSource = self
+        episodePicker.delegate = self
+        episodePicker.dataSource = self
         if show != nil {
+            if let status = show.watchingStatus {
+                selectedSeason = status.season
+                selectedEpisode = status.episode
+            }
+            
+            print("current status \(selectedSeason) \(selectedEpisode)")
+            let seasonIndex = max(0, selectedSeason - 1)
+            let episodeIndex = max(0, selectedEpisode - 1)
+            seasonPicker.selectRow(seasonIndex, inComponent: 0, animated: false)
+            episodePicker.selectRow(episodeIndex, inComponent: 0, animated: false)
+            
+            // Force reload of episode picker for initial setup
+            episodePicker.reloadAllComponents()
             updateUI()
-        } else if tvShow != nil {
-            fetchWatchingShow()
         }
     }
     
     private func updateUI() {
         guard let show = show else { return }
         showTitleLabel.text = show.name
-        seasonTextField.text = String(show.status.season)
-        episodeTextField.text = String(show.status.episode)
         loadPosterImage()
     }
     
-    private func fetchWatchingShow() {
-        guard let tvShow = tvShow else { return }
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-        
-        let db = Firestore.firestore()
-        db.collection("users")
-            .document(userId)
-            .collection("watching")
-            .whereField("showId", isEqualTo: tvShow.showId)
-            .getDocuments { [weak self] snapshot, error in
-                if let error = error {
-                    print("Error fetching watching show: \(error)")
-                    return
-                }
-                
-                if let document = snapshot?.documents.first,
-                   let watchingShow = WatchingShow.fromDictionary(document.data()) {
-                    // Existing watching show found
-                    DispatchQueue.main.async {
-                        self?.show = watchingShow
-                    }
-                } else {
-                    // Create new watching show
-                    let newShow = WatchingShow(
-                        showId: tvShow.showId,
-                        name: tvShow.name,
-                        posterPath: tvShow.posterPath,
-                        numSeasons: tvShow.numSeasons,
-                        status: .init(season: 1, episode: 1)
-                    )
-                    DispatchQueue.main.async {
-                        self?.show = newShow
-                    }
-                }
-            }
-    }
     // Called when 'return' key pressed
 
     func textFieldShouldReturn(_ textField:UITextField) -> Bool {
@@ -124,42 +90,58 @@ class StatusUpdateViewController: UIViewController, UITextFieldDelegate {
             DispatchQueue.main.async {
                 self?.posterView.image = image
             }
-        }.resume() // Don't forget to call resume()!
+        }.resume()
+        self.posterView.layer.cornerRadius = 30
         
     }
     
+    func numberOfComponents(in pickerView: UIPickerView) -> Int {
+        return 1
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, numberOfRowsInComponent component: Int) -> Int {
+        if pickerView == seasonPicker {
+            return show.numSeasons
+        }else {
+            let seasonIndex = max(0, selectedSeason - 1)
+            return seasonIndex < show.episodesPerSeason.count ? show.episodesPerSeason[seasonIndex] : 0
+        }
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, titleForRow row: Int, forComponent component: Int) -> String? {
+        return String(row + 1)
+    }
+    
+    func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        if pickerView == seasonPicker {
+            selectedSeason = row + 1
+            // Reset episode selection when season changes
+            selectedEpisode = 1
+            episodePicker.reloadAllComponents()
+            episodePicker.selectRow(0, inComponent: 0, animated: true)
+        } else {
+            selectedEpisode = row + 1
+        }
+    }
+    
     @IBAction func saveProgressButton(_ sender: Any) {
-        guard let seasonText = seasonTextField.text,
-              let episodeText = episodeTextField.text,
-              let season = Int(seasonText),
-              let episode = Int(episodeText),
-              let userId = Auth.auth().currentUser?.uid else {
+        guard let userId = Auth.auth().currentUser?.uid else {
             print("error")
             return
         }
+        guard let userId = Auth.auth().currentUser?.uid,
+              let updatedShow = show else { return }
         
-        let newStatus = WatchingShow.ShowStatus(season: season, episode: episode)
-        let updatedShow = WatchingShow(
-            showId: show!.showId,
-            name: show!.name,
-            posterPath: show!.posterPath,
-            numSeasons: show!.numSeasons,
-            status: newStatus
-        )
+        updatedShow.watchingStatus = TVShow.WatchingStatus(season: selectedSeason, episode: selectedEpisode)
         
-        let db = Firestore.firestore()
-        let watchingRef = db.collection("users")
-            .document(userId)
-            .collection("watching")
-            .document(String(show!.showId))
+        let watchingRef = TVShow.watchingCollection(userId: userId)
+            .document(String(updatedShow.showId))
         
         watchingRef.setData(updatedShow.toDictionary) { [weak self] error in
             if let error = error {
                 print("Error updating show status: \(error)")
             } else {
-                self?.dismiss(animated: true) {
-
-                }
+                self?.dismiss(animated: true)
             }
         }
     }

@@ -92,6 +92,7 @@ class FriendsViewController: UIViewController {
         setupTableViews()
         
         searchBar.autocapitalizationType = .none
+        searchBar.showsCancelButton = true
            
         if let currentUserId = Auth.auth().currentUser?.uid {
             friendsManager = FriendsManager(userId: currentUserId)
@@ -357,6 +358,10 @@ extension FriendsViewController: UISearchBarDelegate {
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         guard let searchText = searchBar.text, !searchText.isEmpty else { return }
         performSearch(with: searchText)
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 }
 

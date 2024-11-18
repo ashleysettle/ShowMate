@@ -55,6 +55,8 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
             self?.updateDisplayName()
         }
         fixScrollViewConstraints()
+        showSearchBar.showsCancelButton = true
+        showSearchBar.autocapitalizationType = .none
     }
     
     private func setupCollectionView() {
@@ -145,60 +147,42 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
         
     // MARK: fetch user's lists from firebase
     private func fetchUserLists() {
-        guard let userId = Auth.auth().currentUser?.uid else { return }
-        
-        // Fetch Currently Watching
-        fetchShowsFromCollection(userId: userId, collectionName: "watching") { [weak self] shows in
-            self?.currentlyWatching = shows
-            DispatchQueue.main.async {
-                self?.currentlyWatchingCV.reloadData()
-            }
-        }
-        
-        // Fetch Watchlist
-        fetchShowsFromCollection(userId: userId, collectionName: "wish") { [weak self] shows in
-            self?.watchlist = shows
-            DispatchQueue.main.async {
-                self?.watchlistCV.reloadData()
-            }
-        }
-    }
-    
-    private func fetchShowsFromCollection(userId: String, collectionName: String, completion: @escaping ([TVShow]) -> Void) {
-        let db = Firestore.firestore()
-        db.collection("users")
-            .document(userId)
-            .collection(collectionName)
-            .getDocuments { snapshot, error in
-                if let error = error {
-                    print("Error fetching \(collectionName): \(error)")
-                    completion([])
-                    return
-                }
-                
-                var shows: [TVShow] = []
-                let group = DispatchGroup()
-                
-                snapshot?.documents.forEach { document in
-                    group.enter()
-                    let data = document.data()
-                    if let showId = data["showId"] as? Int {
-                        self.fetchShowDetails(for: showId) { show in
-                            if let show = show {
-                                shows.append(show)
-                            }
-                            group.leave()
-                        }
-                    } else {
-                        group.leave()
+            guard let userId = Auth.auth().currentUser?.uid else { return }
+            
+            // Fetch watching list
+            TVShow.watchingCollection(userId: userId)
+                .addSnapshotListener { [weak self] snapshot, error in
+                    if let error = error {
+                        print("Error fetching watching list: \(error)")
+                        return
+                    }
+                    
+                    self?.currentlyWatching = snapshot?.documents.compactMap {
+                        TVShow.fromDictionary($0.data())
+                    } ?? []
+                    
+                    DispatchQueue.main.async {
+                        self?.currentlyWatchingCV.reloadData()
                     }
                 }
-                
-                group.notify(queue: .main) {
-                    completion(shows)
+            
+            // Fetch wishlist
+            TVShow.wishlistCollection(userId: userId)
+                .addSnapshotListener { [weak self] snapshot, error in
+                    if let error = error {
+                        print("Error fetching wishlist: \(error)")
+                        return
+                    }
+                    
+                    self?.watchlist = snapshot?.documents.compactMap {
+                        TVShow.fromDictionary($0.data())
+                    } ?? []
+                    
+                    DispatchQueue.main.async {
+                        self?.watchlistCV.reloadData()
+                    }
                 }
-            }
-    }
+        }
     // MARK: - Collection View
     
     func collectionView(_ collectionView: UICollectionView,
@@ -276,7 +260,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
             destinationVC.show = show
             destinationVC.delegate = self
         }else if segue.identifier == "StatusSegue", let destinationVC = segue.destination as? StatusUpdateViewController, let show = sender as? TVShow {
-                destinationVC.tvShow = show
+                destinationVC.show = show
                 destinationVC.delegate = self
         }
     }
@@ -301,36 +285,28 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     func showAddedToWatching(_ show: TVShow) {
         if !currentlyWatching.contains(where: { $0.showId == show.showId }) {
             currentlyWatching.append(show)
-            DispatchQueue.main.async {
-                self.currentlyWatchingCV.reloadData()
-            }
+            currentlyWatchingCV.reloadData()
         }
     }
     
     func showAddedToWishlist(_ show: TVShow) {
         if !watchlist.contains(where: { $0.showId == show.showId }) {
             watchlist.append(show)
-            DispatchQueue.main.async {
-                self.watchlistCV.reloadData()
-            }
+            watchlistCV.reloadData()
         }
     }
     
     func showRemovedFromWatching(_ show: TVShow) {
         if let index = currentlyWatching.firstIndex(where: { $0.showId == show.showId }) {
             currentlyWatching.remove(at: index)
-            DispatchQueue.main.async {
-                self.currentlyWatchingCV.reloadData()
-            }
+            currentlyWatchingCV.reloadData()
         }
     }
     
     func showRemovedFromWishlist(_ show: TVShow) {
         if let index = watchlist.firstIndex(where: { $0.showId == show.showId }) {
             watchlist.remove(at: index)
-            DispatchQueue.main.async {
-                self.watchlistCV.reloadData()
-            }
+            watchlistCV.reloadData()
         }
     }
     
@@ -359,6 +335,10 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
                 }
             }
         }
+    }
+    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
 
     // MARK: API 
