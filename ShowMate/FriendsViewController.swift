@@ -75,6 +75,8 @@ class FriendsViewController: UIViewController {
     var currentFriendsList = [UserProfile]()
     private var friendsManager: FriendsManager?
     private var friendsListener: ListenerRegistration?
+    // Profile segue identifier
+    let profileSegue = "profileSegue"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -394,12 +396,22 @@ extension FriendsViewController: UITableViewDataSource {
 
 extension FriendsViewController: UITableViewDelegate {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: true)
+        var user:UserProfile
         // Search result table
         if tableView == resultsTable {
-            let user = resultsFromSearch[indexPath.row]
+            user = resultsFromSearch[indexPath.row]
         // Current friend table
         } else {
-            let friend = currentFriendsList[indexPath.row]
+            user = currentFriendsList[indexPath.row]
+        }
+        self.performSegue(withIdentifier: profileSegue, sender: user)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == profileSegue,
+           let nextVC = segue.destination as? ProfileViewController {
+            nextVC.user = sender as? UserProfile
         }
     }
 }
