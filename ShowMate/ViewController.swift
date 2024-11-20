@@ -10,8 +10,6 @@ class ViewController: UIViewController, UITextFieldDelegate {
     @IBOutlet weak var emailTextField: UITextField!
     @IBOutlet weak var errorMessage: UILabel!
     
-    // Variable names for segues
-    let createAccountSegueIdentifier = "CreateAccountSegue"
     let signInSegueIdentifier = "SignInSegue"
     
     // Instance of UserManager to handle Firestore interactions
@@ -164,10 +162,10 @@ class ViewController: UIViewController, UITextFieldDelegate {
                 // After successful sign in, perform segue
                 self?.performSegue(withIdentifier: self?.signInSegueIdentifier ?? "", sender: nil)
 
-                // Set the root view controller after sign-in
-                if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
-                    sceneDelegate.checkAuthAndSetRootViewController()
-                }
+//                // Set the root view controller after sign-in
+//                if let sceneDelegate = UIApplication.shared.connectedScenes.first?.delegate as? SceneDelegate {
+//                    sceneDelegate.checkAuthAndSetRootViewController()
+//                }
             }
         }
     }
