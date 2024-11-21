@@ -25,7 +25,7 @@ class StatusUpdateViewController: UIViewController, UIPickerViewDelegate, UIPick
     private var selectedSeason: Int = 1
     private var selectedEpisode: Int = 1
     
-    let placeholderText = "Add your thoughts about the show so far (optional)"
+    let placeholderText = "(optional)"
     
     override func viewDidLoad() {
         super.viewDidLoad()

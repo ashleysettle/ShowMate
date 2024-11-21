@@ -7,7 +7,7 @@ class ShowDetailViewController: UIViewController {
     // MARK: - Outlets
     @IBOutlet weak var showTitleLabel: UILabel!
     @IBOutlet weak var showImageView: UIImageView!
-    @IBOutlet weak var showDescriptionLabel: UILabel!
+    @IBOutlet weak var descriptionTextView: UITextView!
     @IBOutlet weak var providerLabel: UILabel!
     @IBOutlet weak var lastAirDate: UILabel!
     @IBOutlet weak var firstAirDate: UILabel!
@@ -34,8 +34,8 @@ class ShowDetailViewController: UIViewController {
         guard let show = show else { return }
         
         showTitleLabel.text = show.name
-        showDescriptionLabel.text = show.description
-        showDescriptionLabel.sizeToFit()
+        descriptionTextView.text = show.description
+        //showDescriptionLabel.sizeToFit()
         
         providerLabel.text = "Where to Watch: \(show.providers.joined(separator: ", "))"
         genreLabel.text = "Genres: \(show.genres.joined(separator: ", "))"
