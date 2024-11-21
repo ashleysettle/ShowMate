@@ -9,7 +9,7 @@ import UIKit
 import FirebaseAuth
 import FirebaseFirestore
 
-class StatusUpdateViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource {
+class StatusUpdateViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource, UITextViewDelegate {
     
     var delegate:UIViewController!
     var show: TVShow!
@@ -17,11 +17,15 @@ class StatusUpdateViewController: UIViewController, UIPickerViewDelegate, UIPick
     @IBOutlet weak var showTitleLabel: UILabel!
     @IBOutlet weak var posterView: UIImageView!
     
+    @IBOutlet weak var shareSegmentedControl: UISegmentedControl!
+    @IBOutlet weak var textView: UITextView!
     @IBOutlet weak var seasonPicker: UIPickerView!
     @IBOutlet weak var episodePicker: UIPickerView!
     
     private var selectedSeason: Int = 1
     private var selectedEpisode: Int = 1
+    
+    let placeholderText = "Add your thoughts about the show so far (optional)"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,6 +55,9 @@ class StatusUpdateViewController: UIViewController, UIPickerViewDelegate, UIPick
         guard let show = show else { return }
         showTitleLabel.text = show.name
         loadPosterImage()
+        shareSegmentedControl.selectedSegmentIndex = 1
+        textView.layer.borderWidth = 1
+        textView.layer.borderColor = UIColor.systemGray4.cgColor
     }
     
     // Called when 'return' key pressed
@@ -92,7 +99,36 @@ class StatusUpdateViewController: UIViewController, UIPickerViewDelegate, UIPick
             }
         }.resume()
         self.posterView.layer.cornerRadius = 30
+        self.posterView.clipsToBounds = true
         
+    }
+    
+    @IBAction func segmentedChanged(_ sender: UISegmentedControl) {
+        let isSharing = sender.selectedSegmentIndex == 0
+        UIView.animate(withDuration: 0.3) {
+            self.textView.alpha = isSharing ? 1.0 : 0.0
+        }
+        
+        if !isSharing {
+            textView.text = placeholderText
+            textView.textColor = .placeholderText
+        }
+    }
+            
+    // MARK: - UITextViewDelegate
+    
+    func textViewDidBeginEditing(_ textView: UITextView) {
+        if textView.text == placeholderText {
+            textView.text = ""
+            textView.textColor = .label
+        }
+    }
+    
+    func textViewDidEndEditing(_ textView: UITextView) {
+        if textView.text.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            textView.text = placeholderText
+            textView.textColor = .placeholderText
+        }
     }
     
     func numberOfComponents(in pickerView: UIPickerView) -> Int {
@@ -137,11 +173,48 @@ class StatusUpdateViewController: UIViewController, UIPickerViewDelegate, UIPick
         let watchingRef = TVShow.watchingCollection(userId: userId)
             .document(String(updatedShow.showId))
         
-        watchingRef.setData(updatedShow.toDictionary) { [weak self] error in
-            if let error = error {
-                print("Error updating show status: \(error)")
-            } else {
-                self?.dismiss(animated: true)
+        let isSharing = shareSegmentedControl.selectedSegmentIndex == 0
+        
+        if isSharing {
+            let message = textView.text == placeholderText ? nil : textView.text
+                        
+            let statusUpdate = StatusUpdate(
+                id: UUID().uuidString,
+                userId: userId,
+                username: (Auth.auth().currentUser?.displayName)!,
+                showId: updatedShow.showId,
+                showName: updatedShow.name,
+                posterPath: updatedShow.posterPath,
+                season: selectedSeason,
+                episode: selectedEpisode,
+                message: message,
+                timestamp: Date()
+            )
+            
+            // Use a batch write to update both documents atomically
+            let batch = Firestore.firestore().batch()
+            
+            // Update show progress
+            batch.setData(updatedShow.toDictionary, forDocument: watchingRef)
+            
+            // Create status update
+            let statusRef = StatusUpdate.statusUpdatesCollection().document()
+            batch.setData(statusUpdate.toDictionary, forDocument: statusRef)
+            
+            batch.commit { [weak self] error in
+                if let error = error {
+                    print("Error updating show and creating status: \(error)")
+                } else {
+                    self?.dismiss(animated: true)
+                }
+            }
+        } else {
+            watchingRef.setData(updatedShow.toDictionary) { [weak self] error in
+                if let error = error {
+                    print("Error updating show status: \(error)")
+                } else {
+                    self?.dismiss(animated: true)
+                }
             }
         }
     }
