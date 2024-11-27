@@ -49,6 +49,13 @@ class UserTableViewCell: UITableViewCell {
 // Custom table view cell for the current friends of the user
 class currentFriendsTableViewCell: UITableViewCell{
     @IBOutlet weak var friendUserName: UILabel!
+    @IBOutlet weak var unfollowButton: UIButton!
+    
+    var unfollowAction: (() -> Void)?
+    
+    @IBAction func followButtonTapped(_ sender: UIButton) {
+        unfollowAction?()
+    }
     
     // Formatting for the cell
     override func layoutSubviews() {
@@ -277,7 +284,28 @@ class FriendsViewController: UIViewController {
            }
     }
     
-    // Helper function for loading current friends of the user
+    private func unfollowAction(friendID: String) {
+        guard let currentUserID = Auth.auth().currentUser?.uid else { return }
+        let ref = Firestore.firestore().collection("users").document(currentUserID)
+        
+        // Update the `friend_ids` field by removing the friend ID
+        ref.updateData([
+            "friend_ids": FieldValue.arrayRemove([friendID])
+        ]) { error in
+            if let error = error {
+                print("Error unfollowing friend: \(error)")
+                return
+            }
+            
+            // Update local list and refresh UI
+            self.currentFriendsList = self.currentFriendsList.filter { $0.uid != friendID }
+
+            self.currentFriendsTable.reloadData()
+            
+        }
+    }
+    
+    // Helper function for loading current friends of the userr
     func fetchFriendsProfiles(_ friendIDs: [String]) async {
         let db = Firestore.firestore()
         var friends = [UserProfile]()
@@ -307,14 +335,7 @@ class FriendsViewController: UIViewController {
             self.currentFriendsTable.reloadData()
         }
     }
-    
-    // Function to be implemented in final release
-    @objc private func sendFriendRequest(_ sender: UIButton) {
-    }
-    
-    // Function to be implemented in final release
-    @objc private func removeFriend(_ sender: UIButton) {
-    }
+
     
     // Updates the display name in the corner of the screen
     private func updateDisplayName() {
@@ -394,6 +415,9 @@ extension FriendsViewController: UITableViewDataSource {
             let cell = tableView.dequeueReusableCell(withIdentifier: currentFriendsID, for: indexPath) as! currentFriendsTableViewCell
             let friend = currentFriendsList[indexPath.row]
             cell.friendUserName.text = friend.username
+            cell.unfollowAction = { [weak self] in
+                        self?.unfollowAction(friendID: friend.uid)
+                    }
             return cell
         }
     }
