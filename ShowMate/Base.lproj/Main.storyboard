@@ -392,19 +392,66 @@
                         <rect key="frame" x="0.0" y="0.0" width="393" height="842"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cUu-Kl-CcQ">
-                                <rect key="frame" x="52" y="130" width="79" height="21"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="cUu-Kl-CcQ">
+                                <rect key="frame" x="16" y="94" width="127" height="25"/>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W6" family="Hiragino Mincho ProN" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="xcd-Uj-tIh">
+                                <rect key="frame" x="0.0" y="206" width="393" height="155"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="155" id="6kP-gm-gT8"/>
+                                </constraints>
+                                <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="AwD-NV-u2F">
+                                    <size key="itemSize" width="99" height="144"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="ShowCell" id="UuC-2x-Y10" customClass="ShowCell" customModule="ShowMate" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="5.666666666666667" width="99" height="144"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="tb8-h5-XMj">
+                                            <rect key="frame" x="0.0" y="0.0" width="99" height="144"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="pll" translatesAutoresizingMaskIntoConstraints="NO" id="0oJ-JM-a6V">
+                                                    <rect key="frame" x="0.0" y="0.0" width="99" height="144"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                            </subviews>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="99" height="144"/>
+                                        <connections>
+                                            <outlet property="showPosterImage" destination="0oJ-JM-a6V" id="ElL-cg-LIU"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Currently Watching" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="n5Y-Rb-0qp">
+                                <rect key="frame" x="16" y="140" width="231" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="zQd-IU-tED"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="25"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Otg-Xx-tBl"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                        <constraints>
+                            <constraint firstItem="n5Y-Rb-0qp" firstAttribute="top" secondItem="cUu-Kl-CcQ" secondAttribute="bottom" constant="21" id="EeS-Ge-10d"/>
+                            <constraint firstItem="xcd-Uj-tIh" firstAttribute="top" secondItem="n5Y-Rb-0qp" secondAttribute="bottom" constant="26" id="Ze8-N3-aov"/>
+                            <constraint firstItem="cUu-Kl-CcQ" firstAttribute="top" secondItem="Otg-Xx-tBl" secondAttribute="top" constant="94" id="ulz-DZ-Mrh"/>
+                        </constraints>
                     </view>
                     <navigationItem key="navigationItem" id="Yhb-DV-s5m"/>
                     <connections>
+                        <outlet property="currentlyWatchingCV" destination="xcd-Uj-tIh" id="d9t-X6-ARd"/>
                         <outlet property="usernameLabel" destination="cUu-Kl-CcQ" id="ait-iN-lhc"/>
                     </connections>
                 </viewController>
