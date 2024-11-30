@@ -440,11 +440,85 @@
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" ambiguous="YES" text="Status Updates" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="3Iv-bF-Qgq">
+                                <rect key="frame" x="16" y="391" width="231" height="40"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="40" id="mTU-8C-ue7"/>
+                                </constraints>
+                                <fontDescription key="fontDescription" name="HiraMinProN-W3" family="Hiragino Mincho ProN" pointSize="25"/>
+                                <nil key="textColor"/>
+                                <nil key="highlightedColor"/>
+                            </label>
+                            <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="dh4-hK-RcA">
+                                <rect key="frame" x="0.0" y="439" width="393" height="494"/>
+                                <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                <collectionViewFlowLayout key="collectionViewLayout" automaticEstimatedItemSize="YES" minimumLineSpacing="10" minimumInteritemSpacing="10" id="GJ1-kp-eAO">
+                                    <size key="itemSize" width="386" height="135"/>
+                                    <size key="headerReferenceSize" width="0.0" height="0.0"/>
+                                    <size key="footerReferenceSize" width="0.0" height="0.0"/>
+                                    <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
+                                </collectionViewFlowLayout>
+                                <cells>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="StatusCell" id="cDM-d0-9sU" customClass="StatusCell" customModule="ShowMate" customModuleProvider="target">
+                                        <rect key="frame" x="3.6666666666666665" y="0.0" width="386" height="135"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <collectionViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" id="OMa-kl-ERv">
+                                            <rect key="frame" x="0.0" y="0.0" width="386" height="135"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="username" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="ULN-Pk-9co">
+                                                    <rect key="frame" x="7" y="7" width="153" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="boldSystem" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="tyW-YW-FQ3">
+                                                    <rect key="frame" x="298" y="8" width="80" height="98"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                </imageView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="S:1 E:4" textAlignment="center" lineBreakMode="wordWrap" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="h8x-XR-rNO">
+                                                    <rect key="frame" x="298" y="109" width="80" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                                <textView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" fixedFrame="YES" text="this is the message that the user puts" textAlignment="natural" translatesAutoresizingMaskIntoConstraints="NO" id="weF-er-a7n">
+                                                    <rect key="frame" x="7" y="26" width="283" height="101"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <color key="backgroundColor" systemColor="systemBackgroundColor"/>
+                                                    <color key="textColor" systemColor="labelColor"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                                    <textInputTraits key="textInputTraits" autocapitalizationType="sentences"/>
+                                                </textView>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="2hs ago" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="aH0-7V-TcD">
+                                                    <rect key="frame" x="229" y="8" width="61" height="21"/>
+                                                    <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
+                                        </collectionViewCellContentView>
+                                        <size key="customSize" width="386" height="135"/>
+                                        <connections>
+                                            <outlet property="messageTextView" destination="weF-er-a7n" id="KPF-nc-JvU"/>
+                                            <outlet property="posterImageView" destination="tyW-YW-FQ3" id="Zd1-dd-Lit"/>
+                                            <outlet property="statusLabel" destination="h8x-XR-rNO" id="nS6-bg-B2R"/>
+                                            <outlet property="timeLabel" destination="aH0-7V-TcD" id="Tlm-6K-A3G"/>
+                                            <outlet property="usernameLabel" destination="ULN-Pk-9co" id="re8-hh-78F"/>
+                                        </connections>
+                                    </collectionViewCell>
+                                </cells>
+                            </collectionView>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="Otg-Xx-tBl"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
                         <constraints>
                             <constraint firstItem="n5Y-Rb-0qp" firstAttribute="top" secondItem="cUu-Kl-CcQ" secondAttribute="bottom" constant="21" id="EeS-Ge-10d"/>
+                            <constraint firstItem="dh4-hK-RcA" firstAttribute="top" secondItem="3Iv-bF-Qgq" secondAttribute="bottom" constant="8" symbolic="YES" id="QgK-lp-4nR"/>
+                            <constraint firstItem="3Iv-bF-Qgq" firstAttribute="top" secondItem="xcd-Uj-tIh" secondAttribute="bottom" constant="30" id="V9u-wn-ibx"/>
                             <constraint firstItem="xcd-Uj-tIh" firstAttribute="top" secondItem="n5Y-Rb-0qp" secondAttribute="bottom" constant="26" id="Ze8-N3-aov"/>
                             <constraint firstItem="cUu-Kl-CcQ" firstAttribute="top" secondItem="Otg-Xx-tBl" secondAttribute="top" constant="94" id="ulz-DZ-Mrh"/>
                         </constraints>
