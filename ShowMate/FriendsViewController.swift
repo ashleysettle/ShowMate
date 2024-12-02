@@ -383,6 +383,8 @@ extension FriendsViewController: UISearchBarDelegate {
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
+        searchBar.text = "" // Clear the text in the search bar
+        clearSearchResults()
     }
 }
 
