@@ -98,6 +98,7 @@ class FriendsViewController: UIViewController {
         updateDisplayName()
         setupTableViews()
         
+        // Search bar set up
         searchBar.autocapitalizationType = .none
         searchBar.showsCancelButton = true
            
@@ -284,6 +285,7 @@ class FriendsViewController: UIViewController {
            }
     }
     
+    // Helper function to unadd current friend
     private func unfollowAction(friendID: String) {
         guard let currentUserID = Auth.auth().currentUser?.uid else { return }
         let ref = Firestore.firestore().collection("users").document(currentUserID)
@@ -301,7 +303,6 @@ class FriendsViewController: UIViewController {
             self.currentFriendsList = self.currentFriendsList.filter { $0.uid != friendID }
 
             self.currentFriendsTable.reloadData()
-            
         }
     }
     

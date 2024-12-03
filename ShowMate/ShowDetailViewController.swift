@@ -37,8 +37,10 @@ class ShowDetailViewController: UIViewController {
         descriptionTextView.text = show.description
         //showDescriptionLabel.sizeToFit()
         
-        providerLabel.text = "Where to Watch: \(show.providers.joined(separator: ", "))"
-        genreLabel.text = "Genres: \(show.genres.joined(separator: ", "))"
+        providerLabel.text = "\(show.providers.joined(separator: ", "))"
+        //providerLabel.text = "Where to Watch: \(show.providers.joined(separator: ", "))"
+        genreLabel.text = "\(show.genres.joined(separator: ", "))"
+        //genreLabel.text = "Genres: \(show.genres.joined(separator: ", "))"
         genreLabel.sizeToFit()
         
         numberOfSeasons.text = "Number of Seasons: \(show.numSeasons)"
