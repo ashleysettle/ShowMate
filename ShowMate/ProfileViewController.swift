@@ -181,6 +181,24 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "StatusCell", for: indexPath) as! StatusCell
             let status = statusUpdates[indexPath.row]
             cell.configure(with: status)
+            
+            cell.onLikePressed = {
+                // Your like button logic here
+                let db = Firestore.firestore()
+                let ref = StatusUpdate.statusUpdatesCollection().document(status.id)
+                
+                cell.isLiked.toggle()
+                ref.updateData([
+                    "likes": FieldValue.increment(Int64(cell.isLiked ? 1 : -1))
+                ]) { error in
+                    if let error = error {
+                        print("Error updating likes: \(error)")
+                    }
+                }
+                
+                cell.likeButton.setImage(UIImage(systemName: cell.isLiked ? "heart.fill" : "heart"), for: .normal)
+            }
+            
             return cell
         }
     }

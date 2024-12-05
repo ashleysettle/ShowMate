@@ -19,6 +19,7 @@ struct StatusUpdate {
     let episode: Int
     let message: String?
     let timestamp: Date
+    let likes: Int
     
     var toDictionary: [String: Any] {
         var dict: [String: Any] = [
@@ -29,7 +30,8 @@ struct StatusUpdate {
             "posterPath": posterPath,
             "season": season,
             "episode": episode,
-            "timestamp": timestamp
+            "timestamp": timestamp,
+            "likes": likes
         ]
         
         if let message = message {
@@ -51,6 +53,8 @@ struct StatusUpdate {
             return nil
         }
         
+        let likes = dict["likes"] as? Int ?? 0
+        
         return StatusUpdate(
             id: id,
             userId: userId,
@@ -61,8 +65,11 @@ struct StatusUpdate {
             season: season,
             episode: episode,
             message: dict["message"] as? String,
-            timestamp: timestamp.dateValue()
+            timestamp: timestamp.dateValue(),
+            likes: likes
         )
+        
+        
     }
     
     static func statusUpdatesCollection() -> CollectionReference {

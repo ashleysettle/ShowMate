@@ -1,18 +1,31 @@
 import UIKit
+import FirebaseFirestore
 
 class StatusCell: UICollectionViewCell {
     
+    @IBOutlet weak var likeButton: UIButton!
+    @IBOutlet weak var likes: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var messageTextView: UITextView!
     @IBOutlet weak var posterImageView: UIImageView!
     @IBOutlet weak var statusLabel: UILabel!
     @IBOutlet weak var timeLabel: UILabel!
+
+    var isLiked = false
+    var statusId = ""
+    
+    var onLikePressed: (() -> Void)?    
     
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
+        setupActions()
     }
     
+    private func setupActions() {
+        likeButton.addTarget(self, action: #selector(handleLikePressed), for: .touchUpInside)
+    }
+        
     private func setupUI() {
         // Cell styling
         contentView.backgroundColor = .secondarySystemBackground
@@ -38,15 +51,19 @@ class StatusCell: UICollectionViewCell {
         statusLabel.font = .systemFont(ofSize: 14)
         timeLabel.font = .systemFont(ofSize: 12)
         timeLabel.textColor = .secondaryLabel
-        
+
     }
     
     func configure(with status: StatusUpdate) {
+        self.statusId = status.id
         // Set username
         usernameLabel.text = status.username
         
         // Create status text with show name
         statusLabel.text = "S:\(status.season) E:\(status.episode)"
+        let likeImage = isLiked ? UIImage(systemName: "heart.fill"): UIImage(systemName: "heart")
+        likeButton.setImage(likeImage, for: .normal)
+        likes.text = "\(status.likes)"
         
         // Handle optional message
         if let message = status.message {
@@ -104,8 +121,33 @@ class StatusCell: UICollectionViewCell {
         posterImageView.image = nil
         usernameLabel.text = nil
         statusLabel.text = nil
+        likes.text = nil
         messageTextView.text = nil
         timeLabel.text = nil
         messageTextView.isHidden = false  // Reset visibility
+        statusId = ""
+        
     }
+    
+    
+    @objc private func handleLikePressed() {
+        onLikePressed?()
+    }
+    
+//    @IBAction func likeButtonPressed(_ sender: Any) {
+//        let db = Firestore.firestore()
+//        let ref = StatusUpdate.statusUpdatesCollection().document(statusId)
+//        
+//        isLiked.toggle()
+//        ref.updateData([
+//            "likes": FieldValue.increment(Int64(isLiked ? 1 : -1))
+//        ]) { error in
+//            if let error = error {
+//                print("Error updating likes: \(error)")
+//            }
+//        }
+//        
+//        likeButton.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart"), for: .normal)
+//
+//    }
 }
