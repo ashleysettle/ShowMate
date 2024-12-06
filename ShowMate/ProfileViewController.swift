@@ -181,6 +181,10 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             let status = statusUpdates[indexPath.row]
             cell.configure(with: status)
             
+            cell.onCommentPressed = { [weak self] in
+                self?.performSegue(withIdentifier: "CommentsSegue", sender: status)
+            }
+            
             cell.onLikePressed = {
                 guard let userId = Auth.auth().currentUser?.uid else { return }
                 // Your like button logic here
@@ -224,6 +228,8 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
                 self.performSegue(withIdentifier: "ShowDetailSegue", sender: selectedShow)
             }
         }
+        
+        
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -232,6 +238,13 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
            let show = sender as? TVShow {
             destinationVC.show = show
             destinationVC.delegate = self
+        }
+        
+        if segue.identifier == "CommentsSegue",
+           let commentsVC = segue.destination as? CommentsViewController,
+           let status = sender as? StatusUpdate {
+            commentsVC.statusId = status.id
+            commentsVC.status = status
         }
     }
     

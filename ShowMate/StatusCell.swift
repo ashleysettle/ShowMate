@@ -4,6 +4,8 @@ import FirebaseFirestore
 
 class StatusCell: UICollectionViewCell {
     
+    @IBOutlet weak var comments: UILabel!
+    @IBOutlet weak var commentButton: UIButton!
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var likes: UILabel!
     @IBOutlet weak var usernameLabel: UILabel!
@@ -15,8 +17,11 @@ class StatusCell: UICollectionViewCell {
     var isLiked = false
     var statusId = ""
     
-    var onLikePressed: (() -> Void)?    
-    
+    var onLikePressed: (() -> Void)?
+    var onCommentPressed: (() -> Void)?
+
+    private var allComments: [Comment] = []
+        
     override func awakeFromNib() {
         super.awakeFromNib()
         setupUI()
@@ -25,6 +30,8 @@ class StatusCell: UICollectionViewCell {
     
     private func setupActions() {
         likeButton.addTarget(self, action: #selector(handleLikePressed), for: .touchUpInside)
+        commentButton.addTarget(self, action: #selector(handleCommentPressed), for: .touchUpInside)
+
     }
         
     private func setupUI() {
@@ -87,6 +94,7 @@ class StatusCell: UICollectionViewCell {
         
         // Load poster image
         loadPosterImage(from: status.posterPath)
+        configureComments(for: status.id)
     }
     
     private func loadPosterImage(from urlString: String) {
@@ -132,12 +140,27 @@ class StatusCell: UICollectionViewCell {
         timeLabel.text = nil
         messageTextView.isHidden = false  // Reset visibility
         statusId = ""
+        comments.text = "0"
         
     }
     
+    func configureComments(for statusId: String) {
+        Comment.commentsCollection()
+            .whereField("statusId", isEqualTo: statusId)
+            .order(by: "timestamp", descending: true)
+            .addSnapshotListener { [weak self] snapshot, error in
+                guard let documents = snapshot?.documents else { return }
+                self?.allComments = documents.compactMap { Comment.fromDictionary($0.data(), id: $0.documentID) }
+                self?.comments.text = "\(self?.allComments.count ?? 0)"
+            }
+    }
     
     @objc private func handleLikePressed() {
         onLikePressed?()
+    }
+    
+    @objc private func handleCommentPressed() {
+        onCommentPressed?()
     }
     
 }

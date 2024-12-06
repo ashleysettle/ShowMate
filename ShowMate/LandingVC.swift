@@ -202,6 +202,10 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
             let status = statusUpdates[indexPath.row]
             cell.configure(with: status)
             
+            cell.onCommentPressed = { [weak self] in
+                self?.performSegue(withIdentifier: "CommentsSegue", sender: status)
+            }
+            
             cell.onLikePressed = {
                 guard let userId = Auth.auth().currentUser?.uid else { return }
                 // Your like button logic here
@@ -250,11 +254,20 @@ class LandingVC: UIViewController, UICollectionViewDataSource, UICollectionViewD
         }
     }
     
+    
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "StatusUpdateSegue",
            let nextVC = segue.destination as? StatusUpdateViewController {
             nextVC.delegate = self
             nextVC.show = sender as? TVShow
+        }
+        
+        if segue.identifier == "CommentsSegue",
+           let commentsVC = segue.destination as? CommentsViewController,
+           let status = sender as? StatusUpdate {
+            commentsVC.statusId = status.id
+            commentsVC.status = status
         }
     }
     
