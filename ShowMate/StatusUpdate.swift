@@ -20,6 +20,7 @@ struct StatusUpdate {
     let message: String?
     let timestamp: Date
     let likes: Int
+    let likedBy: [String]
     
     var toDictionary: [String: Any] {
         var dict: [String: Any] = [
@@ -31,7 +32,8 @@ struct StatusUpdate {
             "season": season,
             "episode": episode,
             "timestamp": timestamp,
-            "likes": likes
+            "likes": likes,
+            "likedBy": likedBy
         ]
         
         if let message = message {
@@ -54,6 +56,7 @@ struct StatusUpdate {
         }
         
         let likes = dict["likes"] as? Int ?? 0
+        let likedBy = dict["likedBy"] as? [String] ?? []
         
         return StatusUpdate(
             id: id,
@@ -66,7 +69,8 @@ struct StatusUpdate {
             episode: episode,
             message: dict["message"] as? String,
             timestamp: timestamp.dateValue(),
-            likes: likes
+            likes: likes,
+            likedBy: likedBy
         )
         
         

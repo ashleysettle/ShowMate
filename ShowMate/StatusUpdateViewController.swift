@@ -189,7 +189,8 @@ class StatusUpdateViewController: UIViewController, UIPickerViewDelegate, UIPick
                 episode: selectedEpisode,
                 message: message,
                 timestamp: Date(),
-                likes: 0
+                likes: 0,
+                likedBy: []
             )
             
             // Use a batch write to update both documents atomically

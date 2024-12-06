@@ -1,4 +1,5 @@
 import UIKit
+import FirebaseAuth
 import FirebaseFirestore
 
 class StatusCell: UICollectionViewCell {
@@ -61,6 +62,11 @@ class StatusCell: UICollectionViewCell {
         
         // Create status text with show name
         statusLabel.text = "S:\(status.season) E:\(status.episode)"
+        
+        if let user = Auth.auth().currentUser {
+            isLiked = status.likedBy.contains(user.uid)
+        }
+        
         let likeImage = isLiked ? UIImage(systemName: "heart.fill"): UIImage(systemName: "heart")
         likeButton.setImage(likeImage, for: .normal)
         likes.text = "\(status.likes)"
@@ -134,20 +140,4 @@ class StatusCell: UICollectionViewCell {
         onLikePressed?()
     }
     
-//    @IBAction func likeButtonPressed(_ sender: Any) {
-//        let db = Firestore.firestore()
-//        let ref = StatusUpdate.statusUpdatesCollection().document(statusId)
-//        
-//        isLiked.toggle()
-//        ref.updateData([
-//            "likes": FieldValue.increment(Int64(isLiked ? 1 : -1))
-//        ]) { error in
-//            if let error = error {
-//                print("Error updating likes: \(error)")
-//            }
-//        }
-//        
-//        likeButton.setImage(UIImage(systemName: isLiked ? "heart.fill" : "heart"), for: .normal)
-//
-//    }
 }

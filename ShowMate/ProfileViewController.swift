@@ -183,16 +183,30 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
             cell.configure(with: status)
             
             cell.onLikePressed = {
+                guard let userId = Auth.auth().currentUser?.uid else { return }
                 // Your like button logic here
                 let db = Firestore.firestore()
                 let ref = StatusUpdate.statusUpdatesCollection().document(status.id)
                 
-                cell.isLiked.toggle()
-                ref.updateData([
-                    "likes": FieldValue.increment(Int64(cell.isLiked ? 1 : -1))
-                ]) { error in
-                    if let error = error {
-                        print("Error updating likes: \(error)")
+                if !cell.isLiked {
+                    // Add user to likedBy array and increment likes
+                    ref.updateData([
+                        "likes": FieldValue.increment(Int64(1)),
+                        "likedBy": FieldValue.arrayUnion([userId])
+                    ]) { error in
+                        if let error = error {
+                            print("Error updating likes: \(error)")
+                        }
+                    }
+                } else {
+                    // Remove user from likedBy array and decrement likes
+                    ref.updateData([
+                        "likes": FieldValue.increment(Int64(-1)),
+                        "likedBy": FieldValue.arrayRemove([userId])
+                    ]) { error in
+                        if let error = error {
+                            print("Error updating likes: \(error)")
+                        }
                     }
                 }
                 
