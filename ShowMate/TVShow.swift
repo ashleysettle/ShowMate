@@ -21,6 +21,7 @@ class TVShow {
     var providerLogoPaths: [String]
     var episodesPerSeason: [Int]
     var preview: Bool
+    var review: String?
     
     // Watching status
     var watchingStatus: WatchingStatus?
@@ -45,7 +46,8 @@ class TVShow {
             "providers": providers,
             "providerLogoPaths": providerLogoPaths,
             "episodesPerSeason": episodesPerSeason,
-            "preview": preview
+            "preview": preview,
+            "review": review ?? ""
         ]
         
         if let status = watchingStatus {
@@ -73,6 +75,7 @@ class TVShow {
         self.episodesPerSeason = episodesPerSeason
         self.preview = false
         self.watchingStatus = watchingStatus
+        self.review = review ?? ""
         
     }
     
@@ -92,6 +95,7 @@ class TVShow {
         self.episodesPerSeason = [-1]
         self.preview = true
         self.watchingStatus = WatchingStatus(season: 1, episode: 1)
+        self.review = ""
     }
     
     // prints details on TV show to console
@@ -132,6 +136,7 @@ class TVShow {
         show.providerLogoPaths = dict["providerLogoPaths"] as? [String] ?? ["N/A"]
         show.episodesPerSeason = dict["episodesPerSeason"] as? [Int] ?? [-1]
         show.preview = dict["preview"] as? Bool ?? true
+        show.review = dict["rating"] as? String ?? ""
         
         if let statusDict = dict["watchingStatus"] as? [String: Any],
            let season = statusDict["season"] as? Int,
@@ -157,5 +162,12 @@ extension TVShow {
             .collection("users")
             .document(userId)
             .collection("wish")
+    }
+    
+    static func seenCollection(userId: String) -> CollectionReference {
+        return Firestore.firestore()
+            .collection("users")
+            .document(userId)
+            .collection("seen")
     }
 }

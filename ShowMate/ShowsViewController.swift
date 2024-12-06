@@ -14,6 +14,8 @@ protocol ShowListUpdateDelegate: AnyObject {
     func showAddedToWishlist(_ show: TVShow)
     func showRemovedFromWatching(_ show: TVShow)
     func showRemovedFromWishlist(_ show: TVShow)
+    func showRemovedFromSeen(_ show: TVShow)
+    func showAddedToSeen(_ show: TVShow)
 }
 
 class ShowsViewController: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout, UISearchBarDelegate, ShowListUpdateDelegate{
@@ -22,12 +24,14 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     @IBOutlet weak var watchlistCV: UICollectionView!
     @IBOutlet weak var currentlyWatchingCV: UICollectionView!
     @IBOutlet weak var showCollectionView: UICollectionView!
+    @IBOutlet weak var seenCV: UICollectionView!
     // API Key for TMDB
     let apiKey = "93080f9cf388f053e991e750e536b3ff"
     
     @IBOutlet weak var usernameLabel: UILabel!
     @IBOutlet weak var showSearchBar: UISearchBar!
     
+    @IBOutlet weak var seenLabel: UILabel!
     @IBOutlet weak var watchlistLabel: UILabel!
     @IBOutlet weak var currentlyWatchingLabel: UILabel!
     @IBOutlet weak var searchLabel: UILabel!
@@ -36,7 +40,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     var currentlyWatching: [TVShow] = []
     var watched: [TVShow] = []
     var watchlist: [TVShow] = []
-    
+    var seen: [TVShow] = []
     // Array to hold search results
     var searchResults: [TVShow] = []
     
@@ -60,7 +64,7 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
     }
     
     private func setupCollectionView() {
-        [showCollectionView, currentlyWatchingCV, watchlistCV].forEach { collectionView in
+        [showCollectionView, currentlyWatchingCV, watchlistCV, seenCV].forEach { collectionView in
             collectionView?.delegate = self
             collectionView?.dataSource = self
             
@@ -135,14 +139,33 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
         }
         
         if let watchlist = watchlistCV {
-            NSLayoutConstraint.activate([
-                watchlist.topAnchor.constraint(equalTo: watchlistLabel?.bottomAnchor ?? scrollView.contentLayoutGuide.topAnchor, constant: 12),
-                watchlist.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor),
-                watchlist.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor),
-                watchlist.heightAnchor.constraint(equalToConstant: 200),
-                watchlist.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -20)
-            ])
-        }
+                NSLayoutConstraint.activate([
+                    watchlist.topAnchor.constraint(equalTo: watchlistLabel?.bottomAnchor ?? scrollView.contentLayoutGuide.topAnchor, constant: 12),
+                    watchlist.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor),
+                    watchlist.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor),
+                    watchlist.heightAnchor.constraint(equalToConstant: 200)
+                    // Removed the bottom constraint
+                ])
+            }
+            
+            if let seenLabel = seenLabel {
+                NSLayoutConstraint.activate([
+                    seenLabel.topAnchor.constraint(equalTo: watchlistCV?.bottomAnchor ?? scrollView.contentLayoutGuide.topAnchor, constant: 20),
+                    seenLabel.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor, constant: 16),
+                    seenLabel.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor, constant: -16)
+                ])
+            }
+            
+            if let seen = seenCV {
+                NSLayoutConstraint.activate([
+                    seen.topAnchor.constraint(equalTo: seenLabel?.bottomAnchor ?? scrollView.contentLayoutGuide.topAnchor, constant: 12),
+                    seen.leadingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.leadingAnchor),
+                    seen.trailingAnchor.constraint(equalTo: scrollView.frameLayoutGuide.trailingAnchor),
+                    seen.heightAnchor.constraint(equalToConstant: 200),
+                    // This should be the last bottom constraint
+                    seen.bottomAnchor.constraint(equalTo: scrollView.contentLayoutGuide.bottomAnchor, constant: -20)
+                ])
+            }
     }
         
     // MARK: fetch user's lists from firebase
@@ -182,7 +205,24 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
                         self?.watchlistCV.reloadData()
                     }
                 }
-        }
+        
+            // Fetch seen
+            TVShow.seenCollection(userId: userId)
+                .addSnapshotListener { [weak self] snapshot, error in
+                    if let error = error {
+                        print("Error fetching seen: \(error)")
+                        return
+                    }
+                    
+                    self?.seen = snapshot?.documents.compactMap {
+                        TVShow.fromDictionary($0.data())
+                    } ?? []
+                    
+                    DispatchQueue.main.async {
+                        self?.seenCV.reloadData()
+                    }
+                }
+            }
     // MARK: - Collection View
     
     func collectionView(_ collectionView: UICollectionView,
@@ -202,6 +242,8 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
             return currentlyWatching.count
         case watchlistCV:
             return watchlist.count
+        case seenCV:
+            return seen.count
         default:
             return 0
         }
@@ -218,6 +260,8 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
             show = currentlyWatching[indexPath.row]
         case watchlistCV:
             show = watchlist[indexPath.row]
+        case seenCV:
+            show = seen[indexPath.row]
         default:
             show = nil
         }
@@ -248,6 +292,9 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
             let show = watchlist[indexPath.row]
             performSegue(withIdentifier: "ShowDetailSegue", sender: show)
             
+        case seenCV:
+            let show = seen[indexPath.row]
+            performSegue(withIdentifier: "ShowDetailSegue", sender: show)
         default:
             break
         }
@@ -309,6 +356,21 @@ class ShowsViewController: UIViewController, UICollectionViewDataSource, UIColle
             watchlistCV.reloadData()
         }
     }
+    
+    func showRemovedFromSeen(_ show: TVShow) {
+        if let index = seen.firstIndex(where: { $0.showId == show.showId }) {
+            seen.remove(at: index)
+            seenCV.reloadData()
+        }
+    }
+    
+    func showAddedToSeen(_ show: TVShow) {
+        if !seen.contains(where: { $0.showId == show.showId }) {
+            seen.append(show)
+            seenCV.reloadData()
+        }
+    }
+    
     
     // MARK: Search bar
     

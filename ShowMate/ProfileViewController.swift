@@ -11,7 +11,6 @@ import FirebaseFirestore
 
 class ProfileViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, ShowListUpdateDelegate {
     
-    
     @IBOutlet weak var currentlyWatchingCV: UICollectionView!
     @IBOutlet weak var statusUpdateCV: UICollectionView!
     @IBOutlet weak var usernameLabel: UILabel!
@@ -263,4 +262,13 @@ class ProfileViewController: UIViewController, UICollectionViewDelegate, UIColle
     func showRemovedFromWishlist(_ show: TVShow) {
         
     }
+    func showRemovedFromSeen(_ show: TVShow) {
+        
+    }
+    
+    func showAddedToSeen(_ show: TVShow) {
+        
+    }
+    
+    
 }

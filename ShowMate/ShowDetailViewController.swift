@@ -14,6 +14,7 @@ class ShowDetailViewController: UIViewController {
     @IBOutlet weak var numberOfSeasons: UILabel!
     @IBOutlet weak var genreLabel: UILabel!
     @IBOutlet weak var currentlyWatchingButton: UIButton!
+    @IBOutlet weak var seenButton: UIButton!
     @IBOutlet weak var watchlistButton: UIButton!
     
     // MARK: - Properties
@@ -21,6 +22,7 @@ class ShowDetailViewController: UIViewController {
     weak var delegate: ShowListUpdateDelegate?
     private var isInWatchingList = false
     private var isInWishlist = false
+    private var isInSeen = false
     
     // MARK: - Lifecycle Methods
     override func viewDidLoad() {
@@ -80,6 +82,7 @@ class ShowDetailViewController: UIViewController {
     private func updateButtonStates() {
         currentlyWatchingButton.tintColor = isInWatchingList ? .gray : .systemBlue
         watchlistButton.tintColor = isInWishlist ? .gray : .systemBlue
+        seenButton.tintColor = isInSeen ? .gray : .systemBlue
     }
     
     // MARK: - Show Status Checking
@@ -103,6 +106,15 @@ class ShowDetailViewController: UIViewController {
             .document(String(show.showId))
             .getDocument { [weak self] document, error in
                 self?.isInWishlist = document?.exists ?? false
+                group.leave()
+            }
+        
+        // Check seen status
+        group.enter()
+        TVShow.seenCollection(userId: userId)
+            .document(String(show.showId))
+            .getDocument { [weak self] document, error in
+                self?.isInSeen = document?.exists ?? false
                 group.leave()
             }
         
@@ -189,6 +201,47 @@ class ShowDetailViewController: UIViewController {
                 
                 self.isInWishlist = true
                 self.delegate?.showAddedToWishlist(self.show)
+                
+                DispatchQueue.main.async {
+                    self.updateButtonStates()
+                }
+            }
+        }
+    }
+    
+    @IBAction func seenButtonTapped(_ sender: Any) {
+        guard let userId = Auth.auth().currentUser?.uid else { return }
+        
+        let seenRef = TVShow.seenCollection(userId: userId)
+            .document(String(show.showId))
+        
+        if isInSeen {
+            // Remove from seen
+            seenRef.delete { [weak self] error in
+                guard let self = self else { return }
+                if let error = error {
+                    print("Error removing show from seen: \(error)")
+                    return
+                }
+                
+                self.isInSeen = false
+                self.delegate?.showRemovedFromSeen(self.show)
+                
+                DispatchQueue.main.async {
+                    self.updateButtonStates()
+                }
+            }
+        } else {
+            // Add to wishlist
+            seenRef.setData(show.toDictionary) { [weak self] error in
+                guard let self = self else { return }
+                if let error = error {
+                    print("Error adding show to seen: \(error)")
+                    return
+                }
+                
+                self.isInSeen = true
+                self.delegate?.showAddedToSeen(self.show)
                 
                 DispatchQueue.main.async {
                     self.updateButtonStates()

@@ -220,5 +220,62 @@ class StatusUpdateViewController: UIViewController, UIPickerViewDelegate, UIPick
             }
         }
     }
+    @IBAction func finishedButton(_ sender: Any) {
+        let controller = UIAlertController(
+            title: "\(show.name)",
+            message: "You finished \(show.name)?",
+            preferredStyle: .alert)
+        
+//        controller.addTextField() {
+//            (textField) in textField.placeholder = "What did you think?"
+//        }
+        
+        controller.addAction(UIAlertAction(
+            title: "Save to Seen",
+            style: .default) { [weak self] (action) in
+                guard let self = self,
+                      let userId = Auth.auth().currentUser?.uid,
+                      let review = controller.textFields?[0].text else {
+                    return
+                }
+                
+                // Create a copy of the show with the review
+                let updatedShow = self.show!
+                updatedShow.review = review
+                
+                // Get references to both collections
+                let seenRef = TVShow.seenCollection(userId: userId)
+                    .document(String(updatedShow.showId))
+                let watchingRef = TVShow.watchingCollection(userId: userId)
+                    .document(String(updatedShow.showId))
+                
+                // Use a batch write to handle both operations atomically
+                let batch = Firestore.firestore().batch()
+                
+                // Add to seen collection
+                batch.setData(updatedShow.toDictionary, forDocument: seenRef)
+                
+                // Delete from watching collection
+                batch.deleteDocument(watchingRef)
+                
+                // Commit the batch
+                batch.commit { error in
+                    if let error = error {
+                        print("Error moving show to seen: \(error)")
+                    } else {
+                        print("Successfully moved show to seen list")
+                        self.dismiss(animated: true)
+                    }
+                }
+        })
+        controller.addAction(UIAlertAction(
+            title: "Cancel",
+            style: .cancel))
+        
+        present(controller, animated: true)
+        
+    }
+    
+    
     
 }
