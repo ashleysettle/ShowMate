@@ -137,8 +137,8 @@ class SettingsViewController: UIViewController {
         
         // Add target for value changed
         segmentedVisibility.addTarget(self,
-                                    action: #selector(visibilityChanged),
-                                    for: .valueChanged)
+                                      action: #selector(visibilityChanged),
+                                      for: .valueChanged)
         
         loadVisibilitySetting()
     }
@@ -187,6 +187,37 @@ class SettingsViewController: UIViewController {
             } else {
                 print("Successfully updated visibility to: \(isPublic ? "Public" : "Private")")
             }
+        }
+    }
+    
+    private func fetchCurrentUserProfile(completion: @escaping (UserProfile?) -> Void) {
+        guard let userId = Auth.auth().currentUser?.uid else {
+            completion(nil)
+            return
+        }
+        
+        Firestore.firestore().collection("users").document(userId).getDocument { document, error in
+            if let document = document, document.exists,
+               let userProfile = try? document.data(as: UserProfile.self) {
+                completion(userProfile)
+            } else {
+                completion(nil)
+            }
+        }
+    }
+    
+    @IBAction func viewProfileButton(_ sender: Any) {
+        fetchCurrentUserProfile { [weak self] userProfile in
+            guard let userProfile = userProfile else { return }
+            self?.performSegue(withIdentifier: "ProfileSegue", sender: userProfile)
+        }
+        
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "ProfileSegue",
+           let nextVC = segue.destination as? ProfileViewController {
+            nextVC.user = sender as? UserProfile
         }
     }
 }

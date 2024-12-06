@@ -1246,6 +1246,16 @@
                                     <segment title="Private"/>
                                 </segments>
                             </segmentedControl>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="system" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="PGi-qp-PQk">
+                                <rect key="frame" x="117.33333333333333" y="482" width="158.66666666666669" height="38"/>
+                                <state key="normal" title="Button"/>
+                                <buttonConfiguration key="configuration" style="filled" title="View My Profile">
+                                    <fontDescription key="titleFontDescription" type="system" pointSize="20"/>
+                                </buttonConfiguration>
+                                <connections>
+                                    <action selector="viewProfileButton:" destination="yAI-nI-EFs" eventType="touchUpInside" id="Axw-rC-5UH"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <viewLayoutGuide key="safeArea" id="QJS-mt-VlI"/>
                         <color key="backgroundColor" systemColor="systemBackgroundColor"/>
@@ -1256,6 +1266,7 @@
                             <constraint firstItem="QJS-mt-VlI" firstAttribute="trailing" secondItem="Trn-4m-g47" secondAttribute="trailing" constant="20" id="EcK-wI-8FZ"/>
                             <constraint firstItem="ETP-Os-LV1" firstAttribute="centerX" secondItem="J6Q-Kf-Y3b" secondAttribute="centerX" id="G9M-Zl-LeP"/>
                             <constraint firstItem="zp1-Cy-vUn" firstAttribute="centerX" secondItem="J6Q-Kf-Y3b" secondAttribute="centerX" id="KBp-ZN-5uL"/>
+                            <constraint firstItem="PGi-qp-PQk" firstAttribute="top" secondItem="DIV-2b-D5M" secondAttribute="bottom" constant="100" id="Mmb-f6-eVC"/>
                             <constraint firstItem="DIV-2b-D5M" firstAttribute="top" secondItem="zp1-Cy-vUn" secondAttribute="bottom" constant="50" id="S5C-gY-52t"/>
                             <constraint firstItem="DIV-2b-D5M" firstAttribute="centerX" secondItem="J6Q-Kf-Y3b" secondAttribute="centerX" id="SyH-UV-wcC"/>
                             <constraint firstItem="m1B-Pm-GAJ" firstAttribute="leading" secondItem="QJS-mt-VlI" secondAttribute="leading" constant="20" id="U7q-l3-fym"/>
@@ -1264,6 +1275,7 @@
                             <constraint firstItem="zp1-Cy-vUn" firstAttribute="top" secondItem="RQ0-6e-Epf" secondAttribute="bottom" constant="15" id="gnL-Q6-N1Q"/>
                             <constraint firstItem="m1B-Pm-GAJ" firstAttribute="top" secondItem="QJS-mt-VlI" secondAttribute="top" id="hLa-wa-Qsq"/>
                             <constraint firstItem="RQ0-6e-Epf" firstAttribute="centerX" secondItem="J6Q-Kf-Y3b" secondAttribute="centerX" id="lcg-ns-6JH"/>
+                            <constraint firstItem="PGi-qp-PQk" firstAttribute="centerX" secondItem="J6Q-Kf-Y3b" secondAttribute="centerX" id="vIf-z8-NGV"/>
                         </constraints>
                     </view>
                     <tabBarItem key="tabBarItem" title="Settings" image="gearshape" catalog="system" id="WrY-ki-5ZD"/>
@@ -1272,6 +1284,7 @@
                         <outlet property="curUsername" destination="RQ0-6e-Epf" id="daZ-Zr-zNy"/>
                         <outlet property="segmentedVisibility" destination="ETP-Os-LV1" id="wDn-v6-nNf"/>
                         <outlet property="usernameLabel" destination="Trn-4m-g47" id="RTm-h5-07o"/>
+                        <segue destination="n8I-Kb-5y6" kind="show" identifier="ProfileSegue" id="Iee-mX-BVa"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="L2X-2u-RR4" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
@@ -1306,7 +1319,8 @@
         </scene>
     </scenes>
     <inferredMetricsTieBreakers>
-        <segue reference="PCc-xD-bHC"/>
+        <segue reference="WDx-ol-e4x"/>
+        <segue reference="Iee-mX-BVa"/>
         <segue reference="Ba2-ch-PeW"/>
     </inferredMetricsTieBreakers>
     <resources>
